@@ -397,7 +397,7 @@
   - Check if the card content elements have proper text color for dark backgrounds
   - This is the most visible bug on the site and needs immediate fixing
 
-- [ ] **T063** - Add featured books section to homepage
+- [x] **T063** - Add featured books section to homepage
   - refs: D014
   - Homepage currently only has hero section and newsletter CTA
   - Add "Featured Books" section below hero with 3-4 book cards
