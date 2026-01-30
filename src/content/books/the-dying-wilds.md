@@ -14,6 +14,7 @@ species:
 heatLevel: medium
 setting:
   - kingdom-of-erishum
+  - the-dying-wilds
 genres:
   - fantasy
   - epic fantasy

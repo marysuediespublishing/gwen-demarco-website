@@ -19,7 +19,7 @@ species:
 heatLevel: medium
 setting:
   - san-francisco
-  - city-morgue
+  - san-francisco-morgue
 genres:
   - urban fantasy
   - paranormal romance

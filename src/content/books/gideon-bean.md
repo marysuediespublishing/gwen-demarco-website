@@ -13,7 +13,8 @@ species:
   - shifters
 heatLevel: medium
 setting:
-  - supernatural-underground
+  - auras-and-embers-world
+  - san-francisco
 genres:
   - urban fantasy
   - paranormal romance

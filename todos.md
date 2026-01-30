@@ -340,7 +340,7 @@
   - Group by series with clear "Start Here" indicators
   - Include brief descriptions of each series
 
-- [ ] **T055** - Add locations/world-building page
+- [x] **T055** - Add locations/world-building page
   - refs: D003, D004
   - Create locations collection entries (San Francisco Morgue, Kingdom of Erishum, etc.)
   - Create /locations page with world-building details

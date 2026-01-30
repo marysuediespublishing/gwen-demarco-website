@@ -1,0 +1,182 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { SITE_TITLE } from '../consts';
+import { getCollection } from 'astro:content';
+
+// Get all locations
+const allLocations = await getCollection('locations');
+
+// Get all series and books for context
+const allSeries = await getCollection('series');
+const allBooks = await getCollection('books');
+
+// Add appearance count for each location
+const locationsWithStats = allLocations.map(location => {
+	// Count book appearances - check if location ID is in book.data.setting array
+	const bookCount = allBooks.filter(book =>
+		book.data.setting && book.data.setting.includes(location.id)
+	).length;
+
+	return {
+		...location,
+		bookCount,
+	};
+}).sort((a, b) => a.data.name.localeCompare(b.data.name));
+
+// Get emoji for environment type
+const getLocationEmoji = (envType: string | undefined): string => {
+	const emojiMap: Record<string, string> = {
+		'urban-interior': '🏛️',
+		'urban-city': '🌉',
+		'fantasy-kingdom': '🏰',
+		'fantasy-wilderness': '🌲',
+		'urban-supernatural': '✨',
+	};
+	return emojiMap[envType || ''] || '🗺️';
+};
+---
+
+<Layout title={`Locations & World-Building - ${SITE_TITLE}`} description="Explore the mysterious settings and magical realms in Gwen DeMarco's paranormal romance and urban fantasy novels.">
+	<main id="main-content" class="relative">
+		<!-- Hero Section -->
+		<section class="relative py-16 bg-gradient-night overflow-hidden">
+			<!-- Background fog effect -->
+			<div class="absolute inset-0 bg-gradient-fog opacity-30"></div>
+			<div class="absolute inset-0 bg-gradient-to-t from-shadow-black/60 to-transparent"></div>
+
+			<div class="container mx-auto px-4 relative z-10">
+				<div class="max-w-5xl mx-auto text-center">
+					<h1 class="text-4xl md:text-6xl font-primary font-bold text-bone-white mb-6">
+						<span class="bg-gradient-to-r from-mystic-violet via-ember-orange to-mystic-teal bg-clip-text text-transparent">
+							Locations & Worlds
+						</span>
+					</h1>
+					<p class="text-xl md:text-2xl text-ember-orange font-medium mb-4">
+						Discover the settings of supernatural adventure
+					</p>
+					<p class="text-lg text-moon-silver/90 max-w-3xl mx-auto leading-relaxed">
+						From the fog-shrouded streets of San Francisco to the treacherous wilds of fantasy kingdoms, explore the richly detailed worlds where paranormal romance and urban fantasy unfold.
+					</p>
+				</div>
+			</div>
+		</section>
+
+		<!-- Locations Grid -->
+		<section class="py-16 bg-dark-surface">
+			<div class="container mx-auto px-4">
+				<div class="max-w-7xl mx-auto">
+					<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+						{locationsWithStats.map((location) => (
+							<a
+								href={`/locations/${location.id}`}
+								class="group block bg-midnight-purple/50 rounded-xl overflow-hidden shadow-lg hover:shadow-mystic transition-all duration-300 hover:-translate-y-2 border border-mystic-violet/20 hover:border-mystic-violet/50"
+							>
+								<!-- Location Image -->
+								<div class="relative aspect-[4/3] overflow-hidden">
+									{location.data.image ? (
+										<img
+											src={location.data.image}
+											alt={`${location.data.name} location artwork`}
+											class="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-300"
+										/>
+									) : (
+										<div class="w-full h-full bg-gradient-to-br from-mystic-violet/40 to-midnight-purple flex items-center justify-center">
+											<div class="text-center text-moon-silver">
+												<div class="text-6xl mb-4 opacity-80">
+													{getLocationEmoji(location.data.environmentType)}
+												</div>
+												<div class="text-lg font-bold text-bone-white">{location.data.name}</div>
+											</div>
+										</div>
+									)}
+									<!-- Overlay -->
+									<div class="absolute inset-0 bg-gradient-to-t from-shadow-black/60 to-transparent"></div>
+								</div>
+
+								<!-- Location Info -->
+								<div class="p-6">
+									<h3 class="text-2xl font-primary font-bold text-bone-white mb-3 group-hover:text-ember-orange transition-colors">
+										{location.data.name}
+									</h3>
+
+									{location.data.description && (
+										<p class="text-moon-silver/80 text-sm leading-relaxed mb-4 line-clamp-3">
+											{location.data.description}
+										</p>
+									)}
+
+									<!-- Stats -->
+									<div class="flex items-center justify-between text-sm text-fog-gray">
+										<div class="flex items-center space-x-4">
+											{location.data.environmentType && (
+												<span class="flex items-center space-x-1">
+													<span class="text-mystic-violet">{getLocationEmoji(location.data.environmentType)}</span>
+													<span class="capitalize">{location.data.environmentType.replace(/-/g, ' ')}</span>
+												</span>
+											)}
+
+											{location.bookCount > 0 && (
+												<span class="flex items-center space-x-1">
+													<svg class="w-4 h-4 text-ember-orange" fill="currentColor" viewBox="0 0 20 20">
+														<path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V4.804z"></path>
+													</svg>
+													<span>{location.bookCount} books</span>
+												</span>
+											)}
+										</div>
+
+										<div class="text-mystic-teal font-medium group-hover:text-ember-orange transition-colors">
+											Explore &rarr;
+										</div>
+									</div>
+								</div>
+							</a>
+						))}
+					</div>
+
+					{locationsWithStats.length === 0 && (
+						<div class="text-center py-16">
+							<div class="text-6xl mb-4">🗺️</div>
+							<h3 class="text-2xl font-bold text-bone-white mb-2">No Locations Found</h3>
+							<p class="text-fog-gray">Location profiles are being added soon.</p>
+						</div>
+					)}
+				</div>
+			</div>
+		</section>
+
+		<!-- Browse More CTA -->
+		<section class="py-16 bg-gradient-to-r from-midnight-purple via-shadow-black to-midnight-purple">
+			<div class="container mx-auto px-4 text-center">
+				<div class="max-w-3xl mx-auto space-y-8">
+					<h2 class="text-3xl md:text-4xl font-primary font-bold text-bone-white">
+						Dive Into These Worlds
+					</h2>
+					<p class="text-lg text-moon-silver/90">
+						Discover the books and series set in these fascinating locations
+					</p>
+					<div class="flex flex-col sm:flex-row gap-4 justify-center">
+						<a href="/series" class="btn btn-primary btn-lg">
+							Browse Series
+						</a>
+						<a href="/books" class="btn btn-outline btn-lg">
+							View All Books
+						</a>
+						<a href="/species" class="btn btn-outline btn-lg">
+							Supernatural Species
+						</a>
+					</div>
+				</div>
+			</div>
+		</section>
+	</main>
+</Layout>
+
+<style>
+	.line-clamp-3 {
+		display: -webkit-box;
+		-webkit-line-clamp: 3;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+</style>
