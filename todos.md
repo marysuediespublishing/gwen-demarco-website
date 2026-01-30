@@ -333,7 +333,7 @@
   - Display on homepage and/or about page
   - Style with quote marks and attribution
 
-- [ ] **T054** - Create reading order guide page
+- [x] **T054** - Create reading order guide page
   - refs: D004
   - New page at /reading-order
   - Visual guide showing recommended reading order

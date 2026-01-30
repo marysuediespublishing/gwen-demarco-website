@@ -1,0 +1,287 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { SITE_TITLE } from '../consts';
+import { getCollection } from 'astro:content';
+
+// Get all series and books
+const allSeries = (await getCollection('series')).map(series => ({
+	...series,
+	slug: series.id
+}));
+
+const allBooks = (await getCollection('books')).map(book => ({
+	...book,
+	slug: book.id
+}));
+
+// Group books by series with proper ordering
+const seriesWithBooks = allSeries.map(series => {
+	const seriesBooks = allBooks.filter(book => {
+		const bookSeries = book.data.series;
+		return bookSeries === series.data.title ||
+			   bookSeries === series.slug ||
+			   bookSeries?.toLowerCase().replace(/\s+/g, '-') === series.slug;
+	}).sort((a, b) => (a.data.seriesOrder || 999) - (b.data.seriesOrder || 999));
+	return {
+		...series,
+		books: seriesBooks
+	};
+});
+
+// Define reading order recommendations
+const readingRecommendations = [
+	{
+		slug: 'sophie-feegle',
+		tagline: 'Best for Urban Fantasy Fans',
+		pitch: 'Meet Sophie, a fae changeling at the San Francisco morgue who discovers a hidden world of supernatural beings called the Odd Ones.',
+		startWith: 'Sophie and The Odd Ones',
+		completionNote: 'Complete series - 5 books',
+		icon: '🌃'
+	},
+	{
+		slug: 'kingdom-of-erishum',
+		tagline: 'Best for Epic Fantasy Fans',
+		pitch: 'A gutter rat rises from nothing in a dying kingdom where ancient magic corrupts the land and old powers stir in the shadows.',
+		startWith: 'The Mudlark',
+		completionNote: 'Complete trilogy - 3 books',
+		icon: '🏰'
+	},
+	{
+		slug: 'auras-and-embers',
+		tagline: 'Newest Series - Great Entry Point',
+		pitch: 'Auramancer Gideon Bean sees the true nature of every being around her—and now the supernatural underground wants to use her gift.',
+		startWith: 'Gideon Bean',
+		completionNote: 'Ongoing series - 2 books',
+		icon: '🔥'
+	}
+];
+
+// Merge recommendations with series data
+const orderedSeries = readingRecommendations.map(rec => {
+	const series = seriesWithBooks.find(s => s.slug === rec.slug);
+	return { ...series, ...rec };
+}).filter(s => s.data);
+---
+
+<Layout title={`Reading Order Guide - ${SITE_TITLE}`} description="New to Gwen DeMarco's books? Find the perfect starting point for your supernatural romance journey with this reading order guide.">
+	<main id="main-content" class="relative">
+		<!-- Hero Section -->
+		<section class="relative py-16 bg-gradient-night overflow-hidden">
+			<div class="absolute inset-0 bg-gradient-fog opacity-30"></div>
+			<div class="absolute inset-0 bg-gradient-to-t from-shadow-black/60 to-transparent"></div>
+
+			<div class="container mx-auto px-4 relative z-10">
+				<div class="max-w-4xl mx-auto text-center">
+					<h1 class="text-4xl md:text-6xl font-primary font-bold text-bone-white mb-6">
+						<span class="bg-gradient-to-r from-mystic-violet via-ember-orange to-mystic-teal bg-clip-text text-transparent">
+							Reading Order Guide
+						</span>
+					</h1>
+					<p class="text-xl md:text-2xl text-ember-orange font-medium mb-4">
+						New to the weird and wonderful?
+					</p>
+					<p class="text-lg text-moon-silver/90 max-w-3xl mx-auto leading-relaxed">
+						Each series is standalone—start wherever you like! Here's a guide to help you find your perfect entry point into Gwen DeMarco's supernatural worlds.
+					</p>
+				</div>
+			</div>
+		</section>
+
+		<!-- Standalone Note -->
+		<section class="py-8 bg-midnight-purple/30 border-y border-mystic-violet/20">
+			<div class="container mx-auto px-4">
+				<div class="max-w-4xl mx-auto flex items-center justify-center gap-4 text-center">
+					<div class="text-3xl">✨</div>
+					<p class="text-lg text-moon-silver">
+						<span class="text-ember-orange font-semibold">Good news:</span> All three series are completely standalone! No need to read them in any particular order—just pick the one that sounds most exciting to you.
+					</p>
+					<div class="text-3xl">✨</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Reading Order Cards -->
+		<section class="py-16 bg-dark-surface">
+			<div class="container mx-auto px-4">
+				<div class="max-w-5xl mx-auto">
+					<h2 class="text-3xl font-primary font-bold text-bone-white text-center mb-4">
+						Choose Your Starting Point
+					</h2>
+					<p class="text-center text-fog-gray mb-12 max-w-2xl mx-auto">
+						Each series features snarky heroines, grumpy love interests, and found family—Gwen's signature blend of supernatural romance.
+					</p>
+
+					<div class="space-y-8">
+						{orderedSeries.map((series, index) => (
+							<div class="relative group">
+								<!-- Connection line for visual flow -->
+								{index < orderedSeries.length - 1 && (
+									<div class="absolute left-1/2 -bottom-8 w-px h-8 bg-gradient-to-b from-mystic-violet/50 to-transparent hidden md:block"></div>
+								)}
+
+								<div class="bg-gradient-to-r from-midnight-purple/60 to-shadow-black border border-mystic-violet/30 rounded-2xl p-6 md:p-8 hover:border-ember-orange/50 transition-all duration-300 hover:shadow-mystic">
+									<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+										<!-- Series Info -->
+										<div class="lg:col-span-2 space-y-4">
+											<div class="flex flex-wrap items-center gap-3">
+												<span class="text-4xl">{series.icon}</span>
+												<div>
+													<span class="inline-block px-3 py-1 bg-ember-orange text-shadow-black text-sm font-bold rounded-full mb-2">
+														{series.tagline}
+													</span>
+													<h3 class="text-2xl md:text-3xl font-primary font-bold text-bone-white">
+														{series.data.title}
+													</h3>
+												</div>
+											</div>
+
+											<p class="text-lg text-moon-silver leading-relaxed">
+												{series.pitch}
+											</p>
+
+											<div class="flex flex-wrap items-center gap-4 text-sm">
+												<span class="flex items-center gap-2 text-mystic-teal">
+													<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+														<path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+													</svg>
+													{series.completionNote}
+												</span>
+												{series.data.overallRating && (
+													<span class="flex items-center gap-2 text-ember-orange">
+														<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+															<path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+														</svg>
+														{series.data.overallRating} stars
+													</span>
+												)}
+											</div>
+
+											<!-- Start Here CTA -->
+											<div class="flex flex-col sm:flex-row gap-3 pt-2">
+												{series.books.length > 0 && (
+													<a
+														href={`/books/${series.books[0].slug}`}
+														class="btn btn-primary"
+													>
+														<span class="mr-2">📖</span>
+														Start with {series.startWith}
+													</a>
+												)}
+												<a
+													href={`/series/${series.slug}`}
+													class="btn btn-outline"
+												>
+													View Full Series
+												</a>
+											</div>
+										</div>
+
+										<!-- Book Reading Order -->
+										<div class="bg-shadow-black/50 rounded-xl p-4 border border-mystic-violet/20">
+											<h4 class="text-sm font-semibold text-ember-orange uppercase tracking-wider mb-3">
+												Reading Order
+											</h4>
+											<ol class="space-y-2">
+												{series.books.map((book, bookIndex) => (
+													<li class="flex items-center gap-3 group/book">
+														<span class="flex-shrink-0 w-6 h-6 rounded-full bg-mystic-violet/30 text-mystic-teal text-sm font-bold flex items-center justify-center">
+															{bookIndex + 1}
+														</span>
+														<a
+															href={`/books/${book.slug}`}
+															class="text-moon-silver hover:text-ember-orange transition-colors text-sm line-clamp-1"
+														>
+															{book.data.title}
+														</a>
+														{bookIndex === 0 && (
+															<span class="flex-shrink-0 text-xs bg-ember-orange/20 text-ember-orange px-2 py-0.5 rounded">
+																Start Here
+															</span>
+														)}
+													</li>
+												))}
+											</ol>
+										</div>
+									</div>
+								</div>
+							</div>
+						))}
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Quick Comparison -->
+		<section class="py-16 bg-bg-secondary">
+			<div class="container mx-auto px-4">
+				<div class="max-w-5xl mx-auto">
+					<h2 class="text-3xl font-primary font-bold text-bone-white text-center mb-4">
+						Quick Comparison
+					</h2>
+					<p class="text-center text-fog-gray mb-10 max-w-2xl mx-auto">
+						Not sure which series is right for you? Here's a quick breakdown.
+					</p>
+
+					<div class="overflow-x-auto">
+						<table class="w-full text-left">
+							<thead>
+								<tr class="border-b border-mystic-violet/30">
+									<th class="py-4 px-4 text-ember-orange font-semibold">Series</th>
+									<th class="py-4 px-4 text-ember-orange font-semibold">Genre</th>
+									<th class="py-4 px-4 text-ember-orange font-semibold">Setting</th>
+									<th class="py-4 px-4 text-ember-orange font-semibold">Creatures</th>
+									<th class="py-4 px-4 text-ember-orange font-semibold">Status</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr class="border-b border-mystic-violet/20 hover:bg-midnight-purple/20 transition-colors">
+									<td class="py-4 px-4 font-medium text-bone-white">Sophie Feegle</td>
+									<td class="py-4 px-4 text-moon-silver">Urban Fantasy</td>
+									<td class="py-4 px-4 text-moon-silver">San Francisco</td>
+									<td class="py-4 px-4 text-moon-silver">Shifters, Ogres, Vampires, Fae</td>
+									<td class="py-4 px-4"><span class="badge badge-primary">Complete</span></td>
+								</tr>
+								<tr class="border-b border-mystic-violet/20 hover:bg-midnight-purple/20 transition-colors">
+									<td class="py-4 px-4 font-medium text-bone-white">Kingdom of Erishum</td>
+									<td class="py-4 px-4 text-moon-silver">Epic Fantasy</td>
+									<td class="py-4 px-4 text-moon-silver">Fantasy Kingdom</td>
+									<td class="py-4 px-4 text-moon-silver">Humans, Magical Creatures</td>
+									<td class="py-4 px-4"><span class="badge badge-primary">Complete</span></td>
+								</tr>
+								<tr class="border-b border-mystic-violet/20 hover:bg-midnight-purple/20 transition-colors">
+									<td class="py-4 px-4 font-medium text-bone-white">Auras & Embers</td>
+									<td class="py-4 px-4 text-moon-silver">Urban Fantasy</td>
+									<td class="py-4 px-4 text-moon-silver">Modern City</td>
+									<td class="py-4 px-4 text-moon-silver">Auramancers, Bennu Shifters, Spirits</td>
+									<td class="py-4 px-4"><span class="badge badge-secondary">Ongoing</span></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- All Books CTA -->
+		<section class="py-16 bg-gradient-to-r from-midnight-purple via-shadow-black to-midnight-purple">
+			<div class="container mx-auto px-4 text-center">
+				<div class="max-w-3xl mx-auto">
+					<h2 class="text-3xl md:text-4xl font-primary font-bold text-bone-white mb-6">
+						Ready to Dive In?
+					</h2>
+					<p class="text-lg text-moon-silver/90 mb-8">
+						Browse all books or explore the supernatural species that inhabit these worlds.
+					</p>
+					<div class="flex flex-col sm:flex-row gap-4 justify-center">
+						<a href="/books" class="btn btn-primary btn-lg">
+							Browse All Books
+						</a>
+						<a href="/series" class="btn btn-outline btn-lg">
+							Explore Series
+						</a>
+					</div>
+				</div>
+			</div>
+		</section>
+	</main>
+</Layout>
