@@ -360,7 +360,7 @@
   - Add city skyline silhouette as decorative element
   - Enhance purple glow effects on hover states
 
-- [ ] **T058** - Add "Start Reading" CTA with first book free chapter
+- [x] **T058** - Add "Start Reading" CTA with first book free chapter
   - refs: D008
   - Create prominent "Start Reading" section
   - Link to first chapter preview or Kindle sample

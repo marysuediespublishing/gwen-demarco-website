@@ -216,6 +216,99 @@ function getSeriesDisplay(seriesSlug: string | undefined): string {
 			</section>
 		)}
 
+		<!-- Start Reading CTA Section -->
+		<section class="py-16 px-4 bg-gradient-to-br from-shadow-black via-midnight-purple/50 to-shadow-black relative overflow-hidden">
+			<!-- Background glow effects -->
+			<div class="absolute inset-0 bg-radial-glow opacity-20 pointer-events-none"></div>
+			<div class="absolute top-0 left-1/4 w-96 h-96 bg-mystic-violet/10 rounded-full blur-3xl"></div>
+			<div class="absolute bottom-0 right-1/4 w-96 h-96 bg-ember-orange/10 rounded-full blur-3xl"></div>
+
+			<div class="container mx-auto relative z-10">
+				<div class="max-w-5xl mx-auto">
+					<div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+						<!-- Book Feature -->
+						<div class="flex flex-col items-center lg:items-start">
+							<a href="/books/sophie-and-the-odd-ones" class="group relative">
+								<!-- Book cover placeholder with glow -->
+								<div class="w-48 sm:w-56 md:w-64 aspect-[2/3] bg-gradient-to-br from-mystic-violet/40 to-midnight-purple rounded-lg border-2 border-mystic-violet/50 flex items-center justify-center shadow-mystic group-hover:shadow-ember group-hover:border-ember-orange/70 transition-all duration-500 overflow-hidden">
+									<div class="text-center text-bone-white/80 px-4">
+										<span class="text-6xl block mb-3">📖</span>
+										<span class="text-sm font-medium">Sophie and The Odd Ones</span>
+									</div>
+									<!-- Hover overlay -->
+									<div class="absolute inset-0 bg-gradient-to-t from-ember-orange/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+								</div>
+								<!-- Floating badge -->
+								<div class="absolute -top-3 -right-3 bg-ember-orange text-bone-white text-xs font-bold px-3 py-1 rounded-full shadow-ember animate-pulse">
+									Start Here!
+								</div>
+							</a>
+
+							<!-- Series badge -->
+							<div class="mt-4 flex items-center space-x-2">
+								<span class="badge badge-primary">Sophie Feegle Series</span>
+								<span class="badge badge-outline">Book 1</span>
+							</div>
+						</div>
+
+						<!-- CTA Content -->
+						<div class="text-center lg:text-left space-y-6">
+							<div>
+								<span class="text-ember-orange text-sm font-semibold uppercase tracking-wider">New to Gwen DeMarco?</span>
+								<h2 class="font-primary text-3xl md:text-4xl font-bold text-bone-white mt-2">
+									Start Your Supernatural Journey
+								</h2>
+							</div>
+
+							<!-- Hook/Teaser -->
+							<div class="bg-midnight-purple/40 border-l-4 border-ember-orange rounded-r-lg p-4 backdrop-blur-sm">
+								<p class="text-moon-silver italic text-lg leading-relaxed">
+									"Sophie Feegle thought she had her life figured out. A steady job at the San Francisco City Morgue, a comfortable routine, and absolutely no complications. Then the bodies started getting weird..."
+								</p>
+							</div>
+
+							<p class="text-fog-gray">
+								Dive into the world of shifters, ogres, and vampires with the book that started it all. Meet Sophie—a snarky heroine who's about to discover San Francisco's supernatural underbelly is a lot more literal than she ever imagined.
+							</p>
+
+							<!-- CTA Buttons -->
+							<div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+								<a
+									href="https://www.amazon.com/Sophie-Odd-Ones-Gwen-DeMarco-ebook/dp/B08CHKH9SY"
+									target="_blank"
+									rel="noopener noreferrer"
+									class="btn btn-primary btn-lg px-8 py-4 inline-flex items-center justify-center space-x-2"
+								>
+									<span>Read Free Sample</span>
+									<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+									</svg>
+								</a>
+								<a href="/reading-order" class="btn btn-outline btn-lg px-8 py-4 inline-flex items-center justify-center space-x-2">
+									<span>See Reading Order</span>
+									<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+									</svg>
+								</a>
+							</div>
+
+							<!-- Social proof -->
+							<div class="flex items-center justify-center lg:justify-start space-x-4 text-sm">
+								<div class="flex items-center space-x-1">
+									<span class="text-ember-orange">★★★★☆</span>
+									<span class="text-fog-gray">4.3 rating</span>
+								</div>
+								<span class="text-mystic-violet/50">|</span>
+								<span class="text-fog-gray">245+ reviews</span>
+								<span class="text-mystic-violet/50">|</span>
+								<span class="text-mystic-teal">Free on Kindle Unlimited</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
 		<!-- Featured Series Section -->
 		<section class="py-16 px-4 bg-dark-surface">
 			<div class="container mx-auto">
