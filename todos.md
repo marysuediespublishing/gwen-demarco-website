@@ -416,7 +416,7 @@
   - Add "What Readers Are Saying" section to homepage
   - Display 2-3 reader quotes with attribution
 
-- [ ] **T066** - Add Locations link to main navigation
+- [x] **T066** - Add Locations link to main navigation
   - The /locations page exists but is not linked in the navigation menu
   - Add "Locations" or "Worlds" to the header navigation
   - Position after "Species" in the nav order
