@@ -346,7 +346,7 @@
   - Create /locations page with world-building details
   - Link locations to relevant books and series
 
-- [ ] **T056** - Add more blog content variety
+- [x] **T056** - Add more blog content variety
   - refs: D006
   - Create "Writing Tips" blog post
   - Create "Character Spotlight" blog post (e.g., Sophie Feegle profile)
