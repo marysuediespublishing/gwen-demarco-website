@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import { SITE_TITLE } from '../consts';
 import { getCollection } from 'astro:content';
+import FormattedDate from '../components/FormattedDate.astro';
 
 // Get site configuration from CMS
 const settingsCollection = await getCollection('settings');
@@ -36,6 +37,12 @@ const featuredBooks = allBooks
 	.filter(book => book.data.featured)
 	.sort((a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime())
 	.slice(0, 4);
+
+// Get recent blog posts for homepage
+const allPosts = await getCollection('blog');
+const recentPosts = allPosts
+	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+	.slice(0, 3);
 
 // Helper to get series display name
 const seriesMap = new Map(allSeries.map(s => [s.id, s.data.title]));
@@ -298,6 +305,73 @@ function getSeriesDisplay(seriesSlug: string | undefined): string {
 				</div>
 			</div>
 		</section>
+
+		<!-- Recent Blog Posts Section -->
+		{recentPosts.length > 0 && (
+			<section class="py-16 px-4 bg-dark-surface">
+				<div class="container mx-auto">
+					<div class="text-center mb-12">
+						<h2 class="font-primary text-3xl md:text-4xl font-bold text-bone-white mb-4">
+							Latest from the Blog
+						</h2>
+						<p class="text-lg text-fog-gray max-w-2xl mx-auto">
+							Writing updates, book launches, and behind-the-scenes peeks into the worlds I create
+						</p>
+					</div>
+
+					<div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+						{recentPosts.map((post, index) => (
+							<a
+								href={`/blog/${post.id}/`}
+								class={`card card-hover p-6 group flex flex-col h-full ${index === 0 ? 'md:col-span-1' : ''}`}
+							>
+								{/* Category badge */}
+								{post.data.category && (
+									<span class="badge badge-series text-xs mb-3 w-fit">
+										{post.data.category.toString().split('-').map(word =>
+											word.charAt(0).toUpperCase() + word.slice(1)
+										).join(' ')}
+									</span>
+								)}
+
+								{/* Title */}
+								<h3 class="font-primary text-lg font-bold text-bone-white group-hover:text-ember-orange transition-colors mb-3 line-clamp-2">
+									{post.data.title}
+								</h3>
+
+								{/* Description/Excerpt */}
+								{post.data.description && (
+									<p class="text-fog-gray text-sm mb-4 line-clamp-3 flex-grow">
+										{post.data.description}
+									</p>
+								)}
+
+								{/* Date and reading time */}
+								<div class="flex items-center justify-between text-sm mt-auto pt-4 border-t border-mystic-violet/20">
+									<span class="text-mystic-teal">
+										<FormattedDate date={post.data.pubDate} />
+									</span>
+									{post.data.readingTime && (
+										<span class="text-fog-gray">
+											{post.data.readingTime}
+										</span>
+									)}
+								</div>
+							</a>
+						))}
+					</div>
+
+					<div class="text-center mt-10">
+						<a href="/blog" class="btn btn-outline btn-lg px-8 py-4 inline-flex items-center space-x-2">
+							<span>View All Posts</span>
+							<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+							</svg>
+						</a>
+					</div>
+				</div>
+			</section>
+		)}
 
 		<!-- Newsletter Section -->
 		<section class="py-12 sm:py-16 px-4 bg-gradient-to-r from-midnight-purple via-shadow-black to-midnight-purple">

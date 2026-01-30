@@ -320,7 +320,7 @@
   - Show 3-4 featured books with covers, titles, and "Read More" links
   - Should appear below the hero section
 
-- [ ] **T052** - Add recent blog posts preview to homepage
+- [x] **T052** - Add recent blog posts preview to homepage
   - refs: D004
   - Show latest 2-3 blog posts on homepage
   - Include post title, date, and excerpt
