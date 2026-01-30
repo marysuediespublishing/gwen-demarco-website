@@ -366,7 +366,7 @@
   - Link to first chapter preview or Kindle sample
   - Strong call-to-action for new readers
 
-- [ ] **T059** - Improve book card hover interactions
+- [x] **T059** - Improve book card hover interactions
   - refs: D002
   - Add scale transform on hover
   - Add glowing border effect

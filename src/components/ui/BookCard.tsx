@@ -111,10 +111,14 @@ const BookCard: React.FC<BookCardProps> = ({
   return (
     <div
       className={`
-        group cursor-pointer transition-all duration-300
-        hover:-translate-y-2 hover:shadow-mystic
+        group cursor-pointer
+        transition-all duration-400 ease-out
+        hover:-translate-y-2 hover:scale-[1.02]
         ${cardVariants[variant]} ${className}
       `}
+      style={{
+        transition: 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease'
+      }}
       onClick={handleCardClick}
       data-testid={`book-card-${book.slug}`}
     >
@@ -124,16 +128,21 @@ const BookCard: React.FC<BookCardProps> = ({
           className={`
             relative overflow-hidden rounded-lg shadow-lg
             ${imageVariants[variant]}
-            group-hover:shadow-violet-glow transition-all duration-400
-            border border-dark-border group-hover:border-mystic-violet/50
+            transition-all duration-400 ease-out
+            border-2 border-dark-border
+            group-hover:border-mystic-violet/70
+            group-hover:shadow-[0_0_25px_rgba(107,70,193,0.5),0_0_50px_rgba(107,70,193,0.2),0_8px_32px_rgba(0,0,0,0.4)]
           `}
+          style={{
+            transition: 'border-color 0.3s ease, box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
+          }}
         >
           {/* Book Cover Image */}
           {book.coverUrl && !imageError && (
             <img
               src={book.coverUrl}
               alt={`${book.data.title} book cover`}
-              className="w-full h-full object-cover transition-all duration-400 group-hover:scale-105"
+              className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-110"
               onError={() => setImageError(true)}
               loading="lazy"
             />
@@ -150,10 +159,33 @@ const BookCard: React.FC<BookCardProps> = ({
           )}
 
           {/* Hover Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-shadow-black/90 via-shadow-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-end justify-center p-4">
-            <div className="text-center space-y-2">
+          <div
+            className="absolute inset-0 bg-gradient-to-t from-shadow-black/95 via-shadow-black/50 to-transparent opacity-0 group-hover:opacity-100 flex flex-col items-center justify-end p-4"
+            style={{
+              transition: 'opacity 0.35s ease-out'
+            }}
+          >
+            {/* Quick View Badge at Top */}
+            <div
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transform scale-90 group-hover:scale-100"
+              style={{
+                transition: 'opacity 0.3s ease 0.1s, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s'
+              }}
+            >
+              <span className="bg-mystic-violet/90 backdrop-blur-sm text-bone-white text-sm font-semibold px-4 py-2 rounded-full border border-mystic-violet shadow-lg">
+                Quick View
+              </span>
+            </div>
+
+            {/* Action Buttons */}
+            <div
+              className="text-center space-y-2 transform translate-y-4 group-hover:translate-y-0"
+              style={{
+                transition: 'transform 0.35s cubic-bezier(0.4, 0, 0.2, 1)'
+              }}
+            >
               <button
-                className="btn btn-secondary text-sm px-4 py-2"
+                className="btn btn-secondary text-sm px-4 py-2 shadow-lg"
                 onClick={handleViewBook}
                 data-testid={`view-book-${book.slug}`}
               >
@@ -161,7 +193,7 @@ const BookCard: React.FC<BookCardProps> = ({
               </button>
               {book.data.amazonUrl && (
                 <button
-                  className="btn btn-outline text-sm px-4 py-2"
+                  className="btn btn-outline text-sm px-4 py-2 backdrop-blur-sm"
                   onClick={(e) => handlePurchaseClick(e, book.data.amazonUrl!)}
                   data-testid={`purchase-book-${book.slug}`}
                 >
@@ -212,10 +244,19 @@ const BookCard: React.FC<BookCardProps> = ({
         )}
 
         {/* Title */}
-        <h3 className={`
-          font-primary font-semibold text-bone-white group-hover:text-ember-orange transition-colors line-clamp-2
-          ${variant === 'compact' ? 'text-sm' : 'text-lg'}
-        `}>
+        <h3
+          className={`
+            font-primary font-semibold text-bone-white line-clamp-2
+            group-hover:text-ember-orange
+            ${variant === 'compact' ? 'text-sm' : 'text-lg'}
+          `}
+          style={{
+            transition: 'color 0.3s ease, text-shadow 0.3s ease',
+            textShadow: 'none'
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.textShadow = '0 0 20px rgba(255, 107, 53, 0.4)'}
+          onMouseLeave={(e) => e.currentTarget.style.textShadow = 'none'}
+        >
           {book.data.title}
         </h3>
 
