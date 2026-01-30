@@ -146,6 +146,10 @@ const settings = defineCollection({
       seriesComplete: z.number().optional(),
       averageRating: z.string().optional(),
       totalReviews: z.string().optional(),
+      goodreadsRating: z.string().optional(),
+      goodreadsReviewCount: z.string().optional(),
+      amazonRating: z.string().optional(),
+      amazonReviewCount: z.string().optional(),
     }).optional(),
     newsletter: z.object({
       leadMagnetTitle: z.string().optional(),

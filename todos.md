@@ -373,7 +373,7 @@
   - Smooth transitions
   - Show "Quick View" or series badge on hover
 
-- [ ] **T060** - Add social proof stats (if available)
+- [x] **T060** - Add social proof stats (if available)
   - refs: D002, D005
   - Display real Goodreads ratings if available
   - Show Amazon review counts

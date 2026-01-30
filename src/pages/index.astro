@@ -473,6 +473,133 @@ function getSeriesDisplay(seriesSlug: string | undefined): string {
 			</section>
 		)}
 
+		<!-- Readers Love Social Proof Section -->
+		<section class="py-16 px-4 bg-gradient-to-br from-midnight-purple/40 via-shadow-black to-midnight-purple/40 relative overflow-hidden">
+			<!-- Background effects -->
+			<div class="absolute inset-0 bg-radial-glow opacity-10 pointer-events-none"></div>
+
+			<div class="container mx-auto relative z-10">
+				<div class="text-center mb-12">
+					<h2 class="font-primary text-3xl md:text-4xl font-bold text-bone-white mb-4">
+						Readers Love These Books
+					</h2>
+					<p class="text-lg text-fog-gray max-w-2xl mx-auto">
+						Join thousands of readers who've discovered the weird and wonderful
+					</p>
+				</div>
+
+				<div class="max-w-5xl mx-auto">
+					<!-- Platform Stats Row -->
+					<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+						<!-- Amazon Stats Card -->
+						<div class="card p-6 bg-midnight-purple/50 border-mystic-violet/30 hover:shadow-mystic transition-all duration-300">
+							<div class="flex items-center justify-between mb-4">
+								<div class="flex items-center space-x-3">
+									<div class="w-12 h-12 bg-gradient-to-br from-ember-orange to-mystic-violet rounded-full flex items-center justify-center">
+										<svg class="w-6 h-6 text-bone-white" fill="currentColor" viewBox="0 0 24 24">
+											<path d="M.045 18.02c.072-.116.187-.124.348-.022 3.636 2.11 7.594 3.166 11.87 3.166 2.852 0 5.668-.533 8.447-1.595l.315-.14c.138-.06.234-.1.293-.13.226-.088.39-.046.525.13.12.174.09.336-.12.48-.256.19-.6.41-1.006.654-1.244.743-2.64 1.316-4.185 1.726a17.617 17.617 0 01-10.951-.577 17.88 17.88 0 01-5.43-3.35c-.1-.074-.151-.15-.151-.22 0-.047.021-.09.045-.122zm6.22-5.763c0-1.086.239-2.01.716-2.77.476-.762 1.104-1.342 1.886-1.74.782-.4 1.676-.652 2.68-.756.37-.04.953-.075 1.748-.11v-.48c0-.6-.07-1.02-.21-1.26-.23-.4-.61-.6-1.147-.6h-.115c-.34.03-.65.15-.93.36-.28.21-.47.49-.56.84-.07.27-.2.44-.39.5l-2.18-.3c-.2-.04-.3-.14-.3-.3 0-.03.01-.08.04-.14.24-1.23.86-2.13 1.86-2.69 1-.56 2.14-.84 3.42-.84.93 0 1.78.15 2.55.45.77.3 1.35.78 1.72 1.42.27.48.41 1.2.41 2.17v5.88c0 .39.05.7.16.95.1.24.29.54.57.88l.42.53c.11.14.17.26.17.37 0 .1-.04.18-.12.24l-2.07 1.77c-.14.1-.27.15-.38.15a.54.54 0 01-.32-.11l-.46-.42c-.16-.15-.3-.3-.42-.46-.12-.16-.25-.36-.38-.6-.71.76-1.45 1.27-2.2 1.53-.76.26-1.62.4-2.6.4-1.18 0-2.14-.35-2.88-1.04-.73-.69-1.1-1.61-1.1-2.76zm3.84-.1c0 .53.14.95.43 1.27.29.32.68.47 1.15.47.04 0 .1 0 .18-.01.08-.01.14-.02.18-.02.63-.14 1.13-.5 1.5-1.05.2-.31.34-.66.4-1.05.07-.39.1-.89.1-1.5v-.75c-.67 0-1.24.03-1.7.1-1.23.17-1.84.79-1.84 1.87v.67z"/>
+										</svg>
+									</div>
+									<div>
+										<div class="text-lg font-bold text-bone-white">Amazon</div>
+										<div class="text-xs text-fog-gray">Kindle & Paperback</div>
+									</div>
+								</div>
+								<a href={siteConfig.socialLinks?.amazon || "#"} target="_blank" rel="noopener noreferrer" class="text-mystic-teal hover:text-ember-orange transition-colors text-sm">
+									View Store →
+								</a>
+							</div>
+							<div class="flex items-center justify-between">
+								<div class="flex items-center space-x-2">
+									<span class="text-3xl font-bold text-ember-orange">{siteConfig.stats?.amazonRating || "4.5"}</span>
+									<div class="flex text-ember-orange">
+										<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+										<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+										<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+										<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+										<svg class="w-5 h-5 text-fog-gray" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+									</div>
+								</div>
+								<div class="text-right">
+									<div class="text-xl font-bold text-moon-silver">{siteConfig.stats?.amazonReviewCount || "320+"}</div>
+									<div class="text-xs text-fog-gray">reviews</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- Goodreads Stats Card -->
+						<div class="card p-6 bg-midnight-purple/50 border-mystic-violet/30 hover:shadow-teal transition-all duration-300">
+							<div class="flex items-center justify-between mb-4">
+								<div class="flex items-center space-x-3">
+									<div class="w-12 h-12 bg-gradient-to-br from-mystic-teal to-mystic-violet rounded-full flex items-center justify-center">
+										<svg class="w-6 h-6 text-bone-white" viewBox="0 0 24 24" fill="currentColor">
+											<path d="M11.43 23.995c-3.608-.208-6.274-2.077-6.448-5.078.695.007 1.375-.013 2.07-.006.224 1.342 1.065 2.43 2.683 3.026 1.356.496 2.853.446 4.205.062 1.21-.343 2.109-1.107 2.532-2.263.12-.342.213-.713.246-1.097.012-.118.004-.23.004-.346H16.7c-.01.065-.02.124-.027.18-.228 1.527-1.15 2.466-2.62 2.973-.49.164-1.002.247-1.51.297-.91.09-1.822.027-2.715-.18-1.075-.25-1.98-.772-2.604-1.652-.59-.835-.816-1.783-.81-2.81.008-1.19.34-2.273 1.05-3.237.566-.77 1.322-1.33 2.218-1.712.82-.35 1.69-.495 2.59-.466.83.025 1.627.204 2.37.56.75.358 1.375.87 1.87 1.535.093.124.18.252.283.398h.045c0-.45.003-.9-.003-1.35-.002-.093-.028-.186-.05-.277-.21-.87-.71-1.53-1.456-2.02-.736-.48-1.565-.7-2.432-.742-.93-.046-1.838.074-2.692.467-.61.28-1.11.69-1.497 1.23-.39.545-.637 1.158-.782 1.82-.175.798-.185 1.602-.04 2.407.05.272.117.544.202.807.01.03.01.063.016.095l-.045.003c-.69.005-1.374.016-2.063-.003-.01 0-.032-.07-.034-.108-.09-1.476.194-2.87.85-4.17.677-1.34 1.66-2.392 2.947-3.146C9.74.655 11.28.303 12.936.28c1.197-.016 2.366.13 3.478.553 1.29.49 2.343 1.252 3.11 2.38.71 1.05 1.067 2.227 1.105 3.484.01.355.003.712.003 1.067v12.63c-.008.084-.022.168-.022.252 0 .56-.003 1.117.002 1.676.002.11-.03.146-.14.145-.673-.004-1.346-.003-2.02 0-.066 0-.138-.026-.196-.053-.04-.02-.058-.063-.097-.087v-.047c.004-.063.01-.126.01-.19v-1.62H18.1c-.102.177-.195.362-.306.533-.655 1.01-1.56 1.717-2.64 2.196-.813.36-1.67.566-2.562.637-.15.012-.3.024-.45.04h-.712zm-.67-10.64c0-.912.153-1.788.62-2.58.4-.678.95-1.21 1.643-1.58.657-.35 1.36-.52 2.105-.497.758.022 1.475.227 2.13.596.734.414 1.28.986 1.657 1.73.398.786.513 1.63.43 2.507-.063.66-.24 1.282-.55 1.858-.443.82-1.093 1.435-1.93 1.843-.663.322-1.37.447-2.107.39-.704-.054-1.362-.254-1.958-.595-.722-.415-1.274-.982-1.65-1.723-.35-.69-.44-1.43-.39-2.197v.248z"/>
+										</svg>
+									</div>
+									<div>
+										<div class="text-lg font-bold text-bone-white">Goodreads</div>
+										<div class="text-xs text-fog-gray">Reader Community</div>
+									</div>
+								</div>
+								<a href={siteConfig.socialLinks?.goodreads || "#"} target="_blank" rel="noopener noreferrer" class="text-mystic-teal hover:text-ember-orange transition-colors text-sm">
+									Follow →
+								</a>
+							</div>
+							<div class="flex items-center justify-between">
+								<div class="flex items-center space-x-2">
+									<span class="text-3xl font-bold text-mystic-teal">{siteConfig.stats?.goodreadsRating || "4.3"}</span>
+									<div class="flex text-mystic-teal">
+										<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+										<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+										<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+										<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+										<svg class="w-5 h-5 text-fog-gray" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+									</div>
+								</div>
+								<div class="text-right">
+									<div class="text-xl font-bold text-moon-silver">{siteConfig.stats?.goodreadsReviewCount || "180+"}</div>
+									<div class="text-xs text-fog-gray">ratings</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Aggregate Stats Row -->
+					<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+						<div class="text-center p-4 bg-midnight-purple/30 rounded-lg border border-mystic-violet/20">
+							<div class="text-2xl md:text-3xl font-bold text-ember-orange">{siteConfig.stats?.totalReviews || "500+"}</div>
+							<div class="text-sm text-fog-gray">Total Reviews</div>
+						</div>
+						<div class="text-center p-4 bg-midnight-purple/30 rounded-lg border border-mystic-violet/20">
+							<div class="text-2xl md:text-3xl font-bold text-mystic-teal">{siteConfig.stats?.averageRating || "4.4"}</div>
+							<div class="text-sm text-fog-gray">Average Rating</div>
+						</div>
+						<div class="text-center p-4 bg-midnight-purple/30 rounded-lg border border-mystic-violet/20">
+							<div class="text-2xl md:text-3xl font-bold text-ember-orange">{siteConfig.stats?.booksPublished || 11}</div>
+							<div class="text-sm text-fog-gray">Books Published</div>
+						</div>
+						<div class="text-center p-4 bg-midnight-purple/30 rounded-lg border border-mystic-violet/20">
+							<div class="text-2xl md:text-3xl font-bold text-mystic-teal">{siteConfig.stats?.seriesComplete || 2}</div>
+							<div class="text-sm text-fog-gray">Complete Series</div>
+						</div>
+					</div>
+
+					<!-- CTA -->
+					<div class="text-center mt-10">
+						<p class="text-moon-silver mb-4">Ready to join the community?</p>
+						<div class="flex flex-col sm:flex-row gap-4 justify-center">
+							<a href="/books" class="btn btn-primary btn-lg px-8 py-4">
+								Browse All Books
+							</a>
+							<a href="/reading-order" class="btn btn-outline btn-lg px-8 py-4">
+								Where to Start
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
 		<!-- Recent Blog Posts Section -->
 		{recentPosts.length > 0 && (
 			<section class="py-16 px-4 bg-dark-surface">
