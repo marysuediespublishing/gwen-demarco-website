@@ -29,6 +29,20 @@ const siteConfig = settingsCollection[0]?.data || {
 // Get featured series
 const allSeries = await getCollection('series');
 const featuredSeries = allSeries.filter(s => s.data.featured);
+
+// Get featured books for homepage display
+const allBooks = await getCollection('books');
+const featuredBooks = allBooks
+	.filter(book => book.data.featured)
+	.sort((a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime())
+	.slice(0, 4);
+
+// Helper to get series display name
+const seriesMap = new Map(allSeries.map(s => [s.id, s.data.title]));
+function getSeriesDisplay(seriesSlug: string | undefined): string {
+	if (!seriesSlug) return '';
+	return seriesMap.get(seriesSlug) || seriesSlug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+}
 ---
 
 <Layout title={`${SITE_TITLE} | Paranormal Romance Author`}>
@@ -105,6 +119,80 @@ const featuredSeries = allSeries.filter(s => s.data.featured);
 				</svg>
 			</div>
 		</section>
+
+		<!-- Featured Books Section -->
+		{featuredBooks.length > 0 && (
+			<section class="py-16 px-4 bg-bg-secondary">
+				<div class="container mx-auto">
+					<div class="text-center mb-12">
+						<h2 class="font-primary text-3xl md:text-4xl font-bold text-bone-white mb-4">
+							Featured Books
+						</h2>
+						<p class="text-lg text-fog-gray max-w-2xl mx-auto">
+							Start your supernatural adventure with these reader favorites
+						</p>
+					</div>
+
+					<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+						{featuredBooks.map((book) => (
+							<a href={`/books/${book.id}`} class="card card-hover group p-4 flex flex-col h-full">
+								<!-- Book cover placeholder -->
+								<div class="w-full aspect-[2/3] bg-gradient-to-br from-mystic-violet/30 to-midnight-purple rounded-lg mb-4 flex items-center justify-center border border-mystic-violet/30 group-hover:border-ember-orange/50 group-hover:shadow-mystic transition-all duration-300 overflow-hidden relative">
+									<div class="text-center text-bone-white/70 px-2">
+										<span class="text-4xl block mb-2">📖</span>
+										<span class="text-xs font-medium line-clamp-2">{book.data.title}</span>
+									</div>
+									{/* Hover glow effect */}
+									<div class="absolute inset-0 bg-gradient-to-t from-ember-orange/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+								</div>
+
+								<!-- Series badge -->
+								{book.data.series && (
+									<span class="badge badge-primary mb-2 w-fit text-xs">{getSeriesDisplay(book.data.series)}</span>
+								)}
+
+								<!-- Title -->
+								<h3 class="font-primary text-lg font-bold text-ember-orange mb-2 group-hover:text-mystic-teal transition-colors line-clamp-2">
+									{book.data.title}
+								</h3>
+
+								<!-- Description -->
+								<p class="text-fog-gray text-sm mb-4 line-clamp-2 flex-grow">
+									{book.data.description}
+								</p>
+
+								<!-- Rating and price -->
+								<div class="flex items-center justify-between mt-auto pt-3 border-t border-mystic-violet/20">
+									{book.data.rating && (
+										<div class="flex items-center space-x-1">
+											<span class="text-ember-orange">★</span>
+											<span class="text-moon-silver text-sm">{book.data.rating}</span>
+										</div>
+									)}
+									<div class="flex items-center space-x-2">
+										{book.data.isKU && (
+											<span class="badge badge-secondary text-xs">KU</span>
+										)}
+										{book.data.price && (
+											<span class="text-mystic-teal font-medium text-sm">{book.data.price}</span>
+										)}
+									</div>
+								</div>
+							</a>
+						))}
+					</div>
+
+					<div class="text-center mt-10">
+						<a href="/books" class="btn btn-outline btn-lg px-8 py-4 inline-flex items-center space-x-2">
+							<span>View All Books</span>
+							<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+							</svg>
+						</a>
+					</div>
+				</div>
+			</section>
+		)}
 
 		<!-- Featured Series Section -->
 		<section class="py-16 px-4 bg-dark-surface">

@@ -314,7 +314,7 @@
   - Ensure cards link to individual book pages
   - Add hover effects and proper styling
 
-- [ ] **T051** - Enhance homepage with featured books section
+- [x] **T051** - Enhance homepage with featured books section
   - refs: D002, D004
   - Add a working featured books carousel/grid to homepage
   - Show 3-4 featured books with covers, titles, and "Read More" links
