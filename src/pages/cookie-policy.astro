@@ -1,0 +1,375 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const title = "Cookie Policy - Gwen DeMarco";
+const description = "Cookie Policy for Gwen DeMarco author website. Detailed information about how we use cookies and tracking technologies on our website.";
+---
+
+<Layout title={title} description={description}>
+  <div class="min-h-screen bg-gradient-to-br from-midnight-purple/20 to-shadow-black">
+    <div class="max-w-4xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
+      <div class="bg-dark-surface rounded-lg shadow-mystic border border-dark-border p-8 md:p-12">
+        <div class="mb-8">
+          <h1 class="text-4xl font-primary font-bold text-bone-white mb-4">Cookie Policy</h1>
+          <div class="text-sm text-fog-gray space-y-1">
+            <p><strong class="text-moon-silver">Last updated:</strong> {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+            <p><strong class="text-moon-silver">Effective date:</strong> {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+          </div>
+        </div>
+
+        <div class="prose prose-invert max-w-none">
+          <!-- Introduction -->
+          <section class="mb-8">
+            <h2 class="text-2xl font-primary font-semibold text-bone-white mb-4 border-b border-dark-border pb-2">What Are Cookies?</h2>
+            <p class="text-moon-silver leading-relaxed mb-4">
+              Cookies are small text files that are stored on your device (computer, tablet, or mobile) when you visit a website.
+              They allow the website to recognize your device and store information about your preferences or past actions.
+            </p>
+            <p class="text-moon-silver leading-relaxed">
+              This Cookie Policy explains how Gwen DeMarco ("we," "us," or "our") uses cookies and similar tracking technologies
+              on our website <a href="https://gwendemarco.com" class="text-ember-orange hover:underline">gwendemarco.com</a>
+              (the "Website").
+            </p>
+          </section>
+
+          <!-- Types of Cookies -->
+          <section class="mb-8">
+            <h2 class="text-2xl font-primary font-semibold text-bone-white mb-4 border-b border-dark-border pb-2">Types of Cookies We Use</h2>
+
+            <!-- Essential Cookies -->
+            <div class="bg-mystic-teal/10 border border-mystic-teal/30 rounded-lg p-6 mb-6">
+              <h3 class="text-xl font-medium text-mystic-teal mb-3 flex items-center">
+                <span class="w-3 h-3 bg-mystic-teal rounded-full mr-2"></span>
+                Essential Cookies (Always Active)
+              </h3>
+              <p class="text-moon-silver leading-relaxed mb-4">
+                These cookies are strictly necessary for the website to function properly. They cannot be disabled as they
+                are essential for providing services you request.
+              </p>
+
+              <div class="overflow-x-auto">
+                <table class="min-w-full text-sm">
+                  <thead>
+                    <tr class="border-b border-mystic-teal/30">
+                      <th class="text-left py-2 font-medium text-mystic-teal">Cookie Name</th>
+                      <th class="text-left py-2 font-medium text-mystic-teal">Purpose</th>
+                      <th class="text-left py-2 font-medium text-mystic-teal">Duration</th>
+                    </tr>
+                  </thead>
+                  <tbody class="text-moon-silver">
+                    <tr class="border-b border-mystic-teal/20">
+                      <td class="py-2 font-mono text-xs">gdpr-consent</td>
+                      <td class="py-2">Stores your cookie consent preferences</td>
+                      <td class="py-2">365 days</td>
+                    </tr>
+                    <tr class="border-b border-mystic-teal/20">
+                      <td class="py-2 font-mono text-xs">session_id</td>
+                      <td class="py-2">Maintains your session across pages</td>
+                      <td class="py-2">Session (expires when browser closes)</td>
+                    </tr>
+                    <tr class="border-b border-mystic-teal/20">
+                      <td class="py-2 font-mono text-xs">csrf_token</td>
+                      <td class="py-2">Security protection against cross-site request forgery</td>
+                      <td class="py-2">Session</td>
+                    </tr>
+                    <tr>
+                      <td class="py-2 font-mono text-xs">theme_preference</td>
+                      <td class="py-2">Remembers your theme preference</td>
+                      <td class="py-2">365 days</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Analytics Cookies -->
+            <div class="bg-mystic-violet/10 border border-mystic-violet/30 rounded-lg p-6 mb-6">
+              <h3 class="text-xl font-medium text-mystic-violet mb-3 flex items-center">
+                <span class="w-3 h-3 bg-mystic-violet rounded-full mr-2"></span>
+                Analytics Cookies (Requires Consent)
+              </h3>
+              <p class="text-moon-silver leading-relaxed mb-4">
+                These cookies help us understand how visitors interact with our website by collecting and reporting
+                information anonymously. We use Google Analytics 4 with privacy-enhanced configuration.
+              </p>
+
+              <div class="bg-mystic-violet/20 rounded-lg p-4 mb-4">
+                <h4 class="font-medium text-mystic-violet mb-2">Google Analytics 4 Configuration</h4>
+                <ul class="text-sm text-moon-silver space-y-1">
+                  <li>• IP anonymization enabled</li>
+                  <li>• GDPR Consent Mode v2 compliant</li>
+                  <li>• Enhanced eCommerce disabled (no purchase tracking)</li>
+                  <li>• Data retention set to 26 months (Google standard)</li>
+                  <li>• Advertising features disabled until consent</li>
+                </ul>
+              </div>
+
+              <div class="overflow-x-auto">
+                <table class="min-w-full text-sm">
+                  <thead>
+                    <tr class="border-b border-mystic-violet/30">
+                      <th class="text-left py-2 font-medium text-mystic-violet">Cookie Name</th>
+                      <th class="text-left py-2 font-medium text-mystic-violet">Purpose</th>
+                      <th class="text-left py-2 font-medium text-mystic-violet">Duration</th>
+                    </tr>
+                  </thead>
+                  <tbody class="text-moon-silver">
+                    <tr class="border-b border-mystic-violet/20">
+                      <td class="py-2 font-mono text-xs">_ga</td>
+                      <td class="py-2">Distinguishes unique users</td>
+                      <td class="py-2">2 years</td>
+                    </tr>
+                    <tr class="border-b border-mystic-violet/20">
+                      <td class="py-2 font-mono text-xs">_ga_[ID]</td>
+                      <td class="py-2">Stores session state for GA4</td>
+                      <td class="py-2">2 years</td>
+                    </tr>
+                    <tr class="border-b border-mystic-violet/20">
+                      <td class="py-2 font-mono text-xs">_gid</td>
+                      <td class="py-2">Distinguishes users for 24 hours</td>
+                      <td class="py-2">24 hours</td>
+                    </tr>
+                    <tr>
+                      <td class="py-2 font-mono text-xs">_gat</td>
+                      <td class="py-2">Throttles request rate</td>
+                      <td class="py-2">1 minute</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Marketing Cookies -->
+            <div class="bg-ember-orange/10 border border-ember-orange/30 rounded-lg p-6 mb-6">
+              <h3 class="text-xl font-medium text-ember-orange mb-3 flex items-center">
+                <span class="w-3 h-3 bg-ember-orange rounded-full mr-2"></span>
+                Marketing Cookies (Requires Consent)
+              </h3>
+              <p class="text-moon-silver leading-relaxed mb-4">
+                These cookies enable personalized book marketing and help us reach readers interested in urban fantasy
+                and paranormal romance genres. They track book interactions and optimize advertising campaigns.
+              </p>
+
+              <div class="bg-ember-orange/20 rounded-lg p-4 mb-4">
+                <h4 class="font-medium text-ember-orange mb-2">Meta Pixel (Facebook) Configuration</h4>
+                <ul class="text-sm text-moon-silver space-y-1">
+                  <li>• iOS 14.5+ App Tracking Transparency compliant</li>
+                  <li>• Event tracking disabled until consent</li>
+                  <li>• Limited Data Use mode when consent denied</li>
+                  <li>• Data retention: 180 days (Meta standard)</li>
+                  <li>• Conversion optimization for book marketing</li>
+                </ul>
+              </div>
+
+              <div class="overflow-x-auto">
+                <table class="min-w-full text-sm">
+                  <thead>
+                    <tr class="border-b border-ember-orange/30">
+                      <th class="text-left py-2 font-medium text-ember-orange">Cookie Name</th>
+                      <th class="text-left py-2 font-medium text-ember-orange">Purpose</th>
+                      <th class="text-left py-2 font-medium text-ember-orange">Duration</th>
+                    </tr>
+                  </thead>
+                  <tbody class="text-moon-silver">
+                    <tr class="border-b border-ember-orange/20">
+                      <td class="py-2 font-mono text-xs">_fbp</td>
+                      <td class="py-2">Facebook Pixel browser identifier</td>
+                      <td class="py-2">90 days</td>
+                    </tr>
+                    <tr class="border-b border-ember-orange/20">
+                      <td class="py-2 font-mono text-xs">_fbc</td>
+                      <td class="py-2">Facebook Click ID for conversion tracking</td>
+                      <td class="py-2">90 days</td>
+                    </tr>
+                    <tr>
+                      <td class="py-2 font-mono text-xs">fb_pixel_events</td>
+                      <td class="py-2">Stores pending events when offline</td>
+                      <td class="py-2">Session</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <!-- What We Track -->
+          <section class="mb-8">
+            <h2 class="text-2xl font-primary font-semibold text-bone-white mb-4 border-b border-dark-border pb-2">What Information We Collect</h2>
+
+            <h3 class="text-xl font-medium text-moon-silver mb-3">Analytics Data (With Consent)</h3>
+            <ul class="list-disc list-inside text-moon-silver space-y-2 mb-6">
+              <li><strong class="text-bone-white">Page Views:</strong> Which pages you visit and how long you stay</li>
+              <li><strong class="text-bone-white">Book Interactions:</strong> Which books you view, click on, or show interest in</li>
+              <li><strong class="text-bone-white">User Journey:</strong> How you navigate through our website</li>
+              <li><strong class="text-bone-white">Search Queries:</strong> What you search for on our site (anonymized)</li>
+              <li><strong class="text-bone-white">Device Information:</strong> Browser type, screen size, operating system</li>
+              <li><strong class="text-bone-white">Traffic Source:</strong> How you found our website (search, social media, direct)</li>
+            </ul>
+
+            <h3 class="text-xl font-medium text-moon-silver mb-3">Marketing Data (With Consent)</h3>
+            <ul class="list-disc list-inside text-moon-silver space-y-2 mb-6">
+              <li><strong class="text-bone-white">Book Preferences:</strong> Genres and authors you're interested in</li>
+              <li><strong class="text-bone-white">Conversion Events:</strong> Newsletter signups, book link clicks</li>
+              <li><strong class="text-bone-white">Audience Building:</strong> Creating similar audiences for book marketing</li>
+              <li><strong class="text-bone-white">Ad Performance:</strong> How well our book advertisements perform</li>
+              <li><strong class="text-bone-white">Purchase Intent:</strong> Actions indicating interest in purchasing books</li>
+            </ul>
+
+            <div class="bg-midnight-purple/50 border border-mystic-violet/30 rounded-lg p-4">
+              <p class="text-moon-silver text-sm">
+                <strong class="text-bone-white">Privacy Note:</strong> All analytics data is processed in aggregate and anonymized.
+                We cannot identify individual users from this data, and it's used solely to improve our
+                content and reach readers interested in our books.
+              </p>
+            </div>
+          </section>
+
+          <!-- How to Control Cookies -->
+          <section class="mb-8">
+            <h2 class="text-2xl font-primary font-semibold text-bone-white mb-4 border-b border-dark-border pb-2">How to Control Cookies</h2>
+
+            <h3 class="text-xl font-medium text-moon-silver mb-3">Cookie Consent Banner</h3>
+            <p class="text-moon-silver leading-relaxed mb-4">
+              When you first visit our website, you'll see a cookie consent banner with the following options:
+            </p>
+            <ul class="list-disc list-inside text-moon-silver space-y-2 mb-6">
+              <li><strong class="text-bone-white">Accept All:</strong> Enables all cookies including analytics and marketing</li>
+              <li><strong class="text-bone-white">Reject All:</strong> Only essential cookies will be used</li>
+              <li><strong class="text-bone-white">Customize:</strong> Choose specific cookie categories to enable</li>
+            </ul>
+
+            <h3 class="text-xl font-medium text-moon-silver mb-3">Changing Your Preferences</h3>
+            <p class="text-moon-silver leading-relaxed mb-4">
+              You can change your cookie preferences at any time by:
+            </p>
+            <ul class="list-disc list-inside text-moon-silver space-y-2 mb-6">
+              <li>Looking for a "Cookie Preferences" link in our website footer</li>
+              <li>Clearing your browser cookies and revisiting our site</li>
+              <li>Contacting us at privacy@gwendemarco.com</li>
+            </ul>
+
+            <h3 class="text-xl font-medium text-moon-silver mb-3">Browser Settings</h3>
+            <p class="text-moon-silver leading-relaxed mb-4">
+              You can also control cookies through your browser settings:
+            </p>
+
+            <div class="grid md:grid-cols-2 gap-4 mb-6">
+              <div class="border border-dark-border bg-midnight-purple/20 rounded-lg p-4">
+                <h4 class="font-medium text-bone-white mb-2">Chrome</h4>
+                <p class="text-sm text-fog-gray">Settings → Privacy and security → Cookies and other site data</p>
+              </div>
+              <div class="border border-dark-border bg-midnight-purple/20 rounded-lg p-4">
+                <h4 class="font-medium text-bone-white mb-2">Firefox</h4>
+                <p class="text-sm text-fog-gray">Settings → Privacy & Security → Cookies and Site Data</p>
+              </div>
+              <div class="border border-dark-border bg-midnight-purple/20 rounded-lg p-4">
+                <h4 class="font-medium text-bone-white mb-2">Safari</h4>
+                <p class="text-sm text-fog-gray">Safari → Preferences → Privacy → Manage Website Data</p>
+              </div>
+              <div class="border border-dark-border bg-midnight-purple/20 rounded-lg p-4">
+                <h4 class="font-medium text-bone-white mb-2">Edge</h4>
+                <p class="text-sm text-fog-gray">Settings → Cookies and site permissions → Cookies and site data</p>
+              </div>
+            </div>
+
+            <div class="bg-ember-orange/10 border border-ember-orange/30 rounded-lg p-4">
+              <p class="text-moon-silver text-sm">
+                <strong class="text-ember-orange">Note:</strong> Disabling all cookies may affect website functionality. Essential cookies
+                are required for basic features like remembering your preferences and maintaining security.
+              </p>
+            </div>
+          </section>
+
+          <!-- Third-Party Services -->
+          <section class="mb-8">
+            <h2 class="text-2xl font-primary font-semibold text-bone-white mb-4 border-b border-dark-border pb-2">Third-Party Services</h2>
+
+            <div class="space-y-6">
+              <div class="border border-dark-border bg-midnight-purple/20 rounded-lg p-6">
+                <h3 class="text-lg font-medium text-bone-white mb-3">Google Analytics 4</h3>
+                <p class="text-moon-silver text-sm leading-relaxed mb-3">
+                  We use Google Analytics to understand how visitors use our website. Google provides comprehensive
+                  privacy controls and data processing agreements.
+                </p>
+                <div class="flex flex-wrap gap-2">
+                  <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer"
+                     class="text-xs bg-mystic-violet/20 text-mystic-violet px-2 py-1 rounded hover:bg-mystic-violet/30 transition-colors">
+                    Google Privacy Policy
+                  </a>
+                  <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener noreferrer"
+                     class="text-xs bg-mystic-violet/20 text-mystic-violet px-2 py-1 rounded hover:bg-mystic-violet/30 transition-colors">
+                    GA Opt-out Browser Add-on
+                  </a>
+                </div>
+              </div>
+
+              <div class="border border-dark-border bg-midnight-purple/20 rounded-lg p-6">
+                <h3 class="text-lg font-medium text-bone-white mb-3">Meta Pixel (Facebook)</h3>
+                <p class="text-moon-silver text-sm leading-relaxed mb-3">
+                  We use Meta Pixel to optimize our book marketing campaigns and reach readers interested in urban fantasy
+                  and paranormal romance. Meta provides privacy controls and respects user consent choices.
+                </p>
+                <div class="flex flex-wrap gap-2">
+                  <a href="https://www.facebook.com/privacy/policy/" target="_blank" rel="noopener noreferrer"
+                     class="text-xs bg-ember-orange/20 text-ember-orange px-2 py-1 rounded hover:bg-ember-orange/30 transition-colors">
+                    Meta Privacy Policy
+                  </a>
+                  <a href="https://www.facebook.com/settings?tab=ads" target="_blank" rel="noopener noreferrer"
+                     class="text-xs bg-ember-orange/20 text-ember-orange px-2 py-1 rounded hover:bg-ember-orange/30 transition-colors">
+                    Facebook Ad Preferences
+                  </a>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Data Security -->
+          <section class="mb-8">
+            <h2 class="text-2xl font-primary font-semibold text-bone-white mb-4 border-b border-dark-border pb-2">Data Security and Retention</h2>
+
+            <h3 class="text-xl font-medium text-moon-silver mb-3">Security Measures</h3>
+            <ul class="list-disc list-inside text-moon-silver space-y-2 mb-6">
+              <li><strong class="text-bone-white">Encryption:</strong> All cookie data is transmitted over HTTPS</li>
+              <li><strong class="text-bone-white">Access Control:</strong> Limited access to tracking data on need-to-know basis</li>
+              <li><strong class="text-bone-white">Regular Audits:</strong> Periodic review of cookie usage and data collection</li>
+              <li><strong class="text-bone-white">Data Minimization:</strong> We collect only what's necessary for stated purposes</li>
+            </ul>
+
+            <h3 class="text-xl font-medium text-moon-silver mb-3">Retention Periods</h3>
+            <div class="bg-midnight-purple/30 rounded-lg p-4 border border-dark-border">
+              <ul class="list-disc list-inside text-moon-silver space-y-2">
+                <li><strong class="text-bone-white">Essential Cookies:</strong> Until you clear them or they expire naturally</li>
+                <li><strong class="text-bone-white">Consent Preferences:</strong> 365 days (1 year)</li>
+                <li><strong class="text-bone-white">Analytics Data:</strong> 26 months (Google Analytics standard)</li>
+                <li><strong class="text-bone-white">Marketing Data:</strong> 180 days (Meta Pixel standard)</li>
+              </ul>
+            </div>
+          </section>
+
+          <!-- Contact and Updates -->
+          <section class="mb-8">
+            <h2 class="text-2xl font-primary font-semibold text-bone-white mb-4 border-b border-dark-border pb-2">Updates and Contact</h2>
+
+            <h3 class="text-xl font-medium text-moon-silver mb-3">Policy Updates</h3>
+            <p class="text-moon-silver leading-relaxed mb-6">
+              We may update this Cookie Policy from time to time to reflect changes in our practices or for legal reasons.
+              When we make significant changes, we will notify users through the website and update the "Last updated" date.
+            </p>
+
+            <h3 class="text-xl font-medium text-moon-silver mb-3">Contact Us</h3>
+            <div class="bg-gradient-to-r from-ember-orange/10 to-mystic-violet/10 rounded-lg p-6 border border-dark-border">
+              <p class="text-moon-silver leading-relaxed mb-4">
+                If you have questions about our cookie practices or need help managing your preferences:
+              </p>
+              <div class="space-y-2">
+                <p class="text-moon-silver"><strong class="text-bone-white">Email:</strong> privacy@gwendemarco.com</p>
+                <p class="text-moon-silver"><strong class="text-bone-white">Subject Line:</strong> "Cookie Policy Question"</p>
+                <p class="text-moon-silver"><strong class="text-bone-white">Response Time:</strong> Within 48 hours</p>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>

@@ -1,0 +1,130 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+// Get site configuration from CMS
+const settingsCollection = await getCollection('settings');
+const siteConfig = settingsCollection[0]?.data || {
+	socialLinks: {
+		goodreads: "https://www.goodreads.com/author/show/20443791.Gwen_DeMarco",
+		amazon: "https://www.amazon.com/stores/Gwen-DeMarco/author/B08CJ1G1RJ",
+		email: "gwendemarcoauthor@gmail.com"
+	}
+};
+
+// What I write about themes
+const writingThemes = [
+	"Paranormal romance with snarky heroines",
+	"Grumpy heroes with hearts of gold",
+	"Urban fantasy and supernatural creatures",
+	"Found family themes that warm the heart"
+];
+---
+
+<Layout title="Contact - Gwen DeMarco" description="Get in touch with Gwen DeMarco. I'd love to hear from readers and fellow writers about paranormal romance and urban fantasy.">
+	<main id="main-content" class="relative">
+		<!-- Hero Section -->
+		<section class="relative py-20 bg-gradient-night overflow-hidden">
+			<!-- Background fog effect -->
+			<div class="absolute inset-0 bg-gradient-fog opacity-40"></div>
+			<div class="absolute inset-0 bg-gradient-to-t from-shadow-black/80 to-transparent"></div>
+
+			<div class="container mx-auto px-4 relative z-10">
+				<div class="max-w-4xl mx-auto text-center space-y-6">
+					<h1 class="text-4xl md:text-6xl font-primary font-bold text-bone-white mb-4">
+						<span class="bg-gradient-to-r from-mystic-violet via-ember-orange to-mystic-teal bg-clip-text text-transparent">
+							Let's Connect
+						</span>
+					</h1>
+					<p class="text-xl md:text-2xl text-ember-orange font-medium">
+						I'd love to hear from readers & fellow writers
+					</p>
+					<p class="text-lg text-moon-silver/90 max-w-2xl mx-auto leading-relaxed">
+						Whether you have questions about my books, want to chat about paranormal romance, or just want to say hello, feel free to reach out.
+					</p>
+				</div>
+			</div>
+		</section>
+
+		<!-- Contact Content Section -->
+		<section class="py-16 bg-dark-surface">
+			<div class="container mx-auto px-4">
+				<div class="max-w-4xl mx-auto">
+					<div class="grid md:grid-cols-2 gap-8">
+						<!-- Get in Touch Card -->
+						<div class="card p-8">
+							<h2 class="text-2xl font-primary font-bold text-bone-white mb-6">Get in Touch</h2>
+							<div class="space-y-6">
+								<div>
+									<h3 class="text-lg font-medium text-ember-orange mb-2">Email</h3>
+									<p class="text-moon-silver">
+										<a href={`mailto:${siteConfig.socialLinks?.email || 'gwendemarcoauthor@gmail.com'}`} class="text-mystic-teal hover:text-ember-orange transition-colors">
+											{siteConfig.socialLinks?.email || 'gwendemarcoauthor@gmail.com'}
+										</a>
+									</p>
+								</div>
+
+								<div>
+									<h3 class="text-lg font-medium text-ember-orange mb-2">Find Me Online</h3>
+									<div class="space-y-3">
+										{siteConfig.socialLinks?.amazon && (
+											<div>
+												<a href={siteConfig.socialLinks.amazon} target="_blank" rel="noopener noreferrer" class="text-mystic-teal hover:text-ember-orange transition-colors flex items-center gap-2">
+													<span class="text-xl">&#128218;</span>
+													Amazon Author Page
+												</a>
+											</div>
+										)}
+										{siteConfig.socialLinks?.goodreads && (
+											<div>
+												<a href={siteConfig.socialLinks.goodreads} target="_blank" rel="noopener noreferrer" class="text-mystic-teal hover:text-ember-orange transition-colors flex items-center gap-2">
+													<span class="text-xl">&#128214;</span>
+													Goodreads
+												</a>
+											</div>
+										)}
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- What I Write About Card -->
+						<div class="card p-8">
+							<h2 class="text-2xl font-primary font-bold text-bone-white mb-6">What I Write About</h2>
+							<ul class="space-y-3 text-moon-silver">
+								{writingThemes.map((theme) => (
+									<li class="flex items-start gap-3">
+										<span class="text-mystic-violet">&#10022;</span>
+										{theme}
+									</li>
+								))}
+							</ul>
+						</div>
+					</div>
+
+					<!-- Response Note -->
+					<div class="mt-8 p-6 bg-gradient-to-r from-midnight-purple/50 via-shadow-black to-midnight-purple/50 rounded-xl border border-mystic-violet/30">
+						<p class="text-moon-silver/90">
+							<strong class="text-ember-orange">Note:</strong> I try to respond to all inquiries within 48 hours. For book recommendations or writing questions, I love hearing from readers!
+						</p>
+					</div>
+
+					<!-- Newsletter CTA -->
+					<div class="mt-12 text-center">
+						<div class="card p-8 bg-gradient-to-br from-midnight-purple to-shadow-black border-mystic-violet/30">
+							<h2 class="text-2xl font-primary font-bold text-bone-white mb-4">
+								Join the Supernatural Side
+							</h2>
+							<p class="text-moon-silver mb-6 max-w-xl mx-auto">
+								Get exclusive content, early access to new releases, and behind-the-scenes peeks into the weird and wonderful worlds of urban fantasy.
+							</p>
+							<a href="/#newsletter" class="btn btn-primary btn-lg px-8 py-4 inline-block">
+								Subscribe to My Newsletter
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</main>
+</Layout>

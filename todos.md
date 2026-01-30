@@ -1,0 +1,306 @@
+# Todo List
+
+## Phase 1: Project Setup
+
+- [x] **T001** - Initialize Astro project with TypeScript
+  - refs: D001
+  - Copy package.json structure from dane-griggs-website
+  - Install all required dependencies (astro, tailwind, react, mdx, etc.)
+  - Create astro.config.mjs with same integrations
+
+- [x] **T002** - Set up Tailwind CSS with urban fantasy theme
+  - refs: D002
+  - Create tailwind.config.mjs with custom color palette
+  - Add Cinzel and Inter fonts from Google Fonts
+  - Create custom component classes (btn, card, badge)
+  - Add glow effects and gradient definitions
+
+- [x] **T003** - Set up Decap CMS with local backend
+  - refs: D001, D009
+  - Create public/admin/index.html
+  - Create public/admin/config.yml with all collections
+  - Enable local_backend: true
+  - Test CMS access at /admin
+
+- [x] **T004** - Create base layout and components
+  - refs: D002, D004
+  - Copy and adapt Layout.astro from dane-griggs-website
+  - Create Header.astro with urban fantasy styling
+  - Create Footer.astro
+  - Create Navigation.astro with mobile menu
+  - Apply dark theme throughout
+
+## Phase 2: Content Structure
+
+- [x] **T005** - Create content collections configuration
+  - refs: D003
+  - Create src/content/config.ts (if needed for Astro 5)
+  - Set up books collection schema
+  - Set up series collection schema
+  - Set up blog collection schema
+  - Set up species collection schema
+  - Set up locations collection schema
+  - Set up settings collection schema
+
+- [x] **T006** - Create site settings content
+  - refs: D005, D008
+  - Create src/content/settings/site-config.md
+  - Include author bio, tagline, stats
+  - Include newsletter configuration
+  - Include social links (website, Amazon, Goodreads)
+
+## Phase 3: Series Content
+
+- [x] **T007** - Create Sophie Feegle series entry
+  - refs: D006
+  - Create src/content/series/sophie-feegle.md
+  - Include series description, book count, reading order
+  - Set as featured series
+
+- [x] **T008** - Create Kingdom of Erishum series entry
+  - refs: D006
+  - Create src/content/series/kingdom-of-erishum.md
+  - Include trilogy description and reading order
+
+- [x] **T009** - Create Auras & Embers series entry
+  - refs: D006
+  - Create src/content/series/auras-and-embers.md
+  - Mark as ongoing series
+
+## Phase 4: Book Content
+
+- [x] **T010** - Create Sophie and The Odd Ones book entry
+  - refs: D006
+  - Create src/content/books/sophie-and-the-odd-ones.md
+  - Amazon URL: https://www.amazon.com/Sophie-Odd-Ones-Gwen-DeMarco-ebook/dp/B08CHKH9SY
+  - Include full description, series info, purchase links
+
+- [x] **T011** - Create Portents and Oddities book entry
+  - refs: D006
+  - Create src/content/books/portents-and-oddities.md
+  - Sophie Feegle Book 2
+
+- [x] **T012** - Create Odd Times for Sophie Feegle book entry
+  - refs: D006
+  - Create src/content/books/odd-times-for-sophie-feegle.md
+  - Sophie Feegle Book 3
+
+- [x] **T013** - Create Against All Odds book entry
+  - refs: D006
+  - Create src/content/books/against-all-odds.md
+  - Sophie Feegle Book 4
+
+- [x] **T014** - Create Odds and Ends book entry
+  - refs: D006
+  - Create src/content/books/odds-and-ends.md
+  - Sophie Feegle Book 5
+
+- [x] **T015** - Create Sophie Feegle Box Set entry
+  - refs: D006
+  - Create src/content/books/sophie-feegle-box-set.md
+  - Amazon URL: https://www.amazon.com/Sophie-Feegle-Box-Set-Books-ebook/dp/B0CK55M553
+
+- [x] **T016** - Create The Mudlark book entry
+  - refs: D006
+  - Create src/content/books/the-mudlark.md
+  - Amazon URL: https://www.amazon.com/Mudlark-Kingdom-Erishum-Trilogy-Book-ebook/dp/B0CKZHXBB2
+  - Kingdom of Erishum Book 1
+
+- [x] **T017** - Create The Gutter Shrike book entry
+  - refs: D006
+  - Create src/content/books/the-gutter-shrike.md
+  - Amazon URL: https://www.amazon.com/Gutter-Shrike-Kingdom-Erishum-Trilogy-ebook/dp/B0CMFKGTNV
+  - Kingdom of Erishum Book 2
+
+- [x] **T018** - Create The Dying Wilds book entry
+  - refs: D006
+  - Create src/content/books/the-dying-wilds.md
+  - Amazon URL: https://www.amazon.com/Dying-Wilds-Kingdom-Erishum-Trilogy-ebook/dp/B0CY38RQ5G
+  - Kingdom of Erishum Book 3
+
+- [x] **T019** - Create Gideon Bean book entry
+  - refs: D006
+  - Create src/content/books/gideon-bean.md
+  - Amazon URL: https://www.amazon.com/Gideon-Bean-Auras-Embers-Book-ebook/dp/B0CT9ZX865
+  - Auras & Embers Book 1
+
+- [x] **T020** - Create Spirit Marked book entry
+  - refs: D006
+  - Create src/content/books/spirit-marked.md
+  - Amazon URL: https://www.amazon.com/Spirit-Marked-Auras-Embers-DeMarco/dp/1963906047
+  - Auras & Embers Book 2
+
+## Phase 5: Species Content
+
+- [x] **T021** - Create species content entries
+  - refs: D007
+  - Create src/content/species/shifters.md
+  - Create src/content/species/ogres.md
+  - Create src/content/species/vampires.md
+  - Create src/content/species/fae.md
+  - Create src/content/species/auramancers.md
+  - Create src/content/species/humans.md
+
+## Phase 6: Blog Content
+
+- [x] **T022** - Create Sophie and The Odd Ones launch blog post
+  - refs: D006
+  - Create src/content/blog/sophie-odd-ones-launch.md
+  - Announce first book in Sophie Feegle series
+
+- [x] **T023** - Create Kingdom of Erishum launch blog post
+  - refs: D006
+  - Create src/content/blog/kingdom-of-erishum-launch.md
+  - Announce fantasy trilogy
+
+- [x] **T024** - Create Gideon Bean launch blog post
+  - refs: D006
+  - Create src/content/blog/gideon-bean-launch.md
+  - Announce Auras & Embers series
+
+- [x] **T025** - Create Sophie Feegle series complete blog post
+  - refs: D006
+  - Create src/content/blog/sophie-feegle-complete.md
+  - Celebrate series completion
+
+## Phase 7: Page Development
+
+- [x] **T026** - Create homepage (index.astro)
+  - refs: D002, D004
+  - Copy structure from dane-griggs-website
+  - Apply urban fantasy theme
+  - Hero section with author name and tagline
+  - Featured books carousel
+  - Stats section
+  - Newsletter signup
+  - Why readers love section
+
+- [x] **T027** - Create about page
+  - refs: D004, D005
+  - Author bio section
+  - Writing philosophy cards
+  - Stats section
+  - Connect section with social links
+
+- [x] **T028** - Create books listing page
+  - refs: D004
+  - Grid of all books
+  - Filter by series
+  - Sort options
+  - Urban fantasy styled cards
+
+- [x] **T029** - Create individual book page template
+  - refs: D004
+  - Book cover display
+  - Full description
+  - Series info and reading order
+  - Purchase links (Amazon, etc.)
+  - Related books
+
+- [x] **T030** - Create series listing page
+  - refs: D004
+  - Grid of all series
+  - Book count and status
+
+- [x] **T031** - Create individual series page template
+  - refs: D004
+  - Series description
+  - Books in reading order
+  - World building notes
+
+- [x] **T032** - Create blog listing page
+  - refs: D004
+  - List of blog posts
+  - Category filters
+  - Pagination
+
+- [x] **T033** - Create individual blog post template
+  - refs: D004
+  - Post content rendering
+  - Related posts
+  - Share buttons
+
+- [x] **T034** - Create species listing page
+  - refs: D004, D007
+  - Grid of supernatural creatures
+  - Urban fantasy themed cards
+
+- [x] **T035** - Create individual species page template
+  - refs: D004
+  - Species description
+  - Related books
+
+- [x] **T036** - Create contact page
+  - refs: D004
+  - Contact form
+  - Social links
+  - Newsletter signup
+
+- [x] **T037** - Create search page
+  - refs: D004
+  - Full-text search
+  - Filter by content type
+
+- [x] **T038** - Create privacy policy page
+  - refs: D004
+  - Standard privacy policy content
+
+- [x] **T039** - Create cookie policy page
+  - refs: D004
+  - Cookie consent information
+
+## Phase 8: UI Components
+
+- [x] **T040** - Create BookCard component
+  - refs: D002
+  - Urban fantasy styled book cards
+  - Hover glow effects
+  - Series badge
+  - Rating display
+
+- [x] **T041** - Create SeriesCard component
+  - refs: D002
+  - Series summary cards
+  - Book count badge
+
+- [x] **T042** - Create NewsletterCTA component
+  - refs: D002, D008
+  - Email signup form
+  - Urban fantasy styling
+
+- [x] **T043** - Create StarfieldBackground or FogBackground component
+  - refs: D002
+  - Animated background effect
+  - Subtle, not distracting
+
+- [x] **T044** - Create SpeciesCard component
+  - refs: D002, D007
+  - Creature type cards
+  - Mystical styling
+
+## Phase 9: Final Polish
+
+- [x] **T045** - Add placeholder cover images
+  - Create placeholder book covers
+  - Add to public/images/
+  - Update book entries to reference images
+
+- [x] **T046** - Test all pages render correctly
+  - Run npm run build
+  - Fix any build errors
+  - Verify all routes work
+
+- [x] **T047** - Test Decap CMS admin
+  - Access /admin
+  - Verify all collections editable
+  - Test creating/editing content
+
+- [x] **T048** - Add responsive design fixes
+  - refs: D010
+  - Test on mobile viewports
+  - Fix any layout issues
+
+- [x] **T049** - Final review and cleanup
+  - Remove unused code
+  - Optimize images
+  - Check all links work

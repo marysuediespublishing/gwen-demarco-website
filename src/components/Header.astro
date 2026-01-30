@@ -1,0 +1,46 @@
+---
+import { SITE_TITLE } from '../consts';
+import Navigation from './Navigation.astro';
+import MobileMenu from './MobileMenu.astro';
+---
+
+<header data-testid="site-header" class="bg-gradient-to-r from-shadow-black to-midnight-purple backdrop-blur-md border-b border-mystic-violet/20 sticky top-0 z-50 transition-all duration-300">
+	<div class="container mx-auto px-4 py-4">
+		<nav class="flex items-center justify-between">
+			<!-- Author Name/Logo -->
+			<div data-testid="author-name" class="flex items-center space-x-3">
+				<a href="/" class="group flex items-center space-x-2 transition-all duration-200 hover:-translate-y-0.5">
+					<div class="w-8 h-8 bg-gradient-to-br from-mystic-violet to-ember-orange rounded-full flex items-center justify-center shadow-mystic">
+						<span class="text-bone-white font-bold font-accent text-sm">GD</span>
+					</div>
+					<span class="text-xl font-bold font-primary text-bone-white group-hover:text-ember-orange transition-colors">
+						{SITE_TITLE}
+					</span>
+				</a>
+			</div>
+
+			<!-- Desktop Navigation -->
+			<div class="hidden md:flex items-center space-x-4 lg:space-x-6">
+				<Navigation />
+
+				<!-- Newsletter CTA -->
+				<a
+					href="/contact"
+					class="btn-primary text-sm px-3 py-2 lg:px-4 whitespace-nowrap min-h-[44px] flex items-center"
+				>
+					<span class="hidden lg:inline">Join the Supernatural Side</span>
+					<span class="lg:hidden">Subscribe</span>
+				</a>
+			</div>
+
+			<!-- Mobile Actions -->
+			<div class="flex md:hidden items-center space-x-3">
+				<!-- Mobile Menu Toggle -->
+				<MobileMenu />
+			</div>
+		</nav>
+	</div>
+
+	<!-- Mystical header glow effect -->
+	<div class="absolute inset-0 bg-gradient-to-r from-mystic-violet/5 to-ember-orange/5 pointer-events-none"></div>
+</header>

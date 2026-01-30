@@ -1,0 +1,113 @@
+---
+import HeaderLink from './HeaderLink.astro';
+---
+
+<!-- Mobile Menu Container -->
+<div class="md:hidden">
+	<!-- Hamburger Button -->
+	<button
+		id="mobile-menu-button"
+		data-testid="mobile-menu-button"
+		class="text-moon-silver hover:text-ember-orange focus:outline-none focus:text-ember-orange transition-colors p-2"
+		aria-label="Toggle mobile menu"
+	>
+		<svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+			<path id="hamburger-icon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+			<path id="close-icon" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+		</svg>
+	</button>
+
+	<!-- Mobile Menu Overlay -->
+	<div
+		id="mobile-menu"
+		data-testid="mobile-menu"
+		class="hidden absolute top-full left-0 right-0 bg-shadow-black border-b border-mystic-violet/20 shadow-lg shadow-mystic-violet/10"
+	>
+		<div class="px-4 py-3 space-y-1">
+			<HeaderLink
+				href="/"
+				class="block px-4 py-3 text-moon-silver hover:text-ember-orange hover:bg-midnight-purple/50 rounded-md transition-colors min-h-[44px] flex items-center"
+				data-testid="mobile-home-link"
+			>
+				Home
+			</HeaderLink>
+			<HeaderLink
+				href="/books"
+				class="block px-4 py-3 text-moon-silver hover:text-ember-orange hover:bg-midnight-purple/50 rounded-md transition-colors min-h-[44px] flex items-center"
+				data-testid="mobile-books-link"
+			>
+				Books
+			</HeaderLink>
+			<HeaderLink
+				href="/series"
+				class="block px-4 py-3 text-moon-silver hover:text-ember-orange hover:bg-midnight-purple/50 rounded-md transition-colors min-h-[44px] flex items-center"
+				data-testid="mobile-series-link"
+			>
+				Series
+			</HeaderLink>
+			<HeaderLink
+				href="/species"
+				class="block px-4 py-3 text-moon-silver hover:text-ember-orange hover:bg-midnight-purple/50 rounded-md transition-colors min-h-[44px] flex items-center"
+				data-testid="mobile-species-link"
+			>
+				Species
+			</HeaderLink>
+			<HeaderLink
+				href="/blog"
+				class="block px-4 py-3 text-moon-silver hover:text-ember-orange hover:bg-midnight-purple/50 rounded-md transition-colors min-h-[44px] flex items-center"
+				data-testid="mobile-blog-link"
+			>
+				Blog
+			</HeaderLink>
+			<HeaderLink
+				href="/about"
+				class="block px-4 py-3 text-moon-silver hover:text-ember-orange hover:bg-midnight-purple/50 rounded-md transition-colors min-h-[44px] flex items-center"
+				data-testid="mobile-about-link"
+			>
+				About
+			</HeaderLink>
+			<HeaderLink
+				href="/contact"
+				class="block px-4 py-3 text-moon-silver hover:text-ember-orange hover:bg-midnight-purple/50 rounded-md transition-colors min-h-[44px] flex items-center"
+				data-testid="mobile-contact-link"
+			>
+				Contact
+			</HeaderLink>
+		</div>
+	</div>
+</div>
+
+<script>
+	document.addEventListener('DOMContentLoaded', () => {
+		const menuButton = document.getElementById('mobile-menu-button');
+		const mobileMenu = document.getElementById('mobile-menu');
+		const hamburgerIcon = document.getElementById('hamburger-icon');
+		const closeIcon = document.getElementById('close-icon');
+
+		if (menuButton && mobileMenu && hamburgerIcon && closeIcon) {
+			menuButton.addEventListener('click', () => {
+				const isHidden = mobileMenu.classList.contains('hidden');
+
+				if (isHidden) {
+					mobileMenu.classList.remove('hidden');
+					hamburgerIcon.classList.add('hidden');
+					closeIcon.classList.remove('hidden');
+				} else {
+					mobileMenu.classList.add('hidden');
+					hamburgerIcon.classList.remove('hidden');
+					closeIcon.classList.add('hidden');
+				}
+			});
+
+			// Close menu when clicking outside
+			document.addEventListener('click', (event) => {
+				const target = event.target as Element;
+				if (!menuButton.contains(target) && !mobileMenu.contains(target)) {
+					mobileMenu.classList.add('hidden');
+					hamburgerIcon.classList.remove('hidden');
+					closeIcon.classList.add('hidden');
+				}
+			});
+		}
+	});
+</script>

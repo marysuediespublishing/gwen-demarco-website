@@ -1,0 +1,14 @@
+---
+name: Vampires
+slug: vampires
+description: Vampires are the aristocrats of the supernatural world—ancient, powerful, and wrapped in centuries of mystery and intrigue. These undead beings sustain themselves on blood and have walked the shadows of human civilization for millennia.
+series:
+  - sophie-feegle
+physicalTraits: Inhumanly beautiful and eternally youthful, frozen at the age of their turning. Pale skin ranging from porcelain white to an unearthly pallor. Retractable fangs that extend when feeding.
+cultureNotes: Vampire society is hierarchical and political, with Master vampires ruling over territories. Age equals power, and ancient vampires command respect and fear.
+abilities: Superhuman strength, speed, and senses that increase with age. Immortality and immunity to disease. Ability to mesmerize and control weaker minds.
+---
+
+# Vampires
+
+Vampires reign in the shadows of the supernatural world, ancient predators who have mastered the art of survival through centuries of darkness.

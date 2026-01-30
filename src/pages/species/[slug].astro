@@ -1,0 +1,295 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection, render } from 'astro:content';
+
+// Get the slug from URL params
+const { slug } = Astro.params;
+
+// Fetch all species and find the one matching the slug
+const allSpecies = await getCollection('species');
+const species = allSpecies.find(s => s.id === slug);
+
+// Handle species not found - return 404
+if (!species) {
+	return Astro.redirect('/404');
+}
+
+// Get all series and books to show where this species appears
+const allSeries = await getCollection('series');
+const allBooks = await getCollection('books');
+
+// Find series that feature this species
+const featuredSeries = allSeries.filter(series =>
+	series.data.species && series.data.species.includes(species.id)
+).sort((a, b) => a.data.title.localeCompare(b.data.title));
+
+// Find books that feature this species
+const featuredBooks = allBooks.filter(book =>
+	book.data.species && book.data.species.includes(species.id)
+).sort((a, b) => a.data.title.localeCompare(b.data.title));
+
+// Function to format species name for display
+const formatSpeciesName = (name: string): string => {
+	if (name.toLowerCase() === 'human') return 'Human';
+	if (name.includes(' ')) {
+		return name;
+	} else {
+		return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+	}
+};
+
+// Function to split long text into paragraphs for better readability
+const formatTextWithParagraphs = (text: string): string[] => {
+	if (!text) return [];
+
+	const naturalParagraphs = text.split(/\n\s*\n/);
+	if (naturalParagraphs.length > 1) {
+		return naturalParagraphs.map(p => p.trim()).filter(p => p.length > 0);
+	}
+
+	if (text.length > 600) {
+		const sentences = text.match(/[^\.!?]+[\.!?]+/g) || [text];
+		if (sentences.length > 3) {
+			const paragraphs = [];
+			let currentParagraph = '';
+			for (const sentence of sentences) {
+				const trimmedSentence = sentence.trim();
+				if (currentParagraph.length + trimmedSentence.length > 400 && currentParagraph.length > 0) {
+					paragraphs.push(currentParagraph.trim());
+					currentParagraph = trimmedSentence;
+				} else {
+					currentParagraph += (currentParagraph ? ' ' : '') + trimmedSentence;
+				}
+			}
+			if (currentParagraph.trim()) {
+				paragraphs.push(currentParagraph.trim());
+			}
+			return paragraphs.length > 1 ? paragraphs : [text];
+		}
+	}
+
+	return [text];
+};
+
+// Get emoji for species
+const getSpeciesEmoji = (id: string): string => {
+	const emojiMap: Record<string, string> = {
+		shifters: '🐺',
+		vampires: '🧛',
+		fae: '🧚',
+		ogres: '👹',
+		auramancers: '✨',
+		humans: '👤',
+	};
+	return emojiMap[id] || '🌙';
+};
+
+const speciesName = formatSpeciesName(species.data.name);
+const { Content } = await render(species);
+---
+
+<Layout title={`${speciesName} - Supernatural Species - Gwen DeMarco`} description={species.data.description || `Learn about ${speciesName} in Gwen DeMarco's paranormal romance novels.`}>
+	<main id="main-content" class="relative">
+		<!-- Hero Section -->
+		<section class="relative py-16 bg-gradient-night overflow-hidden">
+			<!-- Background fog effect -->
+			<div class="absolute inset-0 bg-gradient-fog opacity-30"></div>
+			<div class="absolute inset-0 bg-gradient-to-t from-shadow-black/60 to-transparent"></div>
+
+			<div class="container mx-auto px-4 relative z-10">
+				<div class="max-w-4xl mx-auto text-center">
+					<div class="text-lg text-ember-orange font-medium mb-2">Species Profile</div>
+					<h1 class="text-5xl md:text-6xl font-primary font-bold text-bone-white mb-6">
+						<span class="bg-gradient-to-r from-mystic-violet via-ember-orange to-mystic-teal bg-clip-text text-transparent">
+							{speciesName}
+						</span>
+					</h1>
+				</div>
+			</div>
+		</section>
+
+		<!-- Main Content Section -->
+		<section class="py-16 bg-dark-surface">
+			<div class="container mx-auto px-4">
+				<div class="max-w-6xl mx-auto">
+					<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+						<!-- Description -->
+						<div class="space-y-6">
+							{species.data.description && (
+								<div class="text-xl text-moon-silver leading-relaxed space-y-4">
+									{formatTextWithParagraphs(species.data.description).map((paragraph) => (
+										<p>{paragraph}</p>
+									))}
+								</div>
+							)}
+						</div>
+
+						<!-- Image and Stats -->
+						<div class="space-y-8">
+							<!-- Species Image -->
+							{species.data.image ? (
+								<div class="relative max-w-sm mx-auto lg:mx-0">
+									<div class="relative rounded-2xl overflow-hidden shadow-2xl border border-mystic-violet/30">
+										<img
+											src={typeof species.data.image === 'string' ? species.data.image : species.data.image.src}
+											alt={`${speciesName} species artwork`}
+											class="w-full h-auto object-cover"
+										/>
+									</div>
+									<div class="absolute inset-0 rounded-2xl border-2 border-ember-orange/20 -m-1"></div>
+								</div>
+							) : (
+								<div class="relative max-w-sm mx-auto lg:mx-0">
+									<div class="aspect-[3/4] bg-gradient-to-br from-mystic-violet/40 to-midnight-purple rounded-2xl flex items-center justify-center shadow-2xl border border-mystic-violet/30">
+										<div class="text-center text-moon-silver">
+											<div class="text-8xl mb-4">{getSpeciesEmoji(species.id)}</div>
+											<div class="text-lg font-bold text-bone-white">{speciesName}</div>
+										</div>
+									</div>
+								</div>
+							)}
+
+							<!-- Featured Content Lists -->
+							<div class="space-y-6">
+								<!-- Series List -->
+								{featuredSeries.length > 0 && (
+									<div class="bg-midnight-purple/50 rounded-lg p-4 border border-mystic-violet/20">
+										<h3 class="text-lg font-bold text-bone-white mb-3 flex items-center">
+											<svg class="w-5 h-5 text-mystic-violet mr-2" fill="currentColor" viewBox="0 0 20 20">
+												<path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"></path>
+											</svg>
+											Series ({featuredSeries.length})
+										</h3>
+										<div class="space-y-2">
+											{featuredSeries.map((series) => (
+												<a
+													href={`/series/${series.id}`}
+													class="block text-sm text-moon-silver/80 hover:text-ember-orange transition-colors"
+												>
+													{series.data.title}
+												</a>
+											))}
+										</div>
+									</div>
+								)}
+
+								<!-- Books List -->
+								{featuredBooks.length > 0 && (
+									<div class="bg-midnight-purple/50 rounded-lg p-4 border border-mystic-violet/20">
+										<h3 class="text-lg font-bold text-bone-white mb-3 flex items-center">
+											<svg class="w-5 h-5 text-ember-orange mr-2" fill="currentColor" viewBox="0 0 20 20">
+												<path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V4.804z"></path>
+											</svg>
+											Books ({featuredBooks.length})
+										</h3>
+										<div class="space-y-2 max-h-48 overflow-y-auto">
+											{featuredBooks.map((book) => (
+												<a
+													href={`/books/${book.id}`}
+													class="block text-sm text-moon-silver/80 hover:text-ember-orange transition-colors"
+												>
+													{book.data.title}
+												</a>
+											))}
+										</div>
+									</div>
+								)}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Species Details -->
+		<section class="py-20 bg-shadow-black">
+			<div class="container mx-auto px-4">
+				<div class="max-w-4xl mx-auto space-y-12">
+
+					<!-- Physical Traits -->
+					{species.data.physicalTraits && (
+						<div class="bg-midnight-purple/30 rounded-xl p-8 shadow-lg border border-mystic-violet/20">
+							<h2 class="text-3xl font-primary font-bold text-bone-white mb-6 flex items-center">
+								<svg class="w-8 h-8 text-mystic-teal mr-3" fill="currentColor" viewBox="0 0 20 20">
+									<path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+								</svg>
+								Physical Characteristics
+							</h2>
+							<div class="text-lg text-moon-silver leading-relaxed space-y-4">
+								{formatTextWithParagraphs(species.data.physicalTraits).map((paragraph) => (
+									<p>{paragraph}</p>
+								))}
+							</div>
+						</div>
+					)}
+
+					<!-- Culture Notes -->
+					{species.data.cultureNotes && (
+						<div class="bg-midnight-purple/30 rounded-xl p-8 shadow-lg border border-mystic-violet/20">
+							<h2 class="text-3xl font-primary font-bold text-bone-white mb-6 flex items-center">
+								<svg class="w-8 h-8 text-ember-orange mr-3" fill="currentColor" viewBox="0 0 20 20">
+									<path d="M12 14l9-5-9-5-9 5 9 5z"></path>
+								</svg>
+								Culture & Society
+							</h2>
+							<div class="text-lg text-moon-silver leading-relaxed space-y-4">
+								{formatTextWithParagraphs(species.data.cultureNotes).map((paragraph) => (
+									<p>{paragraph}</p>
+								))}
+							</div>
+						</div>
+					)}
+
+					<!-- Abilities -->
+					{species.data.abilities && (
+						<div class="bg-midnight-purple/30 rounded-xl p-8 shadow-lg border border-mystic-violet/20">
+							<h2 class="text-3xl font-primary font-bold text-bone-white mb-6 flex items-center">
+								<svg class="w-8 h-8 text-mystic-violet mr-3" fill="currentColor" viewBox="0 0 20 20">
+									<path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+								</svg>
+								Powers & Abilities
+							</h2>
+							<div class="text-lg text-moon-silver leading-relaxed space-y-4">
+								{formatTextWithParagraphs(species.data.abilities).map((paragraph) => (
+									<p>{paragraph}</p>
+								))}
+							</div>
+						</div>
+					)}
+
+					<!-- Additional Content from MDX body -->
+					{species.body && species.body.trim() !== '' && (
+						<div class="bg-midnight-purple/30 rounded-xl p-8 shadow-lg border border-mystic-violet/20">
+							<h2 class="text-3xl font-primary font-bold text-bone-white mb-6">Additional Information</h2>
+							<div class="prose prose-lg prose-invert max-w-none text-moon-silver prose-headings:text-bone-white prose-a:text-mystic-teal hover:prose-a:text-ember-orange">
+								<Content />
+							</div>
+						</div>
+					)}
+				</div>
+			</div>
+		</section>
+
+		<!-- Navigation -->
+		<section class="py-16 bg-gradient-to-r from-midnight-purple via-shadow-black to-midnight-purple">
+			<div class="container mx-auto px-4 text-center">
+				<div class="max-w-3xl mx-auto space-y-8">
+					<h2 class="text-3xl md:text-4xl font-primary font-bold text-bone-white">
+						Explore More Creatures
+					</h2>
+					<div class="flex flex-col sm:flex-row gap-4 justify-center">
+						<a href="/species" class="btn btn-primary btn-lg px-8 py-4">
+							All Species
+						</a>
+						<a href="/series" class="btn btn-outline btn-lg px-8 py-4">
+							Browse Series
+						</a>
+						<a href="/books" class="btn btn-outline btn-lg px-8 py-4">
+							View Books
+						</a>
+					</div>
+				</div>
+			</div>
+		</section>
+	</main>
+</Layout>

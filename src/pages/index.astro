@@ -1,0 +1,247 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { SITE_TITLE } from '../consts';
+import { getCollection } from 'astro:content';
+
+// Get site configuration from CMS
+const settingsCollection = await getCollection('settings');
+const siteConfig = settingsCollection[0]?.data || {
+	tagline: "Paranormal romance with a focus on the weird and wonderful",
+	stats: {
+		booksPublished: 11,
+		pagesRead: "1M+",
+		readerRatings: "500+",
+		seriesComplete: 2
+	},
+	authorBio: "Gwen DeMarco writes paranormal romance novels featuring snarky heroines, grumpy male leads, and the magic of found family.",
+	newsletter: {
+		leadMagnetTitle: "Join the Supernatural Side",
+		leadMagnetDescription: "Get exclusive content, early access to new releases, and behind-the-scenes peeks into the weird and wonderful worlds of urban fantasy.",
+		benefits: [
+			"Free starter content with bonus material",
+			"Early access to new releases",
+			"Exclusive character backstories",
+			"Behind-the-scenes writing updates"
+		]
+	}
+};
+
+// Get featured series
+const allSeries = await getCollection('series');
+const featuredSeries = allSeries.filter(s => s.data.featured);
+---
+
+<Layout title={`${SITE_TITLE} | Paranormal Romance Author`}>
+	<main id="main-content" class="relative">
+		<!-- Hero Section -->
+		<section class="relative min-h-screen flex items-center justify-center bg-gradient-night overflow-hidden">
+			<!-- Background fog effect -->
+			<div class="absolute inset-0 bg-gradient-fog opacity-40"></div>
+			<div class="absolute inset-0 bg-gradient-to-t from-shadow-black/80 to-transparent"></div>
+
+			<!-- Animated fog layers -->
+			<div class="absolute inset-0 overflow-hidden pointer-events-none">
+				<div class="absolute w-full h-64 -bottom-32 bg-gradient-to-t from-midnight-purple/30 to-transparent animate-fog-drift"></div>
+			</div>
+
+			<div class="container mx-auto px-4 text-center relative z-10">
+				<div class="max-w-4xl mx-auto space-y-8">
+					<!-- Author Name & Tagline -->
+					<div class="space-y-4">
+						<h1 class="text-4xl sm:text-5xl md:text-7xl font-primary font-bold text-bone-white mb-4">
+							<span class="bg-gradient-to-r from-mystic-violet via-ember-orange to-mystic-teal bg-clip-text text-transparent">
+								Gwen DeMarco
+							</span>
+						</h1>
+						<p class="text-lg sm:text-xl md:text-2xl text-ember-orange font-medium px-2">
+							{siteConfig.tagline || "Paranormal romance with a focus on the weird and wonderful"}
+						</p>
+					</div>
+
+					<!-- Stats -->
+					<div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
+						<div class="bg-midnight-purple/40 backdrop-blur-sm rounded-lg p-3 sm:p-4 border border-mystic-violet/30 hover:shadow-mystic transition-all duration-300">
+							<div class="text-xl sm:text-2xl md:text-3xl font-bold text-ember-orange">{siteConfig.stats?.booksPublished || 11}</div>
+							<div class="text-xs sm:text-sm text-moon-silver/80">Books Published</div>
+						</div>
+						<div class="bg-midnight-purple/40 backdrop-blur-sm rounded-lg p-3 sm:p-4 border border-mystic-violet/30 hover:shadow-mystic transition-all duration-300">
+							<div class="text-xl sm:text-2xl md:text-3xl font-bold text-ember-orange">{siteConfig.stats?.pagesRead || "1M+"}</div>
+							<div class="text-xs sm:text-sm text-moon-silver/80">Pages Read</div>
+						</div>
+						<div class="bg-midnight-purple/40 backdrop-blur-sm rounded-lg p-3 sm:p-4 border border-mystic-violet/30 hover:shadow-mystic transition-all duration-300">
+							<div class="text-xl sm:text-2xl md:text-3xl font-bold text-ember-orange">{siteConfig.stats?.readerRatings || "500+"}</div>
+							<div class="text-xs sm:text-sm text-moon-silver/80">Reader Ratings</div>
+						</div>
+						<div class="bg-midnight-purple/40 backdrop-blur-sm rounded-lg p-3 sm:p-4 border border-mystic-violet/30 hover:shadow-mystic transition-all duration-300">
+							<div class="text-xl sm:text-2xl md:text-3xl font-bold text-ember-orange">{siteConfig.stats?.seriesComplete || 2}</div>
+							<div class="text-xs sm:text-sm text-moon-silver/80">Series Complete</div>
+						</div>
+					</div>
+
+					<!-- CTA Buttons -->
+					<div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+						<a href="/books" class="btn btn-primary btn-lg px-6 sm:px-8 py-4 text-base sm:text-lg w-full sm:w-auto min-h-[48px]">
+							Explore My Books
+						</a>
+						<a href="/about" class="btn btn-secondary btn-lg px-6 sm:px-8 py-4 text-base sm:text-lg w-full sm:w-auto min-h-[48px]">
+							Meet the Author
+						</a>
+					</div>
+
+					<!-- Author Bio Snippet -->
+					<div class="max-w-2xl mx-auto">
+						<p class="text-lg text-moon-silver/90 leading-relaxed">
+							{siteConfig.authorBio?.split('.').slice(0, 2).join('.') + '.' ||
+							"Gwen DeMarco writes paranormal romance novels featuring snarky heroines, grumpy male leads, and the magic of found family."}
+						</p>
+					</div>
+				</div>
+			</div>
+
+			<!-- Scroll Indicator -->
+			<div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+				<svg class="w-6 h-6 text-ember-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+				</svg>
+			</div>
+		</section>
+
+		<!-- Featured Series Section -->
+		<section class="py-16 px-4 bg-dark-surface">
+			<div class="container mx-auto">
+				<div class="text-center mb-12">
+					<h2 class="font-primary text-3xl md:text-4xl font-bold text-bone-white mb-4">
+						Featured Series
+					</h2>
+					<p class="text-lg text-fog-gray max-w-2xl mx-auto">
+						Dive into supernatural worlds filled with snarky heroines, grumpy heroes, and the magic of found family
+					</p>
+				</div>
+
+				<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 max-w-5xl mx-auto">
+					<!-- Sophie Feegle -->
+					<a href="/series/sophie-feegle" class="card card-hover p-5 sm:p-6 text-center group">
+						<div class="w-14 h-14 sm:w-16 sm:h-16 mx-auto mb-4 bg-gradient-to-br from-mystic-violet to-ember-orange rounded-full flex items-center justify-center shadow-mystic group-hover:shadow-ember transition-shadow duration-300">
+							<span class="text-xl sm:text-2xl">&#128123;</span>
+						</div>
+						<h3 class="font-primary text-lg sm:text-xl font-bold text-ember-orange mb-2 group-hover:text-mystic-teal transition-colors">Sophie Feegle</h3>
+						<p class="text-fog-gray text-sm sm:text-base mb-4">Urban fantasy set in San Francisco's supernatural underbelly. Shifters, ogres, and one very determined morgue assistant.</p>
+						<span class="badge badge-primary">5 Books</span>
+					</a>
+
+					<!-- Kingdom of Erishum -->
+					<a href="/series/kingdom-of-erishum" class="card card-hover p-5 sm:p-6 text-center group">
+						<div class="w-14 h-14 sm:w-16 sm:h-16 mx-auto mb-4 bg-gradient-to-br from-mystic-teal to-mystic-violet rounded-full flex items-center justify-center shadow-teal group-hover:shadow-mystic transition-shadow duration-300">
+							<span class="text-xl sm:text-2xl">&#128081;</span>
+						</div>
+						<h3 class="font-primary text-lg sm:text-xl font-bold text-mystic-teal mb-2 group-hover:text-ember-orange transition-colors">Kingdom of Erishum</h3>
+						<p class="text-fog-gray text-sm sm:text-base mb-4">Epic fantasy trilogy with street-level heroism, ancient creatures, and impossible odds.</p>
+						<span class="badge badge-secondary">Trilogy</span>
+					</a>
+
+					<!-- Auras & Embers -->
+					<a href="/series/auras-and-embers" class="card card-hover p-5 sm:p-6 text-center group sm:col-span-2 lg:col-span-1">
+						<div class="w-14 h-14 sm:w-16 sm:h-16 mx-auto mb-4 bg-gradient-to-br from-ember-orange to-mystic-violet rounded-full flex items-center justify-center shadow-ember group-hover:shadow-mystic transition-shadow duration-300">
+							<span class="text-xl sm:text-2xl">&#128293;</span>
+						</div>
+						<h3 class="font-primary text-lg sm:text-xl font-bold text-ember-orange mb-2 group-hover:text-mystic-teal transition-colors">Auras & Embers</h3>
+						<p class="text-fog-gray text-sm sm:text-base mb-4">Urban fantasy with auramancers, phoenix shifters, and dangerous magic that demands a price.</p>
+						<span class="badge badge-outline">Ongoing</span>
+					</a>
+				</div>
+
+				<div class="text-center mt-12">
+					<a href="/series" class="btn btn-outline btn-lg px-8 py-4">
+						View All Series
+					</a>
+				</div>
+			</div>
+		</section>
+
+		<!-- Why Readers Love Section -->
+		<section class="py-16 px-4 bg-bg-secondary">
+			<div class="container mx-auto">
+				<div class="text-center mb-12">
+					<h2 class="font-primary text-3xl md:text-4xl font-bold text-bone-white mb-4">
+						Why Readers Love My Books
+					</h2>
+					<p class="text-lg text-fog-gray max-w-2xl mx-auto">
+						Discover what makes these paranormal worlds different
+					</p>
+				</div>
+
+				<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 max-w-5xl mx-auto">
+					<div class="card p-6 sm:p-8 text-center hover:shadow-mystic transition-all duration-300">
+						<div class="w-12 h-12 sm:w-14 sm:h-14 mx-auto mb-4 bg-gradient-to-br from-mystic-violet to-ember-orange rounded-full flex items-center justify-center">
+							<svg class="w-6 h-6 sm:w-7 sm:h-7 text-bone-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+							</svg>
+						</div>
+						<h3 class="text-lg sm:text-xl font-bold text-ember-orange mb-4 font-primary">Snarky Heroines</h3>
+						<p class="text-fog-gray text-sm sm:text-base">
+							My heroines have attitude, opinions, and aren't afraid to use them. They solve problems with wit and determination, not damsel-in-distress moments.
+						</p>
+					</div>
+
+					<div class="card p-6 sm:p-8 text-center hover:shadow-teal transition-all duration-300">
+						<div class="w-12 h-12 sm:w-14 sm:h-14 mx-auto mb-4 bg-gradient-to-br from-mystic-teal to-mystic-violet rounded-full flex items-center justify-center">
+							<svg class="w-6 h-6 sm:w-7 sm:h-7 text-bone-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" />
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z" />
+							</svg>
+						</div>
+						<h3 class="text-lg sm:text-xl font-bold text-mystic-teal mb-4 font-primary">Found Family</h3>
+						<p class="text-fog-gray text-sm sm:text-base">
+							Blood doesn't make a family—loyalty does. My books celebrate the bonds we choose and the people who become home.
+						</p>
+					</div>
+
+					<div class="card p-6 sm:p-8 text-center hover:shadow-ember transition-all duration-300 sm:col-span-2 lg:col-span-1">
+						<div class="w-12 h-12 sm:w-14 sm:h-14 mx-auto mb-4 bg-gradient-to-br from-ember-orange to-mystic-violet rounded-full flex items-center justify-center">
+							<svg class="w-6 h-6 sm:w-7 sm:h-7 text-bone-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+							</svg>
+						</div>
+						<h3 class="text-lg sm:text-xl font-bold text-ember-orange mb-4 font-primary">Grumpy-Sunshine Romance</h3>
+						<p class="text-fog-gray text-sm sm:text-base">
+							There's nothing like a grumpy hero melting for the right person. Add some supernatural tension and you've got the perfect slow burn.
+						</p>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Newsletter Section -->
+		<section class="py-12 sm:py-16 px-4 bg-gradient-to-r from-midnight-purple via-shadow-black to-midnight-purple">
+			<div class="container mx-auto text-center">
+				<div class="max-w-3xl mx-auto">
+					<h2 class="font-primary text-2xl sm:text-3xl md:text-4xl font-bold text-bone-white mb-4">
+						{siteConfig.newsletter?.leadMagnetTitle || "Join the Supernatural Side"}
+					</h2>
+					<p class="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 text-moon-silver/90 px-2">
+						{siteConfig.newsletter?.leadMagnetDescription || "Get exclusive content, early access to new releases, and behind-the-scenes peeks into the weird and wonderful worlds of urban fantasy."}
+					</p>
+
+					{siteConfig.newsletter?.benefits && (
+						<div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-6 sm:mb-8 text-left max-w-2xl mx-auto px-2">
+							{siteConfig.newsletter.benefits.slice(0, 4).map((benefit: string) => (
+								<div class="flex items-start space-x-3">
+									<div class="w-5 h-5 bg-ember-orange rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+										<svg class="w-3 h-3 text-bone-white" fill="currentColor" viewBox="0 0 20 20">
+											<path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+										</svg>
+									</div>
+									<span class="text-moon-silver text-sm sm:text-base">{benefit}</span>
+								</div>
+							))}
+						</div>
+					)}
+
+					<a href="/contact" class="btn btn-primary btn-lg px-6 sm:px-8 py-4 text-base sm:text-lg min-h-[48px]">
+						Subscribe Now
+					</a>
+				</div>
+			</div>
+		</section>
+	</main>
+</Layout>

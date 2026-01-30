@@ -1,0 +1,657 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { SITE_TITLE } from '../consts';
+import { getCollection } from 'astro:content';
+import { getImage } from 'astro:assets';
+
+// Get search query from URL params
+const url = Astro.url;
+const searchQuery = url.searchParams.get('q') || '';
+
+// Get all content for searching
+const books = await Promise.all(
+  (await getCollection('books')).map(async book => {
+    try {
+      const coverImage = book.data.cover ? await getImage({
+        src: book.data.cover,
+        width: 300,
+        height: 450,
+        format: 'webp'
+      }) : null;
+
+      return {
+        ...book,
+        slug: book.id,
+        coverUrl: coverImage?.src
+      };
+    } catch (error) {
+      console.warn(`Failed to process cover for book ${book.id}:`, error);
+      return {
+        ...book,
+        slug: book.id,
+        coverUrl: null
+      };
+    }
+  })
+);
+
+const seriesCollection = await getCollection('series');
+const blog = await getCollection('blog');
+const speciesCollection = await getCollection('species');
+const pages = await getCollection('pages');
+
+// Optional collections - may not exist
+let characters: any[] = [];
+let locations: any[] = [];
+
+try {
+  characters = await getCollection('characters');
+} catch (e) {
+  // characters collection may be empty or not exist
+}
+
+try {
+  locations = await getCollection('locations');
+} catch (e) {
+  // locations collection may be empty or not exist
+}
+
+// Helper function to handle hyphen vs space matching
+const normalizeForSearch = (text: string): string => {
+  return text.replace(/\s+/g, '-');
+};
+
+const matchesQuery = (text: string, query: string): boolean => {
+  if (!text) return false;
+  const lowerText = text.toLowerCase();
+  const lowerQuery = query.toLowerCase();
+  const normalizedQuery = normalizeForSearch(lowerQuery);
+
+  return lowerText.includes(lowerQuery) || lowerText.includes(normalizedQuery);
+};
+
+// Search functions
+const searchBooks = (query: string) => {
+  if (!query) return [];
+
+  return books.filter(book =>
+    matchesQuery(book.data.title, query) ||
+    matchesQuery(book.data.description, query) ||
+    matchesQuery(book.data.author, query) ||
+    (book.data.series && matchesQuery(book.data.series, query)) ||
+    (book.data.species && book.data.species.some(s => matchesQuery(s, query))) ||
+    (book.data.genres && book.data.genres.some(genre => matchesQuery(genre, query))) ||
+    (book.data.setting && book.data.setting.some(setting => matchesQuery(setting, query)))
+  );
+};
+
+const searchSeries = (query: string) => {
+  if (!query) return [];
+
+  return seriesCollection.filter(s =>
+    matchesQuery(s.data.title, query) ||
+    matchesQuery(s.data.description, query) ||
+    (s.data.worldBuilding && matchesQuery(s.data.worldBuilding, query)) ||
+    (s.data.species && s.data.species.some(species => matchesQuery(species, query)))
+  );
+};
+
+const searchBlogPosts = (query: string) => {
+  if (!query) return [];
+
+  return blog.filter(post =>
+    matchesQuery(post.data.title, query) ||
+    matchesQuery(post.data.description, query) ||
+    (post.data.category && matchesQuery(post.data.category, query)) ||
+    (post.data.tags && post.data.tags.some(tag => matchesQuery(tag, query)))
+  );
+};
+
+const searchSpecies = (query: string) => {
+  if (!query) return [];
+
+  return speciesCollection.filter(s =>
+    matchesQuery(s.data.name, query) ||
+    (s.data.description && matchesQuery(s.data.description, query)) ||
+    (s.data.physicalTraits && matchesQuery(s.data.physicalTraits, query)) ||
+    (s.data.cultureNotes && matchesQuery(s.data.cultureNotes, query)) ||
+    (s.data.abilities && matchesQuery(s.data.abilities, query))
+  );
+};
+
+const searchCharacters = (query: string) => {
+  if (!query || characters.length === 0) return [];
+
+  return characters.filter(c =>
+    matchesQuery(c.data.name, query) ||
+    (c.data.description && matchesQuery(c.data.description, query)) ||
+    (c.data.species && matchesQuery(c.data.species, query)) ||
+    (c.data.books && c.data.books.some((book: string) => matchesQuery(book, query)))
+  );
+};
+
+const searchPages = (query: string) => {
+  if (!query) return [];
+
+  return pages.filter(p =>
+    matchesQuery(p.data.title, query) ||
+    (p.data.hero?.title && matchesQuery(p.data.hero.title, query)) ||
+    (p.data.hero?.tagline && matchesQuery(p.data.hero.tagline, query)) ||
+    (p.data.authorBio?.mainBio && matchesQuery(p.data.authorBio.mainBio, query))
+  );
+};
+
+const searchLocations = (query: string) => {
+  if (!query || locations.length === 0) return [];
+
+  return locations.filter(l =>
+    matchesQuery(l.data.name, query) ||
+    (l.data.description && matchesQuery(l.data.description, query)) ||
+    (l.data.environmentType && matchesQuery(l.data.environmentType, query))
+  );
+};
+
+// Perform searches
+const foundBooks = searchBooks(searchQuery);
+const foundSeries = searchSeries(searchQuery);
+const foundBlogPosts = searchBlogPosts(searchQuery);
+const foundSpecies = searchSpecies(searchQuery);
+const foundCharacters = searchCharacters(searchQuery);
+const foundPages = searchPages(searchQuery);
+const foundLocations = searchLocations(searchQuery);
+
+const totalResults = foundBooks.length + foundSeries.length + foundBlogPosts.length +
+                     foundSpecies.length + foundCharacters.length + foundPages.length +
+                     foundLocations.length;
+
+// Popular searches for empty state - urban fantasy themed
+const popularSearches = [
+  'Sophie Feegle',
+  'shifter',
+  'vampire',
+  'fae',
+  'San Francisco',
+  'Kingdom of Erishum',
+  'Auras & Embers',
+  'paranormal romance'
+];
+---
+
+<Layout title={`Search${searchQuery ? ` - ${searchQuery}` : ''} | ${SITE_TITLE}`}>
+  <main id="main-content" class="min-h-screen bg-shadow-black">
+    <!-- Search Header -->
+    <section class="py-12 bg-gradient-to-br from-shadow-black via-midnight-purple to-shadow-black relative overflow-hidden">
+      <!-- Decorative glow -->
+      <div class="absolute inset-0 bg-gradient-to-r from-mystic-violet/10 to-ember-orange/5 pointer-events-none"></div>
+
+      <div class="container mx-auto px-4 relative z-10">
+        <div class="max-w-4xl mx-auto text-center">
+          <h1 class="text-3xl md:text-4xl font-primary font-bold text-bone-white mb-6">
+            {searchQuery ? (
+              <>Search Results for "<span class="text-ember-orange">{searchQuery}</span>"</>
+            ) : (
+              <>Search <span class="bg-gradient-to-r from-mystic-violet to-ember-orange bg-clip-text text-transparent">My Books</span></>
+            )}
+          </h1>
+
+          {searchQuery && (
+            <p class="text-lg text-moon-silver/80 mb-6">
+              Found {totalResults} result{totalResults !== 1 ? 's' : ''} matching your search
+            </p>
+          )}
+
+          <!-- Search Form -->
+          <form method="get" action="/search" class="max-w-2xl mx-auto">
+            <div class="relative">
+              <input
+                type="text"
+                name="q"
+                value={searchQuery}
+                placeholder="Search books, series, species..."
+                class="w-full bg-shadow-black/50 backdrop-blur-sm border-2 border-mystic-violet/30
+                       rounded-lg px-6 py-4 text-moon-silver placeholder-fog-gray text-lg
+                       focus:outline-none focus:border-ember-orange focus:shadow-mystic
+                       transition-all duration-200"
+                aria-label="Search"
+              />
+              <button
+                type="submit"
+                class="absolute right-3 top-1/2 transform -translate-y-1/2 text-fog-gray hover:text-ember-orange transition-colors"
+              >
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <div class="container mx-auto px-4 py-12">
+      {!searchQuery && (
+        <!-- Empty State / Search Landing -->
+        <div class="text-center">
+          <div class="max-w-2xl mx-auto mb-12">
+            <h2 class="text-2xl font-bold text-bone-white mb-4">
+              Discover Your Next Supernatural Adventure
+            </h2>
+            <p class="text-moon-silver/80 mb-8">
+              Search through my collection of paranormal romance and urban fantasy novels. Find content by title, description, species, or themes.
+            </p>
+          </div>
+
+          <!-- Popular Searches -->
+          <div class="mb-12">
+            <h3 class="text-lg font-semibold text-bone-white mb-4">Popular Searches</h3>
+            <div class="flex flex-wrap justify-center gap-3">
+              {popularSearches.map((search) => (
+                <a
+                  href={`/search?q=${encodeURIComponent(search)}`}
+                  class="bg-midnight-purple border border-mystic-violet/30 rounded-lg px-4 py-2 text-sm text-moon-silver hover:border-ember-orange hover:text-ember-orange transition-colors"
+                >
+                  {search}
+                </a>
+              ))}
+            </div>
+          </div>
+
+          <!-- Content Stats -->
+          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+            <div class="text-center p-4 bg-midnight-purple/30 rounded-lg border border-mystic-violet/20">
+              <div class="text-3xl mb-2">📚</div>
+              <h3 class="text-lg font-semibold text-bone-white mb-1">
+                {books.length} Books
+              </h3>
+              <p class="text-fog-gray text-sm">
+                Paranormal romance collection
+              </p>
+            </div>
+            <div class="text-center p-4 bg-midnight-purple/30 rounded-lg border border-mystic-violet/20">
+              <div class="text-3xl mb-2">🌙</div>
+              <h3 class="text-lg font-semibold text-bone-white mb-1">
+                {seriesCollection.length} Series
+              </h3>
+              <p class="text-fog-gray text-sm">
+                Connected story worlds
+              </p>
+            </div>
+            <div class="text-center p-4 bg-midnight-purple/30 rounded-lg border border-mystic-violet/20">
+              <div class="text-3xl mb-2">🐺</div>
+              <h3 class="text-lg font-semibold text-bone-white mb-1">
+                {speciesCollection.length} Species
+              </h3>
+              <p class="text-fog-gray text-sm">
+                Supernatural creatures
+              </p>
+            </div>
+            <div class="text-center p-4 bg-midnight-purple/30 rounded-lg border border-mystic-violet/20">
+              <div class="text-3xl mb-2">👤</div>
+              <h3 class="text-lg font-semibold text-bone-white mb-1">
+                {characters.length} Characters
+              </h3>
+              <p class="text-fog-gray text-sm">
+                Heroes and heroines
+              </p>
+            </div>
+            <div class="text-center p-4 bg-midnight-purple/30 rounded-lg border border-mystic-violet/20">
+              <div class="text-3xl mb-2">✍️</div>
+              <h3 class="text-lg font-semibold text-bone-white mb-1">
+                {blog.length} Blog Posts
+              </h3>
+              <p class="text-fog-gray text-sm">
+                Writing insights
+              </p>
+            </div>
+            <div class="text-center p-4 bg-midnight-purple/30 rounded-lg border border-mystic-violet/20">
+              <div class="text-3xl mb-2">🏛️</div>
+              <h3 class="text-lg font-semibold text-bone-white mb-1">
+                {locations.length} Locations
+              </h3>
+              <p class="text-fog-gray text-sm">
+                Settings and places
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {searchQuery && totalResults === 0 && (
+        <!-- No Results -->
+        <div class="text-center py-12">
+          <div class="text-6xl mb-6">🔮</div>
+          <h2 class="text-2xl font-bold text-bone-white mb-4">
+            No Results Found
+          </h2>
+          <p class="text-moon-silver/80 mb-8 max-w-md mx-auto">
+            The spirits couldn't find anything matching "{searchQuery}". Try searching for something else or browse our popular categories.
+          </p>
+
+          <!-- Suggestions -->
+          <div class="mb-8">
+            <h3 class="text-lg font-semibold text-bone-white mb-4">Try these instead:</h3>
+            <div class="flex flex-wrap justify-center gap-3">
+              {popularSearches.slice(0, 4).map((search) => (
+                <a
+                  href={`/search?q=${encodeURIComponent(search)}`}
+                  class="bg-midnight-purple border border-mystic-violet/30 rounded-lg px-4 py-2 text-sm text-moon-silver hover:border-ember-orange hover:text-ember-orange transition-colors"
+                >
+                  {search}
+                </a>
+              ))}
+            </div>
+          </div>
+
+          <div class="space-y-4">
+            <a href="/books" class="btn-primary inline-block px-6 py-3">Browse All Books</a>
+            <div>
+              <a href="/series" class="btn-secondary inline-block px-6 py-3">Explore Series</a>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {searchQuery && totalResults > 0 && (
+        <!-- Search Results -->
+        <div class="space-y-12">
+          <!-- Books Results -->
+          {foundBooks.length > 0 && (
+            <section>
+              <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold text-bone-white">
+                  Books ({foundBooks.length})
+                </h2>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {foundBooks.map((book) => (
+                  <a href={`/books/${book.slug}`} class="group">
+                    <div class="bg-midnight-purple/30 rounded-xl overflow-hidden border border-mystic-violet/20 hover:border-ember-orange/50 transition-all duration-300 hover:shadow-mystic">
+                      {book.coverUrl && (
+                        <div class="aspect-[2/3] overflow-hidden">
+                          <img
+                            src={book.coverUrl}
+                            alt={book.data.title}
+                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          />
+                        </div>
+                      )}
+                      <div class="p-4">
+                        <h3 class="font-semibold text-bone-white group-hover:text-ember-orange transition-colors mb-1">
+                          {book.data.title}
+                        </h3>
+                        {book.data.series && (
+                          <p class="text-mystic-violet text-sm mb-2">{book.data.series}</p>
+                        )}
+                        <p class="text-fog-gray text-sm line-clamp-2">
+                          {book.data.description}
+                        </p>
+                      </div>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </section>
+          )}
+
+          <!-- Series Results -->
+          {foundSeries.length > 0 && (
+            <section>
+              <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold text-bone-white">
+                  Series ({foundSeries.length})
+                </h2>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {foundSeries.map((seriesItem) => (
+                  <div class="bg-midnight-purple/30 rounded-xl p-6 border border-mystic-violet/20 hover:border-ember-orange/50 transition-all duration-300 hover:shadow-mystic">
+                    <div class="text-center">
+                      <h3 class="text-xl font-bold text-bone-white mb-2">
+                        {seriesItem.data.title}
+                      </h3>
+                      <p class="text-moon-silver/80 mb-4 text-sm line-clamp-3">
+                        {seriesItem.data.description}
+                      </p>
+
+                      <div class="flex justify-center items-center space-x-4 text-sm text-fog-gray mb-4">
+                        <span>{seriesItem.data.bookCount} Books</span>
+                        <span class="text-mystic-violet">•</span>
+                        <span class="capitalize">{seriesItem.data.completionStatus}</span>
+                      </div>
+
+                      <a
+                        href={`/series/${seriesItem.id}`}
+                        class="btn-secondary inline-block px-4 py-2 text-sm"
+                      >
+                        Explore Series
+                      </a>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
+          <!-- Blog Posts Results -->
+          {foundBlogPosts.length > 0 && (
+            <section>
+              <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold text-bone-white">
+                  Blog Posts ({foundBlogPosts.length})
+                </h2>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {foundBlogPosts.map((post) => (
+                  <article class="bg-midnight-purple/30 rounded-lg border border-mystic-violet/20 overflow-hidden hover:border-ember-orange/50 transition-all duration-300 hover:shadow-mystic">
+                    <div class="p-6">
+                      <h3 class="text-lg font-bold text-bone-white mb-2 hover:text-ember-orange transition-colors">
+                        <a href={`/blog/${post.id}`}>
+                          {post.data.title}
+                        </a>
+                      </h3>
+                      <p class="text-moon-silver/80 text-sm mb-3 line-clamp-2">
+                        {post.data.description}
+                      </p>
+                      <div class="flex items-center justify-between text-sm text-fog-gray">
+                        <time datetime={post.data.pubDate.toISOString()}>
+                          {post.data.pubDate.toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                          })}
+                        </time>
+                        {post.data.tags && post.data.tags.length > 0 && (
+                          <span class="bg-mystic-violet/20 text-mystic-teal px-2 py-1 rounded text-xs">
+                            {post.data.tags[0]}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </section>
+          )}
+
+          <!-- Species Results -->
+          {foundSpecies.length > 0 && (
+            <section>
+              <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold text-bone-white">
+                  Species ({foundSpecies.length})
+                </h2>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {foundSpecies.map((speciesItem) => (
+                  <div class="bg-midnight-purple/30 rounded-xl p-6 border border-mystic-violet/20 hover:border-ember-orange/50 transition-all duration-300 hover:shadow-mystic">
+                    <div class="text-center">
+                      <h3 class="text-xl font-bold text-bone-white mb-2">
+                        {speciesItem.data.name}
+                      </h3>
+
+                      {speciesItem.data.description && (
+                        <p class="text-moon-silver/80 mb-4 text-sm line-clamp-3">
+                          {speciesItem.data.description.substring(0, 150) + (speciesItem.data.description.length > 150 ? '...' : '')}
+                        </p>
+                      )}
+
+                      <a
+                        href={`/species/${speciesItem.id}`}
+                        class="btn-secondary inline-block px-4 py-2 text-sm"
+                      >
+                        Learn More
+                      </a>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
+          <!-- Characters Results -->
+          {foundCharacters.length > 0 && (
+            <section>
+              <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold text-bone-white">
+                  Characters ({foundCharacters.length})
+                </h2>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {foundCharacters.map((character) => (
+                  <div class="bg-midnight-purple/30 rounded-xl p-6 border border-mystic-violet/20 hover:border-ember-orange/50 transition-all duration-300 hover:shadow-mystic">
+                    <div class="text-center">
+                      <h3 class="text-xl font-bold text-bone-white mb-2">
+                        {character.data.name}
+                      </h3>
+
+                      {character.data.species && (
+                        <p class="text-ember-orange text-sm font-medium mb-2">
+                          {character.data.species.charAt(0).toUpperCase() + character.data.species.slice(1)}
+                        </p>
+                      )}
+
+                      {character.data.description && (
+                        <p class="text-moon-silver/80 mb-4 text-sm line-clamp-3">
+                          {character.data.description.substring(0, 150) + (character.data.description.length > 150 ? '...' : '')}
+                        </p>
+                      )}
+
+                      <a
+                        href={`/characters/${character.id}`}
+                        class="btn-secondary inline-block px-4 py-2 text-sm"
+                      >
+                        View Profile
+                      </a>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
+          <!-- Pages Results -->
+          {foundPages.length > 0 && (
+            <section>
+              <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold text-bone-white">
+                  Pages ({foundPages.length})
+                </h2>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {foundPages.map((page) => (
+                  <div class="bg-midnight-purple/30 rounded-xl p-6 border border-mystic-violet/20 hover:border-ember-orange/50 transition-all duration-300 hover:shadow-mystic">
+                    <div class="text-center">
+                      <h3 class="text-xl font-bold text-bone-white mb-2 hover:text-ember-orange transition-colors">
+                        <a href={`/${page.id}`}>
+                          {page.data.title}
+                        </a>
+                      </h3>
+
+                      {page.data.hero?.tagline && (
+                        <p class="text-ember-orange text-sm font-medium mb-2">
+                          {page.data.hero.tagline}
+                        </p>
+                      )}
+
+                      {page.data.authorBio?.mainBio && (
+                        <p class="text-moon-silver/80 mb-4 text-sm line-clamp-3">
+                          {page.data.authorBio.mainBio.substring(0, 150) + (page.data.authorBio.mainBio.length > 150 ? '...' : '')}
+                        </p>
+                      )}
+
+                      <a
+                        href={`/${page.id}`}
+                        class="btn-secondary inline-block px-4 py-2 text-sm"
+                      >
+                        Visit Page
+                      </a>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
+          <!-- Locations Results -->
+          {foundLocations.length > 0 && (
+            <section>
+              <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold text-bone-white">
+                  Locations ({foundLocations.length})
+                </h2>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {foundLocations.map((location) => (
+                  <div class="bg-midnight-purple/30 rounded-xl p-6 border border-mystic-violet/20 hover:border-ember-orange/50 transition-all duration-300 hover:shadow-mystic">
+                    <div class="text-center">
+                      <h3 class="text-xl font-bold text-bone-white mb-2">
+                        {location.data.name}
+                      </h3>
+
+                      {location.data.environmentType && (
+                        <p class="text-mystic-teal text-sm font-medium mb-2 capitalize">
+                          {location.data.environmentType.replace(/-/g, ' ')}
+                        </p>
+                      )}
+
+                      {location.data.description && (
+                        <p class="text-moon-silver/80 mb-4 text-sm">
+                          {location.data.description}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
+          <!-- Related Searches -->
+          <section class="bg-midnight-purple/30 rounded-xl p-8 border border-mystic-violet/20">
+            <h3 class="text-lg font-semibold text-bone-white mb-4 text-center">
+              Related Searches
+            </h3>
+            <div class="flex flex-wrap justify-center gap-3">
+              {popularSearches.filter(search =>
+                search.toLowerCase() !== searchQuery.toLowerCase()
+              ).slice(0, 6).map((search) => (
+                <a
+                  href={`/search?q=${encodeURIComponent(search)}`}
+                  class="bg-shadow-black border border-mystic-violet/30 rounded-lg px-3 py-1 text-sm text-moon-silver hover:border-ember-orange hover:text-ember-orange transition-colors"
+                >
+                  {search}
+                </a>
+              ))}
+            </div>
+          </section>
+        </div>
+      )}
+    </div>
+  </main>
+</Layout>

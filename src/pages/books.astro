@@ -1,0 +1,327 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { SITE_TITLE } from '../consts';
+import { getCollection } from 'astro:content';
+
+// Get all books and series for display
+const books = (await getCollection('books')).map(book => ({
+	...book,
+	slug: book.id
+}));
+
+const series = (await getCollection('series')).map(seriesItem => ({
+	...seriesItem,
+	slug: seriesItem.id
+}));
+
+// Sort books by publication date (newest first)
+const sortedBooks = books.sort((a, b) =>
+	new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime()
+);
+
+// Get featured books
+const featuredBooks = books.filter(book => book.data.featured);
+
+// Get latest releases (last 6 months)
+const sixMonthsAgo = new Date();
+sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
+const latestReleases = books.filter(book => new Date(book.data.pubDate) > sixMonthsAgo);
+
+// Calculate average rating
+const booksWithRatings = books.filter(book => book.data.rating);
+const avgRating = booksWithRatings.length > 0
+	? (booksWithRatings.reduce((sum, book) => sum + (book.data.rating || 0), 0) / booksWithRatings.length).toFixed(1)
+	: '4.5';
+
+// Get site configuration for newsletter section
+const settingsCollection = await getCollection('settings');
+const siteConfigData = settingsCollection[0]?.data;
+const siteConfig = {
+	newsletter: {
+		leadMagnetTitle: siteConfigData?.newsletter?.leadMagnetTitle || "Join the Supernatural Side",
+		leadMagnetDescription: siteConfigData?.newsletter?.leadMagnetDescription || "Get exclusive content, early access to new releases, and behind-the-scenes peeks into the weird and wonderful worlds of urban fantasy.",
+		benefits: siteConfigData?.newsletter?.benefits || [
+			"Free starter content with bonus material",
+			"Early access to new releases",
+			"Exclusive character backstories",
+			"Behind-the-scenes writing updates"
+		]
+	}
+};
+
+// Helper to get series name display
+function getSeriesDisplay(seriesSlug: string | undefined): string {
+	if (!seriesSlug) return '';
+	const seriesEntry = series.find(s => s.slug === seriesSlug || s.data.title.toLowerCase().replace(/\s+/g, '-') === seriesSlug);
+	return seriesEntry?.data.title || seriesSlug;
+}
+---
+
+<Layout title={`Books - ${SITE_TITLE}`} description="Explore Gwen DeMarco's paranormal romance and urban fantasy novels. Snarky heroines, grumpy heroes, and found family in supernatural worlds.">
+	<main id="main-content" class="relative">
+		<!-- Hero Section -->
+		<section class="relative py-16 bg-gradient-night overflow-hidden">
+			<!-- Background fog effect -->
+			<div class="absolute inset-0 bg-gradient-fog opacity-30"></div>
+			<div class="absolute inset-0 bg-gradient-to-t from-shadow-black/60 to-transparent"></div>
+
+			<div class="container mx-auto px-4 text-center relative z-10">
+				<div class="max-w-4xl mx-auto space-y-6">
+					<h1 class="text-3xl sm:text-4xl md:text-6xl font-primary font-bold text-bone-white mb-4">
+						<span class="bg-gradient-to-r from-mystic-violet via-ember-orange to-mystic-teal bg-clip-text text-transparent">
+							My Books
+						</span>
+					</h1>
+					<p class="text-lg sm:text-xl md:text-2xl text-ember-orange font-medium px-2">
+						Paranormal romance with snarky heroines and grumpy heroes
+					</p>
+					<p class="text-base sm:text-lg text-moon-silver/90 max-w-2xl mx-auto leading-relaxed px-2">
+						Explore my collection of urban fantasy and paranormal romance novels featuring supernatural creatures, found family, and the magic of the weird and wonderful.
+					</p>
+
+					<!-- Quick Stats -->
+					<div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mt-8">
+						<div class="bg-midnight-purple/40 backdrop-blur-sm rounded-lg p-3 sm:p-4 border border-mystic-violet/30 hover:shadow-mystic transition-all duration-300">
+							<div class="text-xl sm:text-2xl font-bold text-ember-orange">{books.length}</div>
+							<div class="text-xs sm:text-sm text-moon-silver/80">Books Published</div>
+						</div>
+						<div class="bg-midnight-purple/40 backdrop-blur-sm rounded-lg p-3 sm:p-4 border border-mystic-violet/30 hover:shadow-mystic transition-all duration-300">
+							<div class="text-xl sm:text-2xl font-bold text-ember-orange">{series.length}</div>
+							<div class="text-xs sm:text-sm text-moon-silver/80">Series</div>
+						</div>
+						<div class="bg-midnight-purple/40 backdrop-blur-sm rounded-lg p-3 sm:p-4 border border-mystic-violet/30 hover:shadow-mystic transition-all duration-300">
+							<div class="text-xl sm:text-2xl font-bold text-ember-orange">{featuredBooks.length}</div>
+							<div class="text-xs sm:text-sm text-moon-silver/80">Featured</div>
+						</div>
+						<div class="bg-midnight-purple/40 backdrop-blur-sm rounded-lg p-3 sm:p-4 border border-mystic-violet/30 hover:shadow-mystic transition-all duration-300">
+							<div class="text-xl sm:text-2xl font-bold text-ember-orange">{avgRating}</div>
+							<div class="text-xs sm:text-sm text-moon-silver/80">Avg Rating</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Featured Books Section -->
+		{featuredBooks.length > 0 && (
+			<section class="py-16 bg-dark-surface">
+				<div class="container mx-auto px-4">
+					<div class="text-center mb-12">
+						<h2 class="text-3xl md:text-4xl font-primary font-bold text-bone-white mb-4">
+							Featured & Fan Favorites
+						</h2>
+						<p class="text-lg text-fog-gray max-w-2xl mx-auto">
+							The books readers can't stop talking about
+						</p>
+					</div>
+
+					<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+						{featuredBooks.slice(0, 6).map((book) => (
+							<a href={`/books/${book.slug}`} class="card card-hover group p-4 sm:p-6">
+								<div class="flex flex-col h-full">
+									<!-- Book cover placeholder -->
+									<div class="w-full aspect-[2/3] bg-gradient-to-br from-mystic-violet/20 to-midnight-purple rounded-lg mb-4 flex items-center justify-center border border-mystic-violet/30 group-hover:border-ember-orange/50 transition-colors">
+										<span class="text-4xl opacity-60">📖</span>
+									</div>
+
+									<!-- Series badge -->
+									{book.data.series && (
+										<span class="badge badge-primary mb-2 w-fit">{getSeriesDisplay(book.data.series)}</span>
+									)}
+
+									<!-- Title -->
+									<h3 class="font-primary text-xl font-bold text-ember-orange mb-2 group-hover:text-mystic-teal transition-colors">
+										{book.data.title}
+									</h3>
+
+									<!-- Description -->
+									<p class="text-fog-gray text-sm mb-4 line-clamp-3 flex-grow">
+										{book.data.description}
+									</p>
+
+									<!-- Rating and price -->
+									<div class="flex items-center justify-between mt-auto pt-4 border-t border-mystic-violet/20">
+										{book.data.rating && (
+											<div class="flex items-center space-x-1">
+												<span class="text-ember-orange">★</span>
+												<span class="text-moon-silver text-sm">{book.data.rating}</span>
+											</div>
+										)}
+										{book.data.price && (
+											<span class="text-mystic-teal font-medium">{book.data.price}</span>
+										)}
+									</div>
+								</div>
+							</a>
+						))}
+					</div>
+				</div>
+			</section>
+		)}
+
+		<!-- Latest Releases Section -->
+		{latestReleases.length > 0 && (
+			<section class="py-16 bg-bg-secondary">
+				<div class="container mx-auto px-4">
+					<div class="text-center mb-12">
+						<h2 class="text-3xl md:text-4xl font-primary font-bold text-bone-white mb-4">
+							Latest Releases
+						</h2>
+						<p class="text-lg text-fog-gray max-w-2xl mx-auto">
+							Fresh off the press - the newest supernatural adventures
+						</p>
+					</div>
+
+					<div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
+						{latestReleases.slice(0, 8).map((book) => (
+							<a href={`/books/${book.slug}`} class="card card-hover group p-3 sm:p-4">
+								<!-- Book cover placeholder -->
+								<div class="w-full aspect-[2/3] bg-gradient-to-br from-mystic-violet/20 to-midnight-purple rounded-lg mb-3 flex items-center justify-center border border-mystic-violet/30 group-hover:border-ember-orange/50 transition-colors">
+									<span class="text-3xl opacity-60">📖</span>
+								</div>
+
+								<!-- Title -->
+								<h3 class="font-primary text-lg font-bold text-ember-orange mb-1 group-hover:text-mystic-teal transition-colors line-clamp-2">
+									{book.data.title}
+								</h3>
+
+								<!-- Series -->
+								{book.data.series && (
+									<p class="text-fog-gray text-xs mb-2">{getSeriesDisplay(book.data.series)}</p>
+								)}
+
+								<!-- Rating -->
+								{book.data.rating && (
+									<div class="flex items-center space-x-1">
+										<span class="text-ember-orange text-sm">★</span>
+										<span class="text-moon-silver text-xs">{book.data.rating}</span>
+									</div>
+								)}
+							</a>
+						))}
+					</div>
+
+					{latestReleases.length > 8 && (
+						<div class="text-center mt-8">
+							<a href="#all-books" class="btn btn-primary btn-lg">
+								View All Latest Releases
+							</a>
+						</div>
+					)}
+				</div>
+			</section>
+		)}
+
+		<!-- Series CTA Section -->
+		<section class="py-16 bg-gradient-to-r from-midnight-purple/30 via-shadow-black to-midnight-purple/30">
+			<div class="container mx-auto px-4 text-center">
+				<div class="max-w-3xl mx-auto">
+					<h2 class="text-3xl md:text-4xl font-primary font-bold text-bone-white mb-4">
+						Explore My Series
+					</h2>
+					<p class="text-lg text-fog-gray mb-8">
+						Dive deep into interconnected worlds with rich character development across multiple books
+					</p>
+					<a
+						href="/series"
+						class="btn btn-primary btn-lg px-8 py-4 text-lg inline-flex items-center space-x-2"
+					>
+						<span>View All Series</span>
+						<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+						</svg>
+					</a>
+				</div>
+			</div>
+		</section>
+
+		<!-- All Books Section -->
+		<section id="all-books" class="py-16 bg-dark-surface">
+			<div class="container mx-auto px-4">
+				<div class="text-center mb-12">
+					<h2 class="text-3xl md:text-4xl font-primary font-bold text-bone-white mb-4">
+						Complete Book Collection
+					</h2>
+					<p class="text-lg text-fog-gray max-w-2xl mx-auto">
+						Every paranormal romance and urban fantasy adventure, from shifter mysteries to supernatural politics
+					</p>
+				</div>
+
+				<div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
+					{sortedBooks.map((book) => (
+						<a href={`/books/${book.slug}`} class="card card-hover group p-3 sm:p-4">
+							<!-- Book cover placeholder -->
+							<div class="w-full aspect-[2/3] bg-gradient-to-br from-mystic-violet/20 to-midnight-purple rounded-lg mb-3 flex items-center justify-center border border-mystic-violet/30 group-hover:border-ember-orange/50 transition-colors">
+								<span class="text-3xl opacity-60">📖</span>
+							</div>
+
+							<!-- Series badge -->
+							{book.data.series && (
+								<span class="badge badge-outline text-xs mb-2">{getSeriesDisplay(book.data.series)}</span>
+							)}
+
+							<!-- Title -->
+							<h3 class="font-primary text-lg font-bold text-ember-orange mb-2 group-hover:text-mystic-teal transition-colors line-clamp-2">
+								{book.data.title}
+							</h3>
+
+							<!-- Description -->
+							<p class="text-fog-gray text-sm mb-3 line-clamp-2">
+								{book.data.description}
+							</p>
+
+							<!-- Footer with rating and KU badge -->
+							<div class="flex items-center justify-between mt-auto pt-3 border-t border-mystic-violet/20">
+								{book.data.rating && (
+									<div class="flex items-center space-x-1">
+										<span class="text-ember-orange text-sm">★</span>
+										<span class="text-moon-silver text-xs">{book.data.rating}</span>
+									</div>
+								)}
+								{book.data.isKU && (
+									<span class="badge badge-secondary text-xs">KU</span>
+								)}
+								{book.data.price && !book.data.isKU && (
+									<span class="text-mystic-teal text-sm font-medium">{book.data.price}</span>
+								)}
+							</div>
+						</a>
+					))}
+				</div>
+			</div>
+		</section>
+
+		<!-- Newsletter CTA Section -->
+		<section class="py-16 bg-gradient-to-r from-midnight-purple via-shadow-black to-midnight-purple">
+			<div class="container mx-auto px-4 text-center">
+				<div class="max-w-3xl mx-auto">
+					<h2 class="text-3xl md:text-4xl font-primary font-bold text-bone-white mb-4">
+						{siteConfig.newsletter?.leadMagnetTitle || "Join the Supernatural Side"}
+					</h2>
+					<p class="text-xl mb-8 text-moon-silver/90">
+						{siteConfig.newsletter?.leadMagnetDescription || "Get exclusive content, early access to new releases, and behind-the-scenes peeks into the weird and wonderful."}
+					</p>
+
+					{siteConfig.newsletter?.benefits && (
+						<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8 text-left max-w-2xl mx-auto">
+							{siteConfig.newsletter.benefits.slice(0, 4).map((benefit: string) => (
+								<div class="flex items-center space-x-3">
+									<div class="w-5 h-5 bg-ember-orange rounded-full flex items-center justify-center flex-shrink-0">
+										<svg class="w-3 h-3 text-bone-white" fill="currentColor" viewBox="0 0 20 20">
+											<path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+										</svg>
+									</div>
+									<span class="text-moon-silver">{benefit}</span>
+								</div>
+							))}
+						</div>
+					)}
+
+					<a href="/contact" class="btn btn-primary btn-lg px-8 py-4 text-lg">
+						Subscribe Now
+					</a>
+				</div>
+			</div>
+		</section>
+	</main>
+</Layout>
