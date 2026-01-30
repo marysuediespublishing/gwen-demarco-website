@@ -326,7 +326,7 @@
   - Include post title, date, and excerpt
   - "View All Posts" link to blog page
 
-- [ ] **T053** - Add reader testimonials/reviews section
+- [x] **T053** - Add reader testimonials/reviews section
   - refs: D002
   - Create testimonials content collection
   - Add 3-5 reader quotes/reviews

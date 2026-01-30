@@ -185,3 +185,81 @@ local_backend: true
 - Stacked book cards
 - Touch-friendly buttons (min 44px)
 - Readable text sizes on dark backgrounds
+
+---
+
+## D011 - Reader Testimonials
+
+**Decision:** Add reader testimonials/reviews section to build social proof.
+
+**Implementation:**
+- Create testimonials content collection
+- Display on homepage and/or about page
+- Style with decorative quote marks
+- Include reader name/handle and book referenced
+- Rotate or show 3-5 testimonials
+
+**Example format:**
+```yaml
+quote: "Sophie Feegle is the snarky heroine I never knew I needed!"
+reader: "BookLover2024"
+book: "Sophie and The Odd Ones"
+rating: 5
+```
+
+---
+
+## D012 - Reading Order Guide
+
+**Decision:** Create a dedicated reading order page to help new readers.
+
+**Rationale:** With 3 series and 11 books, new readers need guidance on where to start.
+
+**Content:**
+- Visual flowchart or list showing recommended order
+- "Start Here" callouts for each series
+- Brief 1-sentence pitch for each series
+- Links to first book in each series
+- Note that series are standalone (can be read in any order)
+
+**Recommended Starting Points:**
+1. Sophie Feegle series - Best for urban fantasy fans
+2. Kingdom of Erishum - Best for epic fantasy fans
+3. Auras & Embers - Newest series, great entry point
+
+---
+
+## D013 - Enhanced Visual Atmosphere
+
+**Decision:** Add subtle visual effects to enhance urban fantasy atmosphere.
+
+**Effects to implement:**
+- Fog/mist gradient overlay on hero sections
+- Subtle purple glow on card hover states
+- Optional: Animated ember particles (React component)
+- City skyline silhouette SVG as footer decoration
+- Gradient text effects on headers
+
+**Performance considerations:**
+- Use CSS animations where possible
+- Keep particle effects subtle and optional
+- Ensure effects don't impact readability
+
+---
+
+## D014 - Homepage Content Sections
+
+**Decision:** Enhance homepage with additional content sections.
+
+**Required sections (in order):**
+1. Hero with author name, tagline, stats, CTAs
+2. Featured Books carousel/grid (3-4 books)
+3. Latest Blog Posts (2-3 recent posts)
+4. Reader Testimonials (2-3 quotes)
+5. Newsletter Signup CTA
+6. Footer
+
+**Design notes:**
+- Alternate section backgrounds for visual interest
+- Use consistent spacing between sections
+- Each section should have clear heading and description
