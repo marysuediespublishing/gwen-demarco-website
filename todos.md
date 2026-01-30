@@ -410,7 +410,7 @@
   - Show 2-3 most recent blog posts
   - Include title, date, excerpt, and "Read More" link
 
-- [ ] **T065** - Add testimonials section to homepage
+- [x] **T065** - Add testimonials section to homepage
   - refs: D011, D014
   - Create testimonials content if not exists
   - Add "What Readers Are Saying" section to homepage
