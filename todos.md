@@ -353,7 +353,7 @@
   - Create "World-Building" blog post about supernatural creatures
   - Create "Behind the Scenes" post about writing process
 
-- [ ] **T057** - Enhance visual atmosphere with urban fantasy effects
+- [x] **T057** - Enhance visual atmosphere with urban fantasy effects
   - refs: D002
   - Add subtle fog/mist overlay effect to hero sections
   - Consider animated particle effects (embers, stars)

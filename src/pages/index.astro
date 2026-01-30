@@ -63,14 +63,22 @@ function getSeriesDisplay(seriesSlug: string | undefined): string {
 	<main id="main-content" class="relative">
 		<!-- Hero Section -->
 		<section class="relative min-h-screen flex items-center justify-center bg-gradient-night overflow-hidden">
-			<!-- Background fog effect -->
+			<!-- Background fog effect - enhanced with multiple layers -->
 			<div class="absolute inset-0 bg-gradient-fog opacity-40"></div>
-			<div class="absolute inset-0 bg-gradient-to-t from-shadow-black/80 to-transparent"></div>
+			<div class="absolute inset-0 bg-gradient-to-t from-shadow-black/80 via-shadow-black/20 to-transparent"></div>
 
-			<!-- Animated fog layers -->
+			<!-- Animated fog layers - enhanced with multiple drifting layers -->
 			<div class="absolute inset-0 overflow-hidden pointer-events-none">
-				<div class="absolute w-full h-64 -bottom-32 bg-gradient-to-t from-midnight-purple/30 to-transparent animate-fog-drift"></div>
+				<!-- Bottom fog layer -->
+				<div class="absolute w-full h-64 -bottom-32 bg-gradient-to-t from-midnight-purple/40 to-transparent animate-fog-drift"></div>
+				<!-- Middle fog layer - slower, opposite direction -->
+				<div class="absolute w-full h-48 bottom-0 bg-gradient-to-t from-mystic-violet/15 to-transparent animate-fog-drift-slow" style="animation-direction: reverse;"></div>
+				<!-- Top mist layer -->
+				<div class="absolute w-full h-32 top-0 bg-gradient-to-b from-midnight-purple/20 to-transparent animate-fog-drift-slow opacity-60"></div>
 			</div>
+
+			<!-- Subtle radial glow at center -->
+			<div class="absolute inset-0 bg-radial-glow opacity-30 pointer-events-none"></div>
 
 			<div class="container mx-auto px-4 text-center relative z-10">
 				<div class="max-w-4xl mx-auto space-y-8">

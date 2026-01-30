@@ -68,8 +68,9 @@ export default {
         'mystic': '0 0 20px rgba(107, 70, 193, 0.3)',
         'ember': '0 0 15px rgba(255, 107, 53, 0.4)',
         'teal': '0 0 25px rgba(45, 212, 191, 0.2)',
-        'violet-glow': '0 0 30px rgba(107, 70, 193, 0.5)',
-        'ember-glow': '0 0 25px rgba(255, 107, 53, 0.5)',
+        'violet-glow': '0 0 30px rgba(107, 70, 193, 0.5), 0 0 60px rgba(107, 70, 193, 0.2)',
+        'ember-glow': '0 0 25px rgba(255, 107, 53, 0.5), 0 0 50px rgba(255, 107, 53, 0.2)',
+        'teal-glow': '0 0 30px rgba(45, 212, 191, 0.4), 0 0 60px rgba(45, 212, 191, 0.15)',
       },
       backgroundImage: {
         // Urban Fantasy Gradients
@@ -78,6 +79,7 @@ export default {
         'gradient-fog': 'radial-gradient(circle at 50% 50%, rgba(107, 70, 193, 0.1) 0%, transparent 50%)',
         'gradient-night': 'linear-gradient(180deg, #0a0a0f 0%, #2d1b4e 100%)',
         'gradient-card': 'linear-gradient(145deg, #1a1025 0%, #150d20 100%)',
+        'radial-glow': 'radial-gradient(ellipse at 50% 40%, rgba(107, 70, 193, 0.15) 0%, rgba(255, 107, 53, 0.05) 30%, transparent 70%)',
       },
       animation: {
         // Mystical Animations
@@ -85,7 +87,9 @@ export default {
         'ember-pulse': 'ember-pulse 1.5s ease-in-out infinite',
         'float': 'float 3s ease-in-out infinite',
         'fog-drift': 'fog-drift 20s linear infinite',
+        'fog-drift-slow': 'fog-drift 35s linear infinite',
         'flicker': 'flicker 4s ease-in-out infinite',
+        'glow-pulse': 'glow-pulse 3s ease-in-out infinite',
       },
       keyframes: {
         'mystic-glow': {
@@ -110,6 +114,16 @@ export default {
           '50%': { opacity: '0.85' },
           '75%': { opacity: '0.95' },
         },
+        'glow-pulse': {
+          '0%, 100%': {
+            boxShadow: '0 0 15px rgba(107, 70, 193, 0.3), 0 0 30px rgba(107, 70, 193, 0.1)',
+            borderColor: 'rgba(107, 70, 193, 0.5)'
+          },
+          '50%': {
+            boxShadow: '0 0 25px rgba(107, 70, 193, 0.5), 0 0 50px rgba(107, 70, 193, 0.2)',
+            borderColor: 'rgba(107, 70, 193, 0.7)'
+          },
+        },
       },
       aspectRatio: {
         'book': '2/3',
@@ -125,13 +139,16 @@ export default {
           '@apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-shadow-black': {},
         },
         '.btn-primary': {
-          '@apply bg-ember-orange text-bone-white border-2 border-ember-orange hover:bg-[#e55a2a] hover:shadow-ember hover:-translate-y-0.5 focus:ring-ember-orange': {},
+          '@apply bg-ember-orange text-bone-white border-2 border-ember-orange hover:bg-[#e55a2a] hover:shadow-ember-glow hover:-translate-y-0.5 focus:ring-ember-orange': {},
+          'transition': 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
         },
         '.btn-secondary': {
-          '@apply bg-mystic-violet text-bone-white border-2 border-mystic-violet hover:bg-[#5a3aa8] hover:shadow-mystic focus:ring-mystic-violet': {},
+          '@apply bg-mystic-violet text-bone-white border-2 border-mystic-violet hover:bg-[#5a3aa8] hover:shadow-violet-glow hover:-translate-y-0.5 focus:ring-mystic-violet': {},
+          'transition': 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
         },
         '.btn-outline': {
-          '@apply bg-transparent text-ember-orange border-2 border-ember-orange hover:bg-ember-orange hover:text-bone-white focus:ring-ember-orange': {},
+          '@apply bg-transparent text-ember-orange border-2 border-ember-orange hover:bg-ember-orange hover:text-bone-white hover:shadow-ember-glow hover:-translate-y-0.5 focus:ring-ember-orange': {},
+          'transition': 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
         },
         '.btn-ghost': {
           '@apply bg-transparent text-moon-silver border-2 border-moon-silver/30 hover:border-mystic-violet hover:text-mystic-violet focus:ring-mystic-violet': {},
@@ -145,7 +162,8 @@ export default {
           '@apply bg-gradient-fog border border-mystic-violet/20 hover:shadow-mystic': {},
         },
         '.card-hover': {
-          '@apply hover:border-mystic-violet/50 hover:shadow-mystic hover:-translate-y-1': {},
+          '@apply hover:border-mystic-violet/60 hover:shadow-violet-glow hover:-translate-y-1 hover:scale-[1.02]': {},
+          'transition': 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
         },
 
         // Input Components

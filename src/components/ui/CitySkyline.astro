@@ -1,0 +1,121 @@
+---
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+---
+
+<!-- City Skyline Silhouette - Urban Fantasy Decorative Element -->
+<div class={`city-skyline ${className}`}>
+  <svg
+    viewBox="0 0 1200 120"
+    preserveAspectRatio="none"
+    class="w-full h-full"
+    aria-hidden="true"
+  >
+    <defs>
+      <!-- Gradient for buildings - dark purple to transparent -->
+      <linearGradient id="skylineGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="rgba(45, 27, 78, 0.8)" />
+        <stop offset="60%" stop-color="rgba(45, 27, 78, 0.4)" />
+        <stop offset="100%" stop-color="rgba(10, 10, 15, 0)" />
+      </linearGradient>
+
+      <!-- Glow filter for building lights -->
+      <filter id="windowGlow" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="1" result="blur" />
+        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+      </filter>
+    </defs>
+
+    <!-- Background buildings (furthest) -->
+    <path
+      fill="rgba(45, 27, 78, 0.3)"
+      d="M0,120 L0,80 L30,80 L30,70 L50,70 L50,85 L80,85 L80,65 L100,65 L100,55 L120,55 L120,75 L150,75 L150,60 L170,60 L170,80 L200,80 L200,50 L220,50 L220,70 L250,70 L250,55 L280,55 L280,75 L310,75 L310,45 L330,45 L330,65 L360,65 L360,80 L400,80 L400,60 L420,60 L420,75 L450,75 L450,50 L480,50 L480,70 L510,70 L510,55 L540,55 L540,80 L580,80 L580,65 L600,65 L600,45 L620,45 L620,70 L650,70 L650,60 L680,60 L680,80 L720,80 L720,55 L750,55 L750,75 L780,75 L780,50 L810,50 L810,70 L840,70 L840,60 L870,60 L870,80 L900,80 L900,65 L930,65 L930,55 L960,55 L960,75 L990,75 L990,45 L1020,45 L1020,70 L1050,70 L1050,80 L1080,80 L1080,60 L1110,60 L1110,75 L1140,75 L1140,85 L1170,85 L1170,70 L1200,70 L1200,120 Z"
+    />
+
+    <!-- Middle buildings -->
+    <path
+      fill="rgba(45, 27, 78, 0.5)"
+      d="M0,120 L0,90 L40,90 L40,75 L60,75 L60,65 L75,50 L90,65 L90,85 L120,85 L120,70 L140,70 L140,55 L160,55 L160,45 L180,45 L180,65 L210,65 L210,80 L240,80 L240,60 L270,60 L270,40 L290,40 L290,55 L310,55 L310,35 L330,35 L330,55 L360,55 L360,75 L390,75 L390,55 L420,55 L420,45 L440,30 L460,45 L460,65 L490,65 L490,50 L520,50 L520,70 L550,70 L550,60 L580,60 L580,40 L610,40 L610,60 L640,60 L640,75 L670,75 L670,55 L700,55 L700,35 L730,35 L730,55 L760,55 L760,70 L790,70 L790,50 L820,50 L820,40 L850,40 L850,60 L880,60 L880,75 L920,75 L920,55 L950,55 L950,45 L970,30 L990,45 L990,65 L1020,65 L1020,80 L1050,80 L1050,60 L1080,60 L1080,50 L1100,50 L1100,70 L1130,70 L1130,85 L1160,85 L1160,75 L1200,75 L1200,120 Z"
+    />
+
+    <!-- Foreground buildings (closest) - with window lights -->
+    <path
+      fill="url(#skylineGradient)"
+      d="M0,120 L0,95 L50,95 L50,80 L70,80 L70,60 L90,60 L90,50 L105,35 L120,50 L120,70 L150,70 L150,55 L180,55 L180,40 L210,40 L210,60 L240,60 L240,75 L270,75 L270,55 L300,55 L300,30 L320,15 L340,30 L340,50 L370,50 L370,65 L400,65 L400,50 L430,50 L430,35 L460,35 L460,55 L490,55 L490,70 L530,70 L530,45 L560,45 L560,60 L590,60 L590,40 L620,40 L620,25 L640,10 L660,25 L660,45 L690,45 L690,65 L720,65 L720,50 L750,50 L750,35 L780,35 L780,55 L810,55 L810,70 L840,70 L840,55 L870,55 L870,40 L900,40 L900,55 L930,55 L930,75 L970,75 L970,50 L1000,50 L1000,65 L1030,65 L1030,45 L1050,30 L1070,45 L1070,60 L1100,60 L1100,80 L1130,80 L1130,90 L1160,90 L1160,75 L1200,75 L1200,120 Z"
+    />
+
+    <!-- Scattered window lights (ember orange) -->
+    <g filter="url(#windowGlow)" fill="rgba(255, 107, 53, 0.6)">
+      <rect x="95" y="55" width="2" height="3" />
+      <rect x="100" y="52" width="2" height="3" />
+      <rect x="105" y="58" width="2" height="3" />
+      <rect x="185" y="48" width="2" height="3" />
+      <rect x="190" y="52" width="2" height="3" />
+      <rect x="195" y="45" width="2" height="3" />
+      <rect x="310" y="38" width="2" height="3" />
+      <rect x="315" y="42" width="2" height="3" />
+      <rect x="325" y="35" width="2" height="3" />
+      <rect x="330" y="45" width="2" height="3" />
+      <rect x="440" y="42" width="2" height="3" />
+      <rect x="445" y="48" width="2" height="3" />
+      <rect x="540" y="52" width="2" height="3" />
+      <rect x="545" y="48" width="2" height="3" />
+      <rect x="550" y="55" width="2" height="3" />
+      <rect x="630" y="32" width="2" height="3" />
+      <rect x="635" y="38" width="2" height="3" />
+      <rect x="645" y="35" width="2" height="3" />
+      <rect x="650" y="42" width="2" height="3" />
+      <rect x="760" y="42" width="2" height="3" />
+      <rect x="765" y="48" width="2" height="3" />
+      <rect x="770" y="38" width="2" height="3" />
+      <rect x="880" y="48" width="2" height="3" />
+      <rect x="885" y="52" width="2" height="3" />
+      <rect x="1055" y="38" width="2" height="3" />
+      <rect x="1060" y="42" width="2" height="3" />
+      <rect x="1065" y="48" width="2" height="3" />
+    </g>
+
+    <!-- Mystic violet window highlights -->
+    <g filter="url(#windowGlow)" fill="rgba(107, 70, 193, 0.5)">
+      <rect x="110" y="55" width="2" height="3" />
+      <rect x="205" y="50" width="2" height="3" />
+      <rect x="350" y="58" width="2" height="3" />
+      <rect x="480" y="60" width="2" height="3" />
+      <rect x="600" y="48" width="2" height="3" />
+      <rect x="710" y="52" width="2" height="3" />
+      <rect x="850" y="60" width="2" height="3" />
+      <rect x="985" y="58" width="2" height="3" />
+      <rect x="1115" y="65" width="2" height="3" />
+    </g>
+  </svg>
+</div>
+
+<style>
+  .city-skyline {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 120px;
+    pointer-events: none;
+    opacity: 0.8;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .city-skyline svg {
+      animation: skyline-float 20s ease-in-out infinite alternate;
+    }
+  }
+
+  @keyframes skyline-float {
+    0% {
+      transform: translateY(0);
+    }
+    100% {
+      transform: translateY(-3px);
+    }
+  }
+</style>

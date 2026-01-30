@@ -1,4 +1,6 @@
 ---
+import CitySkyline from './ui/CitySkyline.astro';
+
 const today = new Date();
 
 // Author information from D005
@@ -6,8 +8,10 @@ const authorName = "Gwen DeMarco";
 const tagline = "Paranormal romance with a focus on the weird and wonderful";
 ---
 
-<footer class="bg-shadow-black text-moon-silver py-16 border-t border-mystic-violet/20">
-	<div class="container mx-auto px-4">
+<footer class="bg-shadow-black text-moon-silver py-16 border-t border-mystic-violet/20 relative overflow-hidden">
+	<!-- Decorative city skyline -->
+	<CitySkyline class="opacity-40" />
+	<div class="container mx-auto px-4 relative z-10">
 		<div class="max-w-6xl mx-auto">
 			<!-- Main Footer Content -->
 			<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
