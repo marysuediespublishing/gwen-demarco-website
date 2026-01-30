@@ -404,7 +404,7 @@
   - Ensure book cards actually display content (titles, covers)
   - Link each book to its detail page
 
-- [ ] **T064** - Add recent blog posts section to homepage
+- [x] **T064** - Add recent blog posts section to homepage
   - refs: D014
   - Add "Latest from the Blog" section to homepage
   - Show 2-3 most recent blog posts
