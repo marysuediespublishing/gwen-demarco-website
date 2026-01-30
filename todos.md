@@ -385,3 +385,38 @@
   - Check all images load properly
   - Test newsletter signup flow
   - Verify mobile menu functionality
+
+## Phase 11: Critical Fixes (Second Review)
+
+- [x] **T062** - CRITICAL: Fix book cards rendering on /books page
+  - refs: D002
+  - The BookCard components in "Featured & Fan Favorites" section still render as empty boxes
+  - Cards have borders but no content (title, description, cover image) is displaying
+  - Debug the BookCard.astro component - check if props are being passed correctly
+  - Verify the books collection query is returning data
+  - Check if the card content elements have proper text color for dark backgrounds
+  - This is the most visible bug on the site and needs immediate fixing
+
+- [ ] **T063** - Add featured books section to homepage
+  - refs: D014
+  - Homepage currently only has hero section and newsletter CTA
+  - Add "Featured Books" section below hero with 3-4 book cards
+  - Ensure book cards actually display content (titles, covers)
+  - Link each book to its detail page
+
+- [ ] **T064** - Add recent blog posts section to homepage
+  - refs: D014
+  - Add "Latest from the Blog" section to homepage
+  - Show 2-3 most recent blog posts
+  - Include title, date, excerpt, and "Read More" link
+
+- [ ] **T065** - Add testimonials section to homepage
+  - refs: D011, D014
+  - Create testimonials content if not exists
+  - Add "What Readers Are Saying" section to homepage
+  - Display 2-3 reader quotes with attribution
+
+- [ ] **T066** - Add Locations link to main navigation
+  - The /locations page exists but is not linked in the navigation menu
+  - Add "Locations" or "Worlds" to the header navigation
+  - Position after "Species" in the nav order
