@@ -304,3 +304,84 @@
   - Remove unused code
   - Optimize images
   - Check all links work
+
+## Phase 10: Improvements & Enhancements (Post-Review)
+
+- [x] **T050** - FIX: Book cards on /books page not displaying content
+  - refs: D002
+  - The BookCard components in the "Featured & Fan Favorites" section render as empty boxes
+  - Debug why book title, description, and cover are not showing
+  - Ensure cards link to individual book pages
+  - Add hover effects and proper styling
+
+- [ ] **T051** - Enhance homepage with featured books section
+  - refs: D002, D004
+  - Add a working featured books carousel/grid to homepage
+  - Show 3-4 featured books with covers, titles, and "Read More" links
+  - Should appear below the hero section
+
+- [ ] **T052** - Add recent blog posts preview to homepage
+  - refs: D004
+  - Show latest 2-3 blog posts on homepage
+  - Include post title, date, and excerpt
+  - "View All Posts" link to blog page
+
+- [ ] **T053** - Add reader testimonials/reviews section
+  - refs: D002
+  - Create testimonials content collection
+  - Add 3-5 reader quotes/reviews
+  - Display on homepage and/or about page
+  - Style with quote marks and attribution
+
+- [ ] **T054** - Create reading order guide page
+  - refs: D004
+  - New page at /reading-order
+  - Visual guide showing recommended reading order
+  - Group by series with clear "Start Here" indicators
+  - Include brief descriptions of each series
+
+- [ ] **T055** - Add locations/world-building page
+  - refs: D003, D004
+  - Create locations collection entries (San Francisco Morgue, Kingdom of Erishum, etc.)
+  - Create /locations page with world-building details
+  - Link locations to relevant books and series
+
+- [ ] **T056** - Add more blog content variety
+  - refs: D006
+  - Create "Writing Tips" blog post
+  - Create "Character Spotlight" blog post (e.g., Sophie Feegle profile)
+  - Create "World-Building" blog post about supernatural creatures
+  - Create "Behind the Scenes" post about writing process
+
+- [ ] **T057** - Enhance visual atmosphere with urban fantasy effects
+  - refs: D002
+  - Add subtle fog/mist overlay effect to hero sections
+  - Consider animated particle effects (embers, stars)
+  - Add city skyline silhouette as decorative element
+  - Enhance purple glow effects on hover states
+
+- [ ] **T058** - Add "Start Reading" CTA with first book free chapter
+  - refs: D008
+  - Create prominent "Start Reading" section
+  - Link to first chapter preview or Kindle sample
+  - Strong call-to-action for new readers
+
+- [ ] **T059** - Improve book card hover interactions
+  - refs: D002
+  - Add scale transform on hover
+  - Add glowing border effect
+  - Smooth transitions
+  - Show "Quick View" or series badge on hover
+
+- [ ] **T060** - Add social proof stats (if available)
+  - refs: D002, D005
+  - Display real Goodreads ratings if available
+  - Show Amazon review counts
+  - Add "Readers Love" social proof section
+
+- [ ] **T061** - Final QA and link verification
+  - Test all Amazon purchase links work
+  - Verify all internal navigation
+  - Check all images load properly
+  - Test newsletter signup flow
+  - Verify mobile menu functionality
