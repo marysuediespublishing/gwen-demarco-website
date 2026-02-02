@@ -420,3 +420,9 @@
   - The /locations page exists but is not linked in the navigation menu
   - Add "Locations" or "Worlds" to the header navigation
   - Position after "Species" in the nav order
+
+- [x] **T067** - README.md
+  - Please replace the current README.md with a README.md for this project
+  - Include how to run the app for development, add tasks, run loop.sh
+  - Include how to run the CMS locally and deploy to Github
+  - Include high-level summary of what has been built so far
