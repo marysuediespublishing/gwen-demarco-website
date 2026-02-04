@@ -1,20 +1,22 @@
 ---
-import { getCollection, render } from 'astro:content';
+import { type CollectionEntry, getCollection, render } from 'astro:content';
 import BlogPost from '../../layouts/BlogPost.astro';
 
-// Get the slug from URL params
-const { slug } = Astro.params;
-
-// Fetch all blog posts and find the one matching the slug
-const allBlogPosts = await getCollection('blog');
-const post = allBlogPosts.find(p => p.id === slug);
-
-// Handle post not found - return 404
-if (!post) {
-  return Astro.redirect('/404');
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: post,
+  }));
 }
 
+type Props = CollectionEntry<'blog'>;
+
+const post = Astro.props;
 const { Content } = await render(post);
+
+// Fetch all blog posts for navigation
+const allBlogPosts = await getCollection('blog');
 
 // Get all posts sorted chronologically (oldest to newest) for navigation
 const allPosts = allBlogPosts.sort(

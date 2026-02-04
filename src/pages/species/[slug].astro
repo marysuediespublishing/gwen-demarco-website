@@ -1,18 +1,18 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { getCollection, render } from 'astro:content';
+import { type CollectionEntry, getCollection, render } from 'astro:content';
 
-// Get the slug from URL params
-const { slug } = Astro.params;
-
-// Fetch all species and find the one matching the slug
-const allSpecies = await getCollection('species');
-const species = allSpecies.find(s => s.id === slug);
-
-// Handle species not found - return 404
-if (!species) {
-	return Astro.redirect('/404');
+export async function getStaticPaths() {
+  const allSpecies = await getCollection('species');
+  return allSpecies.map((species) => ({
+    params: { slug: species.id },
+    props: species,
+  }));
 }
+
+type Props = CollectionEntry<'species'>;
+
+const species = Astro.props;
 
 // Get all series and books to show where this species appears
 const allSeries = await getCollection('series');

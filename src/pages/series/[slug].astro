@@ -1,23 +1,24 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { SITE_TITLE } from '../../consts';
-import { getCollection, render } from 'astro:content';
+import { type CollectionEntry, getCollection, render } from 'astro:content';
 import { Image, getImage } from 'astro:assets';
 
-// Get the slug from URL params
-const { slug } = Astro.params;
-
-// Fetch all series and find the one matching the slug
-const seriesCollection = await getCollection('series');
-const seriesItem = seriesCollection.find(s => s.id === slug);
-
-// Handle series not found - return 404
-if (!seriesItem) {
-  return Astro.redirect('/404');
+export async function getStaticPaths() {
+  const seriesCollection = await getCollection('series');
+  return seriesCollection.map((series) => ({
+    params: { slug: series.id },
+    props: series,
+  }));
 }
 
-// Render the series content (markdown body)
+type Props = CollectionEntry<'series'>;
+
+const seriesItem = Astro.props;
 const { Content } = await render(seriesItem);
+
+// Fetch series collection for related series
+const seriesCollection = await getCollection('series');
 
 // Helper function to map series names to slugs
 function getSeriesSlug(seriesName: string): string {

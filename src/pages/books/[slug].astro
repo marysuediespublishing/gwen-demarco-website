@@ -1,8 +1,22 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { SITE_TITLE } from '../../consts';
-import { getCollection, render } from 'astro:content';
+import { type CollectionEntry, getCollection, render } from 'astro:content';
 import { Image, getImage } from 'astro:assets';
+
+export async function getStaticPaths() {
+  const books = await getCollection('books');
+  return books.map((book) => ({
+    params: { slug: book.id },
+    props: book,
+  }));
+}
+
+type Props = CollectionEntry<'books'>;
+
+const book = Astro.props;
+const { Content } = await render(book);
+const bookWithSlug = { ...book, slug: book.id };
 
 // Helper function to map series names to slugs
 function getSeriesSlug(seriesName: string): string | null {
@@ -47,19 +61,8 @@ function formatGenreName(genre: string): string {
   ).join(' ');
 }
 
-// Get the slug from URL params
-const { slug } = Astro.params;
-
-// Fetch all books and find the one matching the slug
+// Fetch all books for related content
 const allBooks = await getCollection('books');
-const book = allBooks.find(b => b.id === slug);
-
-// Handle book not found - return 404
-if (!book) {
-  return Astro.redirect('/404');
-}
-const { Content } = await render(book);
-const bookWithSlug = { ...book, slug: book.id };
 
 // Process all books for related recommendations
 const allBooksProcessed = await Promise.all(

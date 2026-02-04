@@ -437,3 +437,17 @@
   - Check if there's a proxy configuration needed in astro.config.mjs
   - Compare working dane-griggs-website setup if needed
   - Test that CMS loads and can edit content locally
+
+## Phase 13: Deployment
+
+- [x] **T069** - Switch to static output and configure GitHub Pages deployment
+  - refs: D001, D015
+  - Remove @astrojs/node adapter from astro.config.mjs
+  - Remove @astrojs/node from package.json dependencies
+  - Set output to 'static' (or remove output config entirely)
+  - Set `site` field in astro.config.mjs to the GitHub Pages URL
+  - Remove any SSR-only code or API routes if present
+  - Create .github/workflows/deploy.yml for GitHub Actions build + deploy
+  - Verify /admin/index.html is included in build output
+  - Handle contact form (replace with mailto or Formspree)
+  - Run npm run build and verify clean static output in dist/
