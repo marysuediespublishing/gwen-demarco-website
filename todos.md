@@ -451,3 +451,24 @@
   - Verify /admin/index.html is included in build output
   - Handle contact form (replace with mailto or Formspree)
   - Run npm run build and verify clean static output in dist/
+
+## Phase 14: Ongoing Development
+
+- [x] **T070** - FIX: Testimonials book field should be a relation dropdown, not text input
+  - refs: D001, D011
+  - In public/admin/config.yml, update the testimonials collection
+  - Change the book field from widget: string to widget: relation
+  - Configure relation to point to the books collection
+  - Use book title as display and slug as value
+  - Example config:
+```yaml
+    - name: book
+      label: Book Title
+      widget: relation
+      collection: books
+      search_fields: [title]
+      value_field: "{{slug}}"
+      display_fields: [title]
+```
+  - Test in /admin that the dropdown populates with all books
+  - Verify existing testimonial entries still work after the change
