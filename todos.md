@@ -426,3 +426,14 @@
   - Include how to run the app for development, add tasks, run loop.sh
   - Include how to run the CMS locally and deploy to Github
   - Include high-level summary of what has been built so far
+
+## Phase 12: Bug Fixes
+
+- [x] **T068** - FIX: Decap CMS admin not working in local development
+  - refs: D001, D009
+  - When running `npm run dev` + `npx decap-server`, the /admin page is not functioning
+  - Investigate browser console for JavaScript errors
+  - Verify decap-server is running on correct port (default 8081)
+  - Check if there's a proxy configuration needed in astro.config.mjs
+  - Compare working dane-griggs-website setup if needed
+  - Test that CMS loads and can edit content locally
