@@ -177,54 +177,46 @@ const sortedSeries = seriesWithBooks.sort((a, b) => {
 								</div>
 							</div>
 
-							<!-- Book Cover Display -->
+							<!-- Book Cover Display - Large Stacked/Fanned Layout -->
 							<div class={`relative ${index % 2 === 1 ? 'lg:order-1' : ''}`}>
-								<div class="relative w-full max-w-md mx-auto">
-									<!-- Side-by-side book covers with slight overlap -->
-									<div class="flex justify-center items-end">
-										{series.books.slice(0, 3).map((book, bookIndex) => (
-											<div
-												class="relative transition-transform duration-300 hover:scale-105 hover:z-20"
-												style={{
-													width: '140px',
-													marginLeft: bookIndex > 0 ? '-20px' : '0',
-													zIndex: 3 - bookIndex
-												}}
-											>
-												<div class="relative aspect-[2/3]">
-													{book.data.cover ? (
-														<img
-															src={book.data.cover}
-															alt={book.data.title}
-															class="w-full h-full object-cover rounded-lg shadow-2xl border border-mystic-violet/50 transition-all duration-300 hover:border-ember-orange/70 hover:shadow-mystic"
-															loading="lazy"
-														/>
-													) : (
-														<div class="w-full h-full bg-gradient-to-br from-mystic-violet/40 to-midnight-purple rounded-lg shadow-2xl flex items-center justify-center border border-mystic-violet/50 transition-all duration-300 hover:border-ember-orange/70 hover:shadow-mystic">
-															<div class="text-center text-moon-silver p-2">
-																<div class="text-3xl mb-2 opacity-70">📖</div>
-																<div class="text-xs font-bold text-bone-white line-clamp-2">{book.data.title}</div>
-															</div>
-														</div>
-													)}
-
-													<!-- Book info overlay on hover -->
-													<div class="absolute inset-0 bg-shadow-black/95 opacity-0 hover:opacity-100 transition-opacity duration-300 rounded-lg flex items-center justify-center p-2">
-														<div class="text-center text-bone-white">
-															<h4 class="text-sm font-bold mb-1 line-clamp-2">{book.data.title}</h4>
-															<p class="text-xs text-ember-orange mb-2">Book #{book.data.seriesOrder}</p>
-															<a
-																href={`/books/${book.slug}`}
-																class="btn btn-primary text-xs px-3 py-1"
-															>
-																View Book
-															</a>
-														</div>
+								<div class="relative aspect-[2/3] max-w-sm mx-auto">
+									{series.books.slice(0, 3).map((book, bookIndex) => (
+										<a
+											href={`/books/${book.slug}`}
+											class="absolute inset-0 transition-all duration-300 hover:scale-105 hover:z-30 group"
+											style={{
+												transform: `rotate(${(bookIndex - 1) * 6}deg) translateX(${(bookIndex - 1) * 15}px)`,
+												zIndex: 3 - bookIndex
+											}}
+										>
+											{book.data.cover ? (
+												<img
+													src={book.data.cover}
+													alt={book.data.title}
+													class="w-full h-full object-cover rounded-lg shadow-2xl border-2 border-mystic-violet/50 transition-all duration-300 group-hover:border-ember-orange/70 group-hover:shadow-mystic"
+													loading="lazy"
+												/>
+											) : (
+												<div class="w-full h-full bg-gradient-to-br from-mystic-violet/40 to-midnight-purple rounded-lg shadow-2xl flex items-center justify-center border-2 border-mystic-violet/50 transition-all duration-300 group-hover:border-ember-orange/70 group-hover:shadow-mystic">
+													<div class="text-center text-moon-silver p-4">
+														<div class="text-5xl mb-3 opacity-70">📖</div>
+														<div class="text-sm font-bold text-bone-white line-clamp-2">{book.data.title}</div>
 													</div>
 												</div>
+											)}
+
+											<!-- Dark overlay on hover with book title and View Book link -->
+											<div class="absolute inset-0 bg-shadow-black/90 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg flex items-center justify-center p-6">
+												<div class="text-center text-bone-white">
+													<h4 class="text-lg font-bold mb-2 line-clamp-2">{book.data.title}</h4>
+													<p class="text-sm text-ember-orange mb-4">Book #{book.data.seriesOrder}</p>
+													<span class="btn btn-primary text-sm px-4 py-2">
+														View Book
+													</span>
+												</div>
 											</div>
-										))}
-									</div>
+										</a>
+									))}
 								</div>
 							</div>
 						</div>

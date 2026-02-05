@@ -837,7 +837,7 @@
   - Also consider renaming files to use consistent naming convention (e.g., sophie-and-the-odd-ones-cover.jpg)
   - Test that all 5 Sophie Feegle covers display crisply in the stacked arrangement
 
-- [x] **T075** - FIX: Series page - cap fanned book covers at 3 max, remove "+N" badge
+- [x] **T095** - FIX: Series page - cap fanned book covers at 3 max, remove "+N" badge
   - refs: D001
   - In src/pages/series.astro, in the "Book Stack Visualization" section:
   - Change .slice(0, 4) to .slice(0, 3) so only the first 3 books display
@@ -849,3 +849,23 @@
   - Keep everything else as-is: large fanned layout, book.data.cover images,
     placeholder fallback, hover overlays, responsive sizing
   - Test with all series on /series page to confirm correct display
+
+- [x] **T096** - FIX: Revert series page book covers to large stacked/fanned layout, max 3 books
+  - refs: D001
+  - In src/pages/series.astro, the book covers are currently displaying as small
+    side-by-side thumbnails (see Auras & Embers section for example)
+  - Revert to the original large stacked/fanned layout where covers overlap
+    with slight rotation, filling the right column at full height
+  - Use the original Book Stack Visualization code structure:
+    - aspect-[2/3] container with max-w-sm mx-auto
+    - Absolute positioned covers stacked on top of each other
+    - Slight rotation per book: transform rotate + translate
+    - Large cover images that fill the container (w-full h-full object-cover)
+    - Hover effect with scale and z-index change
+    - Dark overlay on hover showing book title and "View Book" link
+  - Cap at first 3 books per series: .slice(0, 3)
+  - Rotation math for 3 books: (bookIndex - 1) * 3 degrees
+  - Remove any "+N" badge if still present
+  - The Mudlark series (screenshot 2) shows the desired large cover look
+  - The Auras & Embers series (screenshot 1) shows the current broken small layout
+  - Test all series on /series page to confirm large fanned covers display correctly
