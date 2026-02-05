@@ -965,3 +965,11 @@
   - This mirrors the same pattern used for series sorting on the /series page
   - Verify Sophie Feegle and Mac Volpes appear before Ace in the Sophie Feegle section
   - Test with other series groups to confirm featured sorting works across all groups
+
+- [x] **T103** - FIX: Change "Featured" label to "Main Character" on characters page
+  - refs: D001, T099, T101
+  - In src/pages/characters.astro, find any text or badge that displays "Featured"
+    for featured characters and change it to "Main Character"
+  - This is display-only — the underlying field in the CMS stays as "featured: true"
+  - Update any CSS classes or styling if the badge name affects sizing
+  - Test on /characters page that featured characters show "Main Character" badge
