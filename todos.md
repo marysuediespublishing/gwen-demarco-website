@@ -1139,3 +1139,13 @@
   - Test hover preview works on both main and per-series pages
   - Test "More..." button appears only when artwork exceeds the limit
   - Test nav link appears in correct position on all pages
+
+- [x] **T109** - REMOVE: Delete Reading Order page and remove from navigation
+  - refs: D001
+  - Remove "Reading Order" link from the site navigation/header component
+    (find in src/components/ or src/layouts/)
+  - Delete the Reading Order page file (likely src/pages/reading-order.astro)
+  - Remove any internal links pointing to /reading-order from other pages
+    (check series pages, book pages, homepage, etc.)
+  - Test that navigation displays correctly without the link
+  - Test that no broken links remain referencing /reading-order
