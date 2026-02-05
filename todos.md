@@ -836,3 +836,18 @@
   - Likely fix: Replace low-quality image file with proper high-resolution book cover
   - Also consider renaming files to use consistent naming convention (e.g., sophie-and-the-odd-ones-cover.jpg)
   - Test that all 5 Sophie Feegle covers display crisply in the stacked arrangement
+
+- [x] **T075** - FIX: Series page book images must use CMS content images, not hardcoded paths
+  - refs: D001
+  - Audit src/pages/series.astro (or equivalent series template)
+  - Ensure all book cover images are pulled from each book's frontmatter image field
+    (e.g., book.data.cover or book.data.image from the books collection)
+  - Remove any hardcoded placeholder image paths or fallback images
+    that would prevent CMS-updated images from displaying
+  - Check for any hardcoded image imports or static asset references
+    that bypass the content collection
+  - If series-level images exist separately from book images,
+    ensure they also reference CMS-managed content
+  - Verify that updating a book's cover image in /admin
+    automatically reflects on the /series page
+  - Test with at least one real cover image to confirm the pipeline works
