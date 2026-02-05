@@ -10,9 +10,9 @@ socialLinks:
   email: gwendemarcoauthor@gmail.com
 stats:
   booksPublished: 11
-  pagesRead: 1M+
-  readerRatings: 500+
-  seriesComplete: 2
+  pagesRead: 32M+
+  readerRatings: 13K+
+  seriesComplete: 4
   averageRating: "4.4"
   totalReviews: "500+"
   goodreadsRating: "4.3"

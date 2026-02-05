@@ -588,3 +588,14 @@
   - Fix image path resolution so covers display correctly
   - Verify fix on both /books listing and individual /books/[slug] pages
   - Run npm run build to confirm no image errors
+
+
+- [x] **T077** - UPDATE: Fix homepage stats to reflect accurate numbers
+  - refs: D005, D014
+  - Update stats section on homepage with correct figures:
+    - Change "1M+ pages read" to "32M+ pages read"
+    - Change "2 Series Complete" to "4 Series"
+    - Change "500+ Reader Ratings" to "13K+ Reader Ratings"
+  - Stats are likely in src/content/settings/site-config.md or hardcoded in src/pages/index.astro
+  - Check both locations and update wherever the values are defined
+  - Verify changes display correctly on homepage

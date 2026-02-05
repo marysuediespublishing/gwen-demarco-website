@@ -17,9 +17,9 @@ const siteConfig = settingsCollection[0]?.data || {
 	tagline: "Paranormal romance with a focus on the weird and wonderful",
 	stats: {
 		booksPublished: 11,
-		pagesRead: "1M+",
-		readerRatings: "500+",
-		seriesComplete: 2
+		pagesRead: "32M+",
+		readerRatings: "13K+",
+		seriesComplete: 4
 	},
 	authorBio: "Gwen DeMarco writes paranormal romance novels featuring snarky heroines, grumpy male leads, and the magic of found family.",
 	newsletter: {
@@ -101,16 +101,16 @@ function getSeriesDisplay(seriesSlug: string | undefined): string {
 							<div class="text-xs sm:text-sm text-moon-silver/80">Books Published</div>
 						</div>
 						<div class="bg-midnight-purple/40 backdrop-blur-sm rounded-lg p-3 sm:p-4 border border-mystic-violet/30 hover:shadow-mystic transition-all duration-300">
-							<div class="text-xl sm:text-2xl md:text-3xl font-bold text-ember-orange">{siteConfig.stats?.pagesRead || "1M+"}</div>
+							<div class="text-xl sm:text-2xl md:text-3xl font-bold text-ember-orange">{siteConfig.stats?.pagesRead || "32M+"}</div>
 							<div class="text-xs sm:text-sm text-moon-silver/80">Pages Read</div>
 						</div>
 						<div class="bg-midnight-purple/40 backdrop-blur-sm rounded-lg p-3 sm:p-4 border border-mystic-violet/30 hover:shadow-mystic transition-all duration-300">
-							<div class="text-xl sm:text-2xl md:text-3xl font-bold text-ember-orange">{siteConfig.stats?.readerRatings || "500+"}</div>
+							<div class="text-xl sm:text-2xl md:text-3xl font-bold text-ember-orange">{siteConfig.stats?.readerRatings || "13K+"}</div>
 							<div class="text-xs sm:text-sm text-moon-silver/80">Reader Ratings</div>
 						</div>
 						<div class="bg-midnight-purple/40 backdrop-blur-sm rounded-lg p-3 sm:p-4 border border-mystic-violet/30 hover:shadow-mystic transition-all duration-300">
-							<div class="text-xl sm:text-2xl md:text-3xl font-bold text-ember-orange">{siteConfig.stats?.seriesComplete || 2}</div>
-							<div class="text-xs sm:text-sm text-moon-silver/80">Series Complete</div>
+							<div class="text-xl sm:text-2xl md:text-3xl font-bold text-ember-orange">{siteConfig.stats?.seriesComplete || 4}</div>
+							<div class="text-xs sm:text-sm text-moon-silver/80">Series</div>
 						</div>
 					</div>
 
@@ -579,8 +579,8 @@ function getSeriesDisplay(seriesSlug: string | undefined): string {
 							<div class="text-sm text-fog-gray">Books Published</div>
 						</div>
 						<div class="text-center p-4 bg-midnight-purple/30 rounded-lg border border-mystic-violet/20">
-							<div class="text-2xl md:text-3xl font-bold text-mystic-teal">{siteConfig.stats?.seriesComplete || 2}</div>
-							<div class="text-sm text-fog-gray">Complete Series</div>
+							<div class="text-2xl md:text-3xl font-bold text-mystic-teal">{siteConfig.stats?.seriesComplete || 4}</div>
+							<div class="text-sm text-fog-gray">Series</div>
 						</div>
 					</div>
 
