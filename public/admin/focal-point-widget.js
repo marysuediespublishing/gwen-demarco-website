@@ -16,23 +16,38 @@ const FocalPointControl = createClass({
   },
 
   componentDidUpdate(prevProps) {
-    // Check if the entry data changed (image might have been uploaded)
-    if (prevProps.entry !== this.props.entry) {
-      this.findImageUrl();
+    // Check if the image field specifically changed (not just the entry reference)
+    const prevImage = this.getImageFromEntry(prevProps.entry);
+    const currentImage = this.getImageFromEntry(this.props.entry);
+
+    if (prevImage !== currentImage) {
+      this.setState({ imageUrl: currentImage || null });
     }
+  },
+
+  getImageFromEntry(entry) {
+    // Safely extract the image field value from an entry
+    if (!entry) return null;
+
+    // Try getIn for immutable.js data structures (Decap CMS standard)
+    if (typeof entry.getIn === 'function') {
+      return entry.getIn(['data', 'image']) || null;
+    }
+
+    // Fallback for plain objects
+    const data = entry.get ? entry.get('data') : entry.data;
+    if (data) {
+      return data.get ? data.get('image') : data.image;
+    }
+
+    return null;
   },
 
   findImageUrl() {
     // Try to get the image URL from the entry's data
-    const entry = this.props.entry;
-    if (entry) {
-      const data = entry.get('data');
-      if (data) {
-        const image = data.get('image');
-        if (image) {
-          this.setState({ imageUrl: image });
-        }
-      }
+    const image = this.getImageFromEntry(this.props.entry);
+    if (image !== this.state.imageUrl) {
+      this.setState({ imageUrl: image || null });
     }
   },
 

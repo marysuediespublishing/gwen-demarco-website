@@ -1084,3 +1084,24 @@
   - Test in /admin that clicking the image updates the focal point visually
   - Test that the preview thumbnail matches what displays on the site
   - Test that saved values persist correctly after publish
+
+- [x] **T107** - FIX: Focal point widget should update immediately when artwork image is uploaded
+  - refs: D001, T104, T106
+  - In public/admin/focal-point-widget.js, the custom widget does not
+    reactively detect when the image field value changes during the same session
+  - The widget needs to listen for changes to the sibling "image" field
+    and update its preview without requiring a save/reload
+  - Update the widget's React component to:
+    - Access the image field value from the CMS entry via the Decap API
+      (e.g., using this.props.entry.getIn(['data', 'image']))
+    - Watch for changes to that value using componentDidUpdate or useEffect
+    - When the image value changes from empty to a new upload,
+      immediately render the image in the focal point picker
+    - Handle both file path strings and blob/preview URLs that Decap
+      generates for newly uploaded images before save
+  - If Decap provides a blob URL for unsaved uploads, use that for preview
+  - If only the path is available pre-save, attempt to resolve it
+    or show a message like "Save entry to enable focal point picker"
+    as a graceful fallback
+  - Test workflow: create new artwork entry → upload image → focal point
+    picker should populate immediately without needing to publish first
