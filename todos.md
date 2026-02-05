@@ -837,57 +837,15 @@
   - Also consider renaming files to use consistent naming convention (e.g., sophie-and-the-odd-ones-cover.jpg)
   - Test that all 5 Sophie Feegle covers display crisply in the stacked arrangement
 
-- [x] **T075** - FIX: Series page book images must use CMS content images, not hardcoded paths
+- [x] **T075** - FIX: Series page - cap fanned book covers at 3 max, remove "+N" badge
   - refs: D001
-  - Audit src/pages/series.astro (or equivalent series template)
-  - Ensure all book cover images are pulled from each book's frontmatter image field
-    (e.g., book.data.cover or book.data.image from the books collection)
-  - Remove any hardcoded placeholder image paths or fallback images
-    that would prevent CMS-updated images from displaying
-  - Check for any hardcoded image imports or static asset references
-    that bypass the content collection
-  - If series-level images exist separately from book images,
-    ensure they also reference CMS-managed content
-  - Verify that updating a book's cover image in /admin
-    automatically reflects on the /series page
-  - Test with at least one real cover image to confirm the pipeline works
-
-- [x] **T075** - FIX: Series page book cover display - limit to 3, remove stack effect and badge
-  - refs: D001
-  - In src/pages/series.astro, rework the "Book Stack Visualization" section
-  - Currently displays up to 4 rotated/overlapping book covers with a "+N" orange badge
-  - Change slice from .slice(0, 4) to .slice(0, 3) — show max 3 books per series
-  - Remove the fanned/stacked effect (rotation via transform, translation, z-index layering)
-  - Display books in a clean side-by-side or slight overlap layout instead
-  - Remove the "+N" orange circle badge entirely (the series.books.length > 4 block)
-  - Each book image should still pull from book.data.cover (already correct)
-  - Keep the placeholder fallback for books missing a cover image
-  - Keep the hover overlay with book title and "View Book" link
-  - Maintain responsive sizing and aspect-[2/3] container
-  - Match the clean look that Kingdom of Erishum currently has on /series
-  - Test with all series on /series page to confirm clean display
-
-- [x] **T075** - FIX: Series page book cover display - limit to 3, remove stack effect and badge
-  - refs: D001
-  - In src/pages/series.astro, rework the "Book Stack Visualization" section
-  - Currently displays up to 4 rotated/overlapping book covers with a "+N" orange badge
-  - Change slice from .slice(0, 4) to .slice(0, 3) — show max 3 books per series
-  - Remove the fanned/stacked effect (rotation via transform, translation, z-index layering)
-  - Display books in a clean side-by-side or slight overlap layout instead
-  - Remove the "+N" orange circle badge entirely (the series.books.length > 4 block)
-  - Each book image should still pull from book.data.cover (already correct)
-  - Keep the placeholder fallback for books missing a cover image
-  - Keep the hover overlay with book title and "View Book" link
-  - Maintain responsive sizing and aspect-[2/3] container
-  - Match the clean look that Kingdom of Erishum currently has on /series
-  - Test with all series on /series page to confirm clean display
-
-- [x] **T075** - FIX: Series page book cover display - limit to max 3 books, remove "+N" badge
-  - refs: D001
-  - In src/pages/series.astro, update the "Book Stack Visualization" section
-  - Change .slice(0, 4) to .slice(0, 3) — show max 3 book covers per series
-  - Keep the existing fanned/stacked layout with rotation and translation
-  - Adjust rotation math for 3 books instead of 4 (e.g., (bookIndex - 1) * 3 instead of (bookIndex - 1.5) * 3)
-  - Remove the "+N" orange circle badge entirely (delete the series.books.length > 4 block)
-  - Everything else stays the same: book.data.cover for images, placeholder fallback, hover overlays
-  - Test with all series on /series page
+  - In src/pages/series.astro, in the "Book Stack Visualization" section:
+  - Change .slice(0, 4) to .slice(0, 3) so only the first 3 books display
+  - If a series has fewer than 3 books, just show however many exist
+  - Adjust the rotation/translation math for 3 cards instead of 4
+    (e.g., change (bookIndex - 1.5) * 3 to (bookIndex - 1) * 3 so they fan evenly)
+  - Remove the "+N" orange circle badge block entirely
+    (delete the series.books.length > 4 conditional and its contents)
+  - Keep everything else as-is: large fanned layout, book.data.cover images,
+    placeholder fallback, hover overlays, responsive sizing
+  - Test with all series on /series page to confirm correct display
