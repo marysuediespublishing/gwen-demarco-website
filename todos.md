@@ -1158,3 +1158,14 @@
   - Style it to be informative but unobtrusive (e.g., text-fog-gray, text-sm,
     italic, or with a small icon like a cursor/magnifying glass)
   - Test on /artwork page that the note is visible and fits the design
+
+- [x] **T111** - FIX: Replace artwork count text with "Click on any thumbnail to see full image"
+  - refs: D001, T108, T110
+  - In src/pages/artwork.astro, under each series group title heading,
+    find the text that says something like "X artworks from this series"
+  - Replace it with "Click on any thumbnail to see full image"
+  - Apply this to every series group section on the page
+  - Remove the previous T110 note if it was added above the first group
+    (this replaces that approach — one note per section instead of one global note)
+  - Style consistently with the rest of the page (e.g., text-fog-gray, text-sm)
+  - Test on /artwork page that each series section shows the updated text

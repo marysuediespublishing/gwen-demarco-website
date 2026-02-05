@@ -151,18 +151,6 @@ const THUMBNAIL_LIMIT = 8;
 			</div>
 		</section>
 
-		<!-- Hint Note -->
-		<div class="py-4 bg-shadow-black/50 border-y border-mystic-violet/10">
-			<div class="container mx-auto px-4">
-				<div class="flex items-center justify-center gap-2 text-fog-gray text-sm italic">
-					<svg class="w-4 h-4 text-mystic-teal" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path>
-					</svg>
-					<span>Click on any thumbnail to see the full image</span>
-				</div>
-			</div>
-		</div>
-
 		<!-- Artwork Grouped by Series -->
 		{seriesGroups.map((group, index) => {
 			const displayArtworks = group.artworks.slice(0, THUMBNAIL_LIMIT);
@@ -186,7 +174,7 @@ const THUMBNAIL_LIMIT = 8;
 									</a>
 								</div>
 								<p class="text-fog-gray text-lg">
-									{group.artworks.length} {group.artworks.length === 1 ? 'artwork' : 'artworks'} from this series
+									Click on any thumbnail to see full image
 								</p>
 							</div>
 
@@ -249,7 +237,7 @@ const THUMBNAIL_LIMIT = 8;
 								Other Artwork
 							</h2>
 							<p class="text-fog-gray text-lg">
-								{otherArtwork.length} {otherArtwork.length === 1 ? 'artwork' : 'artworks'}
+								Click on any thumbnail to see full image
 							</p>
 						</div>
 
