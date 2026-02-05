@@ -551,3 +551,21 @@
   - picker_utc: false ensures local timezone
   - Test in /admin that calendar picker works and defaults to today
   - If datetime widget bugs persist, fall back to T072 string approach
+
+- [x] **T075** - FIX: Broken images on homepage at localhost:4321
+  - refs: D002, D004
+  - Homepage is showing image-not-found errors
+  - Debug steps:
+    1. Open browser dev tools (Network tab) to identify which image URLs are 404ing
+    2. Check src/pages/index.astro for image references
+    3. Check if referenced images exist in public/images/
+    4. Check book cover paths in src/content/books/*.md frontmatter
+    5. Check any hero/background image paths in components
+  - Common causes:
+    - Image path mismatch between content files and actual file locations
+    - Missing placeholder images from T045 that were never created or got deleted
+    - Incorrect relative vs absolute paths (should be /images/filename.ext)
+  - Fix all broken image references
+  - Add fallback/default images where covers are missing
+  - Run npm run build to verify no image-related warnings
+  - Visually confirm homepage loads cleanly with no broken image icons

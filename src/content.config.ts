@@ -4,11 +4,11 @@ import { glob } from 'astro/loaders';
 // Books collection - individual book entries
 const books = defineCollection({
   loader: glob({ base: './src/content/books', pattern: '**/*.{md,mdx}' }),
-  schema: ({ image }) => z.object({
+  schema: z.object({
     title: z.string(),
     author: z.string().default('Gwen DeMarco'),
     description: z.string(),
-    cover: image().optional(),
+    cover: z.string().optional(),
     series: z.string().optional(),
     seriesOrder: z.number().optional(),
     pubDate: z.coerce.date(),
@@ -32,10 +32,10 @@ const books = defineCollection({
 // Series collection - book series groupings
 const series = defineCollection({
   loader: glob({ base: './src/content/series', pattern: '**/*.{md,mdx}' }),
-  schema: ({ image }) => z.object({
+  schema: z.object({
     title: z.string(),
     description: z.string(),
-    cover: image().optional(),
+    cover: z.string().optional(),
     bookCount: z.number(),
     completionStatus: z.enum(['ongoing', 'complete']).default('ongoing'),
     startDate: z.coerce.date(),
@@ -52,12 +52,12 @@ const series = defineCollection({
 // Blog collection - blog posts
 const blog = defineCollection({
   loader: glob({ base: './src/content/blog', pattern: '**/*.{md,mdx}' }),
-  schema: ({ image }) => z.object({
+  schema: z.object({
     title: z.string(),
     description: z.string(),
     pubDate: z.coerce.date(),
     updatedDate: z.coerce.date().optional(),
-    heroImage: image().optional(),
+    heroImage: z.string().optional(),
     bookSlug: z.string().optional(),
     tags: z.array(z.string()).default([]),
     category: z.enum(['book-launches', 'species-lore', 'world-building', 'writing-process', 'behind-scenes']).default('writing-process'),
@@ -84,13 +84,13 @@ const testimonials = defineCollection({
 // Characters collection - character profiles
 const characters = defineCollection({
   loader: glob({ base: './src/content/characters', pattern: '**/*.{md,mdx}' }),
-  schema: ({ image }) => z.object({
+  schema: z.object({
     name: z.string(),
     slug: z.string().optional(),
     description: z.string().optional(),
     books: z.array(z.string()).default([]),
     cameos: z.array(z.string()).default([]),
-    image: image().optional(),
+    image: z.string().optional(),
     species: z.string().optional(),
   }),
 });
@@ -98,12 +98,12 @@ const characters = defineCollection({
 // Species collection - supernatural creature types
 const species = defineCollection({
   loader: glob({ base: './src/content/species', pattern: '**/*.{md,mdx}' }),
-  schema: ({ image }) => z.object({
+  schema: z.object({
     name: z.string(),
     slug: z.string().optional(),
     description: z.string().optional(),
     series: z.array(z.string()).default([]),
-    image: image().optional(),
+    image: z.string().optional(),
     physicalTraits: z.string().optional(),
     cultureNotes: z.string().optional(),
     abilities: z.string().optional(),
@@ -113,11 +113,11 @@ const species = defineCollection({
 // Locations collection - settings and places
 const locations = defineCollection({
   loader: glob({ base: './src/content/locations', pattern: '**/*.{md,mdx}' }),
-  schema: ({ image }) => z.object({
+  schema: z.object({
     name: z.string(),
     slug: z.string().optional(),
     description: z.string().optional(),
-    image: image().optional(),
+    image: z.string().optional(),
     environmentType: z.string().optional(),
   }),
 });

@@ -2,38 +2,17 @@
 import Layout from '../layouts/Layout.astro';
 import { SITE_TITLE } from '../consts';
 import { getCollection } from 'astro:content';
-import { getImage } from 'astro:assets';
 
 // Get search query from URL params
 const url = Astro.url;
 const searchQuery = url.searchParams.get('q') || '';
 
 // Get all content for searching
-const books = await Promise.all(
-  (await getCollection('books')).map(async book => {
-    try {
-      const coverImage = book.data.cover ? await getImage({
-        src: book.data.cover,
-        width: 300,
-        height: 450,
-        format: 'webp'
-      }) : null;
-
-      return {
-        ...book,
-        slug: book.id,
-        coverUrl: coverImage?.src
-      };
-    } catch (error) {
-      console.warn(`Failed to process cover for book ${book.id}:`, error);
-      return {
-        ...book,
-        slug: book.id,
-        coverUrl: null
-      };
-    }
-  })
-);
+const books = (await getCollection('books')).map(book => ({
+  ...book,
+  slug: book.id,
+  coverUrl: book.data.cover || null
+}));
 
 const seriesCollection = await getCollection('series');
 const blog = await getCollection('blog');

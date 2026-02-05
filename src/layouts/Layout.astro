@@ -14,12 +14,12 @@ export interface Props {
 const {
   title,
   description = "Gwen DeMarco writes paranormal romance with a focus on the weird and wonderful. Snarky heroines, grumpy heroes, and found family.",
-  image = "/images/og-image.jpg",
+  image,
   type = "website"
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
-const socialImageURL = new URL(image, Astro.url);
+const socialImageURL = image ? new URL(image, Astro.url) : undefined;
 ---
 
 <!DOCTYPE html>
@@ -42,15 +42,15 @@ const socialImageURL = new URL(image, Astro.url);
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={socialImageURL} />
+    {socialImageURL && <meta property="og:image" content={socialImageURL} />}
     <meta property="og:site_name" content="Gwen DeMarco - Paranormal Romance Author" />
 
     <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:card" content={socialImageURL ? "summary_large_image" : "summary"} />
     <meta property="twitter:url" content={canonicalURL} />
     <meta property="twitter:title" content={title} />
     <meta property="twitter:description" content={description} />
-    <meta property="twitter:image" content={socialImageURL} />
+    {socialImageURL && <meta property="twitter:image" content={socialImageURL} />}
 
     <!-- Additional SEO -->
     <meta name="robots" content="index, follow" />
