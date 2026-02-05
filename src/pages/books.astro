@@ -119,10 +119,19 @@ function getSeriesDisplay(seriesSlug: string | undefined): string {
 						{featuredBooks.slice(0, 6).map((book) => (
 							<a href={`/books/${book.slug}`} class="card card-hover group p-4 sm:p-6">
 								<div class="flex flex-col h-full">
-									<!-- Book cover placeholder -->
-									<div class="w-full aspect-[2/3] bg-gradient-to-br from-mystic-violet/20 to-midnight-purple rounded-lg mb-4 flex items-center justify-center border border-mystic-violet/30 group-hover:border-ember-orange/50 transition-colors">
-										<span class="text-4xl opacity-60">📖</span>
-									</div>
+									<!-- Book cover -->
+									{book.data.cover ? (
+										<img
+											src={book.data.cover}
+											alt={`${book.data.title} book cover`}
+											class="w-full aspect-[2/3] object-cover rounded-lg mb-4 border border-mystic-violet/30 group-hover:border-ember-orange/50 transition-colors"
+											loading="lazy"
+										/>
+									) : (
+										<div class="w-full aspect-[2/3] bg-gradient-to-br from-mystic-violet/20 to-midnight-purple rounded-lg mb-4 flex items-center justify-center border border-mystic-violet/30 group-hover:border-ember-orange/50 transition-colors">
+											<span class="text-4xl opacity-60">📖</span>
+										</div>
+									)}
 
 									<!-- Series badge -->
 									{book.data.series && (
@@ -175,10 +184,19 @@ function getSeriesDisplay(seriesSlug: string | undefined): string {
 					<div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
 						{latestReleases.slice(0, 8).map((book) => (
 							<a href={`/books/${book.slug}`} class="card card-hover group p-3 sm:p-4">
-								<!-- Book cover placeholder -->
-								<div class="w-full aspect-[2/3] bg-gradient-to-br from-mystic-violet/20 to-midnight-purple rounded-lg mb-3 flex items-center justify-center border border-mystic-violet/30 group-hover:border-ember-orange/50 transition-colors">
-									<span class="text-3xl opacity-60">📖</span>
-								</div>
+								<!-- Book cover -->
+								{book.data.cover ? (
+									<img
+										src={book.data.cover}
+										alt={`${book.data.title} book cover`}
+										class="w-full aspect-[2/3] object-cover rounded-lg mb-3 border border-mystic-violet/30 group-hover:border-ember-orange/50 transition-colors"
+										loading="lazy"
+									/>
+								) : (
+									<div class="w-full aspect-[2/3] bg-gradient-to-br from-mystic-violet/20 to-midnight-purple rounded-lg mb-3 flex items-center justify-center border border-mystic-violet/30 group-hover:border-ember-orange/50 transition-colors">
+										<span class="text-3xl opacity-60">📖</span>
+									</div>
+								)}
 
 								<!-- Title -->
 								<h3 class="font-primary text-lg font-bold text-ember-orange mb-1 group-hover:text-mystic-teal transition-colors line-clamp-2">
@@ -250,10 +268,19 @@ function getSeriesDisplay(seriesSlug: string | undefined): string {
 				<div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
 					{sortedBooks.map((book) => (
 						<a href={`/books/${book.slug}`} class="card card-hover group p-3 sm:p-4">
-							<!-- Book cover placeholder -->
-							<div class="w-full aspect-[2/3] bg-gradient-to-br from-mystic-violet/20 to-midnight-purple rounded-lg mb-3 flex items-center justify-center border border-mystic-violet/30 group-hover:border-ember-orange/50 transition-colors">
-								<span class="text-3xl opacity-60">📖</span>
-							</div>
+							<!-- Book cover -->
+							{book.data.cover ? (
+								<img
+									src={book.data.cover}
+									alt={`${book.data.title} book cover`}
+									class="w-full aspect-[2/3] object-cover rounded-lg mb-3 border border-mystic-violet/30 group-hover:border-ember-orange/50 transition-colors"
+									loading="lazy"
+								/>
+							) : (
+								<div class="w-full aspect-[2/3] bg-gradient-to-br from-mystic-violet/20 to-midnight-purple rounded-lg mb-3 flex items-center justify-center border border-mystic-violet/30 group-hover:border-ember-orange/50 transition-colors">
+									<span class="text-3xl opacity-60">📖</span>
+								</div>
+							)}
 
 							<!-- Series badge -->
 							{book.data.series && (

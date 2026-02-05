@@ -569,3 +569,22 @@
   - Add fallback/default images where covers are missing
   - Run npm run build to verify no image-related warnings
   - Visually confirm homepage loads cleanly with no broken image icons
+
+
+- [x] **T076** - FIX: Book cover images not displaying on /books listing page
+  - refs: D002, D004
+  - Book images have been uploaded via Decap CMS admin but are not rendering on /books page
+  - Debug steps:
+    1. Check a book markdown file in src/content/books/ to see the image path Decap saved
+    2. Decap CMS typically saves images to a media_folder path - check config.yml for media_folder and public_folder settings
+    3. Compare the path stored in frontmatter (e.g., cover: /images/book.jpg) with actual file location
+    4. Check BookCard component to see how it reads and renders the cover image
+    5. Verify images exist on disk at the path the component expects
+  - Likely causes:
+    - Decap saves to a different folder than where the component looks
+    - media_folder in config.yml doesn't match public/images/
+    - BookCard component may not be reading the frontmatter image field correctly
+    - Path mismatch between relative and absolute URLs
+  - Fix image path resolution so covers display correctly
+  - Verify fix on both /books listing and individual /books/[slug] pages
+  - Run npm run build to confirm no image errors
