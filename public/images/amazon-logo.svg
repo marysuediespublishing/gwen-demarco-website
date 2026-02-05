@@ -1,8 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 48" width="120" height="48">
-  <!-- Amazon text -->
-  <text x="60" y="28" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="bold" letter-spacing="-0.5" fill="#FFFFFF">amazon</text>
-  <!-- Orange smile arrow -->
-  <path d="M25 35 Q60 46 95 35" stroke="#FF9900" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48">
+  <circle cx="24" cy="24" r="24" fill="#3D3D3D"/>
+  <!-- Lowercase "a" -->
+  <text x="24" y="29" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="bold" fill="#FFFFFF">a</text>
+  <!-- Orange smile arrow underneath the "a" -->
+  <path d="M14 34 Q24 40 34 34" stroke="#FF9900" stroke-width="2" fill="none" stroke-linecap="round"/>
   <!-- Arrow head -->
-  <polygon points="93,31 98,35 92,37" fill="#FF9900"/>
+  <polygon points="33,31.5 35.5,34 32.5,35" fill="#FF9900"/>
 </svg>

@@ -680,3 +680,14 @@
   - Update the homepage component to reference the new logo
   - Ensure the logo is appropriately sized and consistent with the Goodreads logo next to it
   - Verify the logo displays correctly on both desktop and mobile
+
+- [x] **T085** - UPDATE: Use circular Amazon "a" logo style in "Readers Love These Books" section
+  - refs: D014
+  - This supersedes T084
+  - Use a circular Amazon logo style matching https://www.iconpacks.net/free-icon/amazon-letter-a-circle-round-grey-logo-19625.html
+  - Logo should be: grey/dark circle with Amazon lowercase "a" and arrow smile inside
+  - This matches the circular style of the Goodreads logo for visual consistency
+  - Create or source an SVG of this circular Amazon "a" logo
+  - Save to public/images/ and update the homepage component
+  - Ensure it's the same size as the Goodreads circular logo
+  - Verify both logos look consistent and balanced on desktop and mobile
