@@ -625,3 +625,13 @@
     2. Or changing the relation widget value_field to title instead of slug
   - Check both homepage and any other pages that display testimonials
   - Verify the book title displays as readable text everywhere testimonials appear
+
+- [x] **T080** - ENHANCE: Make testimonial book titles clickable links to book pages
+  - refs: D011, D014
+  - In the "What Readers Are Saying" section on homepage, the book title at the end of each testimonial should link to the corresponding book's detail page
+  - The testimonial book field stores the book slug (via relation widget from T070)
+  - Use the slug to construct the link as /books/{slug}
+  - Apply Mystic Teal or Ember Orange color to the link for visibility
+  - Add hover effect consistent with site theme
+  - Check both homepage testimonials and any other pages that display testimonials
+  - Verify links navigate to the correct book pages

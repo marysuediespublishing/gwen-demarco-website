@@ -479,7 +479,7 @@ function getBookTitle(bookSlug: string | undefined): string {
 									</div>
 									{testimonial.data.bookTitle && (
 										<div class="text-xs text-fog-gray mt-1">
-											on <span class="text-mystic-teal">{getBookTitle(testimonial.data.bookTitle)}</span>
+											on <a href={`/books/${testimonial.data.bookTitle}`} class="text-mystic-teal hover:text-ember-orange transition-colors duration-200 underline decoration-mystic-teal/40 hover:decoration-ember-orange/60">{getBookTitle(testimonial.data.bookTitle)}</a>
 											<span class="capitalize ml-1">({testimonial.data.reviewerPlatform})</span>
 										</div>
 									)}
