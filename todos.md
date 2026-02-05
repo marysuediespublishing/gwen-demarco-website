@@ -712,3 +712,15 @@
   - Any series marked as featured in the /admin should automatically appear in the footer
   - Verify by toggling featured on/off for a series in admin and checking footer updates
   - Run npm run build to confirm no errors
+
+- [x] **T088** - UPDATE: Fix footer social links and Amazon logo
+  - refs: D005
+  - Three updates needed in the website footer:
+    1. Goodreads link: change to https://www.goodreads.com/gwen_demarco
+    2. Amazon link: change to https://www.amazon.com/stores/Gwen-DeMarco/author/B08CHLX2TB
+    3. Amazon logo: replace with circular style matching https://www.iconpacks.net/icons/free-icons-6/free-amazon-logo-and-circle-icon-19645-thumb.png
+  - For the Amazon logo, create or source a circular Amazon logo SVG (dark circle with white "a" and arrow)
+  - If T085 already created a circular Amazon logo, reuse the same asset for consistency
+  - Check if links are hardcoded in Footer.astro or pulled from site settings
+  - Update wherever defined and verify all three changes display correctly
+  - Test that both external links open to the correct pages
