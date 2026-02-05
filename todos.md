@@ -699,3 +699,16 @@
   - Button may be in the NewsletterCTA component or hardcoded in index.astro
   - Check both locations and update wherever defined
   - Verify button text displays correctly and doesn't overflow on mobile
+
+- [x] **T087** - FIX: Footer featured series list should dynamically pull from CMS
+  - refs: D003, D004
+  - The footer has a "Featured Series" list that may be hardcoded
+  - Update to dynamically query the series collection and filter by featured flag
+  - Debug steps:
+    1. Check Footer.astro to see how featured series are currently rendered
+    2. Check series markdown files for a featured: true/false frontmatter field
+    3. If no featured field exists in the series schema, add it to config.yml and content files
+  - Ensure the footer queries all series, filters where featured is true, and renders links
+  - Any series marked as featured in the /admin should automatically appear in the footer
+  - Verify by toggling featured on/off for a series in admin and checking footer updates
+  - Run npm run build to confirm no errors

@@ -1,11 +1,18 @@
 ---
 import CitySkyline from './ui/CitySkyline.astro';
+import { getCollection } from 'astro:content';
 
 const today = new Date();
 
 // Author information from D005
 const authorName = "Gwen DeMarco";
 const tagline = "Paranormal romance with a focus on the weird and wonderful";
+
+// Dynamically fetch featured series from CMS
+const allSeries = await getCollection('series');
+const featuredSeries = allSeries
+	.filter(s => s.data.featured)
+	.sort((a, b) => a.data.title.localeCompare(b.data.title));
 ---
 
 <footer class="bg-shadow-black text-moon-silver py-16 border-t border-mystic-violet/20 relative overflow-hidden">
@@ -64,13 +71,13 @@ const tagline = "Paranormal romance with a focus on the weird and wonderful";
 					</ul>
 				</div>
 
-				<!-- Featured Series -->
+				<!-- Featured Series (dynamically pulled from CMS) -->
 				<div>
 					<h4 class="font-semibold text-bone-white mb-4">Featured Series</h4>
 					<ul class="space-y-3">
-						<li><a href="/series/sophie-feegle" class="text-moon-silver/60 hover:text-ember-orange transition-colors py-1 inline-block">Sophie Feegle</a></li>
-						<li><a href="/series/kingdom-of-erishum" class="text-moon-silver/60 hover:text-ember-orange transition-colors py-1 inline-block">Kingdom of Erishum</a></li>
-						<li><a href="/series/auras-and-embers" class="text-moon-silver/60 hover:text-ember-orange transition-colors py-1 inline-block">Auras & Embers</a></li>
+						{featuredSeries.map(s => (
+							<li><a href={`/series/${s.id}`} class="text-moon-silver/60 hover:text-ember-orange transition-colors py-1 inline-block">{s.data.title}</a></li>
+						))}
 					</ul>
 				</div>
 			</div>
