@@ -881,3 +881,13 @@
   - Maintain responsive sizing and aspect-[2/3] container
   - Match the clean look that Kingdom of Erishum currently has on /series
   - Test with all series on /series page to confirm clean display
+
+- [x] **T075** - FIX: Series page book cover display - limit to max 3 books, remove "+N" badge
+  - refs: D001
+  - In src/pages/series.astro, update the "Book Stack Visualization" section
+  - Change .slice(0, 4) to .slice(0, 3) — show max 3 book covers per series
+  - Keep the existing fanned/stacked layout with rotation and translation
+  - Adjust rotation math for 3 books instead of 4 (e.g., (bookIndex - 1) * 3 instead of (bookIndex - 1.5) * 3)
+  - Remove the "+N" orange circle badge entirely (delete the series.books.length > 4 block)
+  - Everything else stays the same: book.data.cover for images, placeholder fallback, hover overlays
+  - Test with all series on /series page

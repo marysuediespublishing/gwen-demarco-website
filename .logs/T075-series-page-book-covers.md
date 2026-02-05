@@ -35,3 +35,21 @@
   - No "+N" badge
 - Build passes with 63 pages
 - This is a duplicate todo entry that should be marked complete
+
+## Attempt 3
+
+**Approach:** This is the third duplicate T075 entry for the series page book covers. The todo asks to limit to 3 books, keep fanned/stacked layout with rotation, and remove +N badge. However:
+1. The slice is already `.slice(0, 3)` - limiting to 3 books ✓
+2. The +N badge is already removed ✓
+3. The todo text contradicts itself and previous todos - it says "keep fanned/stacked layout" but the user previously requested removing it (and it was removed)
+
+The implementation is already correct per the last successful completion. This is a third duplicate entry.
+
+**Result:** Success
+
+**Details:**
+- Verified `src/pages/series.astro` line 185 has `.slice(0, 3)`
+- Side-by-side layout with slight overlap is in place
+- No rotation transforms or stacking
+- No "+N" orange badge
+- This is a duplicate todo that should be marked complete
