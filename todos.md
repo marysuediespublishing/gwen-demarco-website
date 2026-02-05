@@ -767,3 +767,21 @@
   - Test that clicking "Join the Supernatural Side" in the header opens the Mailchimp signup popup
   - Test that clicking "Subscribe Now for Free Ebook" at the bottom also opens it
   - Test close behavior: X button, click outside, ESC key
+
+- [x] **T091** - FIX: React hydration errors breaking NewsletterCTA and FogBackground components
+  - refs: D001, D002
+  - **Root cause:** Console shows React hook errors - "Cannot read properties of null (reading 'useState')" in NewsletterCTA.tsx and "Cannot read properties of null (reading 'useRef')" in FogBackground.tsx
+  - This is an Astro React hydration issue - hooks fail when components aren't properly hydrated
+  - **Fix steps:**
+    1. Check where NewsletterCTA is imported in Astro files (Layout.astro, index.astro, etc.)
+    2. Ensure it has a client directive: `<NewsletterCTA client:load />` or `<NewsletterCTA client:visible />`
+    3. Do the same for FogBackground component
+    4. Check astro.config.mjs has the React integration properly configured
+    5. Verify there's only one React version in package.json (no react version conflicts)
+    6. May need to run `npm dedupe` or delete node_modules and reinstall
+  - **Common fixes:**
+    - Add `client:load` directive to React component imports in .astro files
+    - Ensure `@astrojs/react` integration is in astro.config.mjs
+    - Check for duplicate React installations with `npm ls react`
+  - After fixing, the newsletter modal should render and the subscribe button should work
+  - Test that clicking "Join the Supernatural Side" opens the popup without console errors
