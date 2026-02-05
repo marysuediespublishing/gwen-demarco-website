@@ -1,0 +1,22 @@
+# T075 - FIX: Series page book cover display - limit to 3, remove stack effect and badge
+
+## Attempt 1
+
+**Approach:**
+1. In `src/pages/series.astro`, change `series.books.slice(0, 4)` to `series.books.slice(0, 3)` to limit to 3 books max
+2. Remove the rotation transform effect from the book cards (remove `rotate()` from style)
+3. Remove the "+N" orange badge block (series.books.length > 4 conditional)
+4. Adjust the positioning to show books side-by-side with slight overlap instead of fanned/stacked
+5. Change the container layout to accommodate horizontal display
+
+**Result:** Success
+
+**Details:**
+- Changed `series.books.slice(0, 4)` to `series.books.slice(0, 3)` to show max 3 books
+- Removed the fanned/stacked rotation effect (`rotate()` transforms)
+- Removed the "+N" orange badge block entirely
+- Changed layout from absolute-positioned stacked cards to flexbox side-by-side display
+- Books now display with slight overlap (-20px margin) for a clean, cohesive look
+- Reduced individual book width to 140px to fit 3 books nicely
+- Adjusted font sizes and padding in hover overlay for smaller cards
+- Build passes with 63 pages

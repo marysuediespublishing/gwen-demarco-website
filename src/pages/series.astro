@@ -177,59 +177,53 @@ const sortedSeries = seriesWithBooks.sort((a, b) => {
 								</div>
 							</div>
 
-							<!-- Book Stack Visualization -->
+							<!-- Book Cover Display -->
 							<div class={`relative ${index % 2 === 1 ? 'lg:order-1' : ''}`}>
-								<div class="relative w-full max-w-sm mx-auto">
-									<!-- Base container to establish dimensions -->
-									<div class="relative aspect-[2/3] w-full">
-										<!-- Create stacked book effect -->
-										{series.books.slice(0, 4).map((book, bookIndex) => (
+								<div class="relative w-full max-w-md mx-auto">
+									<!-- Side-by-side book covers with slight overlap -->
+									<div class="flex justify-center items-end">
+										{series.books.slice(0, 3).map((book, bookIndex) => (
 											<div
-												class="absolute top-0 left-0 w-full h-full transition-transform duration-300 hover:scale-105 hover:z-20"
+												class="relative transition-transform duration-300 hover:scale-105 hover:z-20"
 												style={{
-													transform: `rotate(${(bookIndex - 1.5) * 3}deg) translate(${bookIndex * 8}px, ${bookIndex * 4}px)`,
-													zIndex: 4 - bookIndex
+													width: '140px',
+													marginLeft: bookIndex > 0 ? '-20px' : '0',
+													zIndex: 3 - bookIndex
 												}}
 											>
-												{book.data.cover ? (
-													<img
-														src={book.data.cover}
-														alt={book.data.title}
-														class="w-full h-full object-cover rounded-xl shadow-2xl border border-mystic-violet/50 transition-all duration-300 hover:border-ember-orange/70 hover:shadow-mystic"
-														loading="lazy"
-													/>
-												) : (
-													<div class="w-full h-full bg-gradient-to-br from-mystic-violet/40 to-midnight-purple rounded-xl shadow-2xl flex items-center justify-center border border-mystic-violet/50 transition-all duration-300 hover:border-ember-orange/70 hover:shadow-mystic">
-														<div class="text-center text-moon-silver p-4">
-															<div class="text-5xl mb-3 opacity-70">📖</div>
-															<div class="text-sm font-bold text-bone-white line-clamp-2">{book.data.title}</div>
-															<div class="text-xs text-ember-orange mt-1">Book {book.data.seriesOrder}</div>
+												<div class="relative aspect-[2/3]">
+													{book.data.cover ? (
+														<img
+															src={book.data.cover}
+															alt={book.data.title}
+															class="w-full h-full object-cover rounded-lg shadow-2xl border border-mystic-violet/50 transition-all duration-300 hover:border-ember-orange/70 hover:shadow-mystic"
+															loading="lazy"
+														/>
+													) : (
+														<div class="w-full h-full bg-gradient-to-br from-mystic-violet/40 to-midnight-purple rounded-lg shadow-2xl flex items-center justify-center border border-mystic-violet/50 transition-all duration-300 hover:border-ember-orange/70 hover:shadow-mystic">
+															<div class="text-center text-moon-silver p-2">
+																<div class="text-3xl mb-2 opacity-70">📖</div>
+																<div class="text-xs font-bold text-bone-white line-clamp-2">{book.data.title}</div>
+															</div>
 														</div>
-													</div>
-												)}
+													)}
 
-												<!-- Book info overlay on hover -->
-												<div class="absolute inset-0 bg-shadow-black/95 opacity-0 hover:opacity-100 transition-opacity duration-300 rounded-xl flex items-center justify-center p-4">
-													<div class="text-center text-bone-white">
-														<h4 class="text-base font-bold mb-2 line-clamp-2">{book.data.title}</h4>
-														<p class="text-sm text-ember-orange mb-3">Book #{book.data.seriesOrder}</p>
-														<a
-															href={`/books/${book.slug}`}
-															class="btn btn-primary btn-sm text-sm"
-														>
-															View Book
-														</a>
+													<!-- Book info overlay on hover -->
+													<div class="absolute inset-0 bg-shadow-black/95 opacity-0 hover:opacity-100 transition-opacity duration-300 rounded-lg flex items-center justify-center p-2">
+														<div class="text-center text-bone-white">
+															<h4 class="text-sm font-bold mb-1 line-clamp-2">{book.data.title}</h4>
+															<p class="text-xs text-ember-orange mb-2">Book #{book.data.seriesOrder}</p>
+															<a
+																href={`/books/${book.slug}`}
+																class="btn btn-primary text-xs px-3 py-1"
+															>
+																View Book
+															</a>
+														</div>
 													</div>
 												</div>
 											</div>
 										))}
-
-										{/* Add book count indicator if more than 4 books */}
-										{series.books.length > 4 && (
-											<div class="absolute -bottom-3 -right-3 bg-ember-orange text-shadow-black rounded-full w-12 h-12 flex items-center justify-center font-bold text-sm shadow-lg z-30">
-												+{series.books.length - 4}
-											</div>
-										)}
 									</div>
 								</div>
 							</div>
