@@ -635,3 +635,14 @@
   - Add hover effect consistent with site theme
   - Check both homepage testimonials and any other pages that display testimonials
   - Verify links navigate to the correct book pages
+
+- [x] **T081** - FIX: Update social links and stats in "Readers Love These Books" homepage section
+  - refs: D005, D014
+  - Three fixes needed in the "Readers Love These Books" section on homepage:
+    1. Goodreads "Follow" link is incorrect - change to: https://www.goodreads.com/gwen_demarco
+    2. Amazon "View Store" link is incorrect - change to: https://www.amazon.com/stores/Gwen-DeMarco/author/B08CHLX2TB
+    3. Total reviews stat needs to show "13K+" 
+  - Links may be hardcoded in src/pages/index.astro or pulled from src/content/settings/site-config.md
+  - Check both locations and update wherever defined
+  - Verify all three links/stats display correctly on homepage
+  - Test that Goodreads and Amazon links open to correct external pages

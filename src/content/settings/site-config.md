@@ -5,8 +5,8 @@ authorName: Gwen DeMarco
 authorBio: Gwen DeMarco is an avid reader, wine & coffee drinker, gardener and a lover of all things nerdy. She loves to write paranormal romance novels with a focus on the weird and wonderful. She loves to write a good snarky heroine and a grumpy male lead. Gwen is happily married to her high school sweetheart and has two teenage children. She can often be found with her nose in a book and a glass of wine or mug of coffee in her hand.
 tagline: Paranormal romance with a focus on the weird and wonderful
 socialLinks:
-  goodreads: https://www.goodreads.com/author/show/20443791.Gwen_DeMarco
-  amazon: https://www.amazon.com/stores/Gwen-DeMarco/author/B08CJ1G1RJ
+  goodreads: https://www.goodreads.com/gwen_demarco
+  amazon: https://www.amazon.com/stores/Gwen-DeMarco/author/B08CHLX2TB
   email: gwendemarcoauthor@gmail.com
 stats:
   booksPublished: 11
@@ -14,7 +14,7 @@ stats:
   readerRatings: 13K+
   seriesComplete: 4
   averageRating: "4.4"
-  totalReviews: "500+"
+  totalReviews: "13K+"
   goodreadsRating: "4.3"
   goodreadsReviewCount: "180+"
   amazonRating: "4.5"
