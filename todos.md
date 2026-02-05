@@ -668,3 +668,15 @@
   - Update the homepage component to reference the new logo
   - Ensure the logo is appropriately sized and consistent with the Amazon logo next to it
   - Verify the logo displays correctly on both desktop and mobile
+
+- [x] **T084** - FIX: Replace incorrect Amazon logo in "Readers Love These Books" section
+  - refs: D014
+  - The Amazon logo on the homepage is incorrect
+  - Replace with the correct Amazon logo (black text "amazon" with orange arrow smile underneath)
+  - Options:
+    1. Download official Amazon logo and save to public/images/
+    2. Or create an SVG matching the brand
+  - For dark background, may need the white text variant with orange arrow
+  - Update the homepage component to reference the new logo
+  - Ensure the logo is appropriately sized and consistent with the Goodreads logo next to it
+  - Verify the logo displays correctly on both desktop and mobile
