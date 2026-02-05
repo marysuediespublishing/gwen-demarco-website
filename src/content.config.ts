@@ -160,6 +160,18 @@ const settings = defineCollection({
   }),
 });
 
+// Artwork collection - artwork and illustrations
+const artwork = defineCollection({
+  loader: glob({ base: './src/content/artwork', pattern: '**/*.{md,mdx}' }),
+  schema: z.object({
+    title: z.string(),
+    image: z.string(),
+    description: z.string().optional(),
+    book: z.string().optional(),
+    featured: z.boolean().default(false),
+  }),
+});
+
 // Pages collection - CMS-editable page content
 const pages = defineCollection({
   loader: glob({ base: './src/content/pages', pattern: '**/*.{md,mdx}' }),
@@ -196,5 +208,6 @@ export const collections = {
   species,
   locations,
   settings,
+  artwork,
   pages,
 };

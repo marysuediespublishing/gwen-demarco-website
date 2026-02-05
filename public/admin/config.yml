@@ -300,6 +300,29 @@ collections:
       - { label: "Environment Type", name: "environmentType", widget: "string", required: false }
       - { label: "Content", name: "body", widget: "markdown", required: false }
 
+  # Artwork collection
+  - name: "artwork"
+    label: "Artwork"
+    folder: "src/content/artwork"
+    create: true
+    slug: "{{slug}}"
+    extension: "md"
+    format: "frontmatter"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Image", name: "image", widget: "image", required: true }
+      - { label: "Description", name: "description", widget: "text", required: false }
+      - label: "Book"
+        name: "book"
+        widget: "relation"
+        collection: "books"
+        search_fields: ["title"]
+        value_field: "{{slug}}"
+        display_fields: ["title"]
+        required: false
+      - { label: "Featured", name: "featured", widget: "boolean", default: false, required: false }
+      - { label: "Content", name: "body", widget: "markdown", required: false }
+
   # Pages collection
   - name: "pages"
     label: "Pages"

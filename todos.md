@@ -973,3 +973,47 @@
   - This is display-only — the underlying field in the CMS stays as "featured: true"
   - Update any CSS classes or styling if the badge name affects sizing
   - Test on /characters page that featured characters show "Main Character" badge
+
+- [x] **T104** - NEW: Create Artwork collection in Decap CMS admin
+  - refs: D001
+  - In public/admin/config.yml, add a new collection for artwork:
+```yaml
+    - name: artwork
+      label: Artwork
+      folder: src/content/artwork
+      create: true
+      slug: "{{slug}}"
+      fields:
+        - name: title
+          label: Title
+          widget: string
+        - name: image
+          label: Image
+          widget: image
+          required: true
+        - name: description
+          label: Description
+          widget: text
+          required: false
+        - name: book
+          label: Book
+          widget: relation
+          collection: books
+          search_fields: [title]
+          value_field: "{{slug}}"
+          display_fields: [title]
+          required: false
+        - name: featured
+          label: Featured
+          widget: boolean
+          default: false
+          required: false
+```
+  - Create the Astro content collection config for artwork:
+    - Add artwork schema to src/content/config.ts (or equivalent)
+    - Define fields matching the CMS config (title, image, description, book, featured)
+  - Create the folder src/content/artwork/ so Decap CMS can store entries
+  - Test in /admin that the Artwork section appears in the sidebar
+  - Test creating a new artwork entry with image upload, description,
+    book dropdown, and featured toggle
+  - Verify the entry saves correctly and the markdown file is created
