@@ -1,0 +1,335 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { SITE_TITLE } from '../../consts';
+import { getCollection } from 'astro:content';
+
+// Get all artwork, books, and series
+const allArtwork = await getCollection('artwork');
+const allBooks = await getCollection('books');
+const allSeries = (await getCollection('series')).map(series => ({
+	...series,
+	slug: series.id
+}));
+
+// Create a book slug -> series slug mapping
+const bookToSeriesMap = new Map<string, string>();
+allBooks.forEach(book => {
+	if (book.data.series) {
+		// Normalize the book's series field for comparison
+		const bookSeriesNormalized = book.data.series.toLowerCase().replace(/&/g, 'and').replace(/\s+/g, '-');
+
+		// Find matching series by title, slug, or normalized comparison
+		const matchingSeries = allSeries.find(s => {
+			// Direct matches
+			if (s.data.title === book.data.series) return true;
+			if (s.slug === book.data.series) return true;
+
+			// Normalized slug comparison
+			if (s.slug === bookSeriesNormalized) return true;
+
+			// Normalized title comparison
+			const seriesTitleNormalized = s.data.title.toLowerCase().replace(/&/g, 'and').replace(/\s+/g, '-');
+			if (seriesTitleNormalized === bookSeriesNormalized) return true;
+
+			// Also check if the series title starts with the book's series value
+			if (s.data.title.toLowerCase().startsWith(book.data.series.toLowerCase())) return true;
+
+			return false;
+		});
+		if (matchingSeries) {
+			bookToSeriesMap.set(book.id, matchingSeries.slug);
+		}
+	}
+});
+
+// Helper function to parse focal point
+const parseFocalPoint = (focalPoint: string | undefined): { x: number; y: number } => {
+	if (!focalPoint) return { x: 50, y: 50 };
+	const [x, y] = focalPoint.split(',').map(v => parseInt(v.trim(), 10));
+	return { x: isNaN(x) ? 50 : x, y: isNaN(y) ? 50 : y };
+};
+
+// Generate static paths for each series that has artwork
+export async function getStaticPaths() {
+	const allArtwork = await getCollection('artwork');
+	const allBooks = await getCollection('books');
+	const allSeries = (await getCollection('series')).map(series => ({
+		...series,
+		slug: series.id
+	}));
+
+	// Create a book slug -> series slug mapping
+	const bookToSeriesMap = new Map<string, string>();
+	allBooks.forEach(book => {
+		if (book.data.series) {
+			const bookSeriesNormalized = book.data.series.toLowerCase().replace(/&/g, 'and').replace(/\s+/g, '-');
+			const matchingSeries = allSeries.find(s => {
+				if (s.data.title === book.data.series) return true;
+				if (s.slug === book.data.series) return true;
+				if (s.slug === bookSeriesNormalized) return true;
+				const seriesTitleNormalized = s.data.title.toLowerCase().replace(/&/g, 'and').replace(/\s+/g, '-');
+				if (seriesTitleNormalized === bookSeriesNormalized) return true;
+				if (s.data.title.toLowerCase().startsWith(book.data.series.toLowerCase())) return true;
+				return false;
+			});
+			if (matchingSeries) {
+				bookToSeriesMap.set(book.id, matchingSeries.slug);
+			}
+		}
+	});
+
+	// Find which series have artwork
+	const seriesWithArtwork = new Set<string>();
+	allArtwork.forEach(artwork => {
+		if (artwork.data.book) {
+			const seriesSlug = bookToSeriesMap.get(artwork.data.book);
+			if (seriesSlug) {
+				seriesWithArtwork.add(seriesSlug);
+			}
+		}
+	});
+
+	// Generate paths for each series with artwork
+	return Array.from(seriesWithArtwork).map(seriesSlug => {
+		const series = allSeries.find(s => s.slug === seriesSlug);
+		return {
+			params: { slug: seriesSlug },
+			props: { seriesData: series }
+		};
+	});
+}
+
+const { slug } = Astro.params;
+const { seriesData } = Astro.props;
+
+// Get all artwork for this series
+const seriesArtwork = allArtwork.filter(artwork => {
+	if (!artwork.data.book) return false;
+	const artworkSeriesSlug = bookToSeriesMap.get(artwork.data.book);
+	return artworkSeriesSlug === slug;
+}).map(artwork => ({
+	...artwork,
+	focalPoint: parseFocalPoint(artwork.data.focal_point),
+	isFeatured: artwork.data.featured || false,
+})).sort((a, b) => {
+	// Featured artwork first
+	if (a.isFeatured && !b.isFeatured) return -1;
+	if (!a.isFeatured && b.isFeatured) return 1;
+	// Then sort by title
+	return a.data.title.localeCompare(b.data.title);
+});
+---
+
+<Layout title={`${seriesData?.data.title || 'Series'} Artwork - ${SITE_TITLE}`} description={`Explore all artwork and illustrations from the ${seriesData?.data.title || 'series'}. Character art, scene illustrations, and more.`}>
+	<main id="main-content" class="relative">
+		<!-- Hero Section -->
+		<section class="relative py-16 bg-gradient-night overflow-hidden">
+			<!-- Background fog effect -->
+			<div class="absolute inset-0 bg-gradient-fog opacity-30"></div>
+			<div class="absolute inset-0 bg-gradient-to-t from-shadow-black/60 to-transparent"></div>
+
+			<div class="container mx-auto px-4 relative z-10">
+				<div class="max-w-5xl mx-auto text-center">
+					<!-- Breadcrumb -->
+					<nav class="mb-6">
+						<ol class="flex items-center justify-center space-x-2 text-sm text-fog-gray">
+							<li>
+								<a href="/artwork" class="hover:text-ember-orange transition-colors">Artwork Gallery</a>
+							</li>
+							<li>
+								<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+								</svg>
+							</li>
+							<li class="text-moon-silver">{seriesData?.data.title || 'Series'}</li>
+						</ol>
+					</nav>
+
+					<h1 class="text-4xl md:text-6xl font-primary font-bold text-bone-white mb-6">
+						<span class="bg-gradient-to-r from-mystic-violet via-ember-orange to-mystic-teal bg-clip-text text-transparent">
+							{seriesData?.data.title || 'Series'} Artwork
+						</span>
+					</h1>
+					<p class="text-xl md:text-2xl text-ember-orange font-medium mb-4">
+						{seriesArtwork.length} {seriesArtwork.length === 1 ? 'artwork' : 'artworks'}
+					</p>
+					{seriesData?.data.description && (
+						<p class="text-lg text-moon-silver/90 max-w-3xl mx-auto leading-relaxed">
+							{seriesData.data.description.slice(0, 200)}{seriesData.data.description.length > 200 ? '...' : ''}
+						</p>
+					)}
+				</div>
+			</div>
+		</section>
+
+		<!-- Artwork Grid -->
+		<section class="py-16 bg-dark-surface">
+			<div class="container mx-auto px-4">
+				<div class="max-w-7xl mx-auto">
+					{seriesArtwork.length > 0 ? (
+						<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+							{seriesArtwork.map((artwork) => (
+								<button
+									type="button"
+									class="group relative aspect-square overflow-hidden rounded-lg bg-midnight-purple/50 border border-mystic-violet/20 hover:border-mystic-violet/50 transition-all duration-300 hover:shadow-mystic cursor-pointer artwork-trigger"
+									data-image={artwork.data.image}
+									data-title={artwork.data.title}
+									data-description={artwork.data.description || ''}
+								>
+									<img
+										src={artwork.data.image}
+										alt={artwork.data.title}
+										class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+										style={`object-position: ${artwork.focalPoint.x}% ${artwork.focalPoint.y}%;`}
+									/>
+									<!-- Hover overlay -->
+									<div class="absolute inset-0 bg-gradient-to-t from-shadow-black/80 via-shadow-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-3">
+										<p class="text-bone-white text-sm font-medium truncate">{artwork.data.title}</p>
+										{artwork.isFeatured && (
+											<span class="text-ember-orange text-xs mt-1">Featured</span>
+										)}
+									</div>
+								</button>
+							))}
+						</div>
+					) : (
+						<div class="text-center py-16">
+							<div class="text-6xl mb-4">🎨</div>
+							<h3 class="text-2xl font-bold text-bone-white mb-2">No Artwork Found</h3>
+							<p class="text-fog-gray">No artwork has been added for this series yet.</p>
+						</div>
+					)}
+				</div>
+			</div>
+		</section>
+
+		<!-- Back to Gallery CTA -->
+		<section class="py-16 bg-gradient-to-r from-midnight-purple via-shadow-black to-midnight-purple">
+			<div class="container mx-auto px-4 text-center">
+				<div class="max-w-3xl mx-auto space-y-8">
+					<h2 class="text-3xl md:text-4xl font-primary font-bold text-bone-white">
+						Explore More Artwork
+					</h2>
+					<p class="text-lg text-moon-silver/90">
+						Discover artwork from other series in the gallery
+					</p>
+					<div class="flex flex-col sm:flex-row gap-4 justify-center">
+						<a href="/artwork" class="btn btn-primary btn-lg">
+							Back to Gallery
+						</a>
+						<a href={`/series/${slug}`} class="btn btn-outline btn-lg">
+							View {seriesData?.data.title || 'Series'}
+						</a>
+					</div>
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<!-- Lightbox Modal -->
+	<div id="artwork-lightbox" class="fixed inset-0 z-50 hidden">
+		<!-- Backdrop -->
+		<div id="lightbox-backdrop" class="absolute inset-0 bg-shadow-black/95 backdrop-blur-sm"></div>
+
+		<!-- Content Container -->
+		<div class="relative w-full h-full flex items-center justify-center p-4 md:p-8">
+			<!-- Close Button -->
+			<button
+				id="lightbox-close"
+				type="button"
+				class="absolute top-4 right-4 z-10 p-2 text-moon-silver hover:text-ember-orange transition-colors bg-midnight-purple/50 rounded-full backdrop-blur-sm"
+				aria-label="Close lightbox"
+			>
+				<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+				</svg>
+			</button>
+
+			<!-- Image and Info Container -->
+			<div class="max-w-5xl max-h-full flex flex-col items-center">
+				<img
+					id="lightbox-image"
+					src=""
+					alt=""
+					class="max-w-full max-h-[80vh] object-contain rounded-lg shadow-2xl"
+				/>
+				<div class="mt-4 text-center">
+					<h3 id="lightbox-title" class="text-xl md:text-2xl font-primary font-bold text-bone-white mb-2"></h3>
+					<p id="lightbox-description" class="text-moon-silver/80 text-sm md:text-base max-w-lg"></p>
+				</div>
+			</div>
+		</div>
+	</div>
+</Layout>
+
+<script>
+	document.addEventListener('DOMContentLoaded', () => {
+		const lightbox = document.getElementById('artwork-lightbox');
+		const lightboxImage = document.getElementById('lightbox-image') as HTMLImageElement;
+		const lightboxTitle = document.getElementById('lightbox-title');
+		const lightboxDescription = document.getElementById('lightbox-description');
+		const lightboxClose = document.getElementById('lightbox-close');
+		const lightboxBackdrop = document.getElementById('lightbox-backdrop');
+		const artworkTriggers = document.querySelectorAll('.artwork-trigger');
+
+		if (!lightbox || !lightboxImage || !lightboxTitle || !lightboxDescription || !lightboxClose || !lightboxBackdrop) return;
+
+		// Open lightbox
+		artworkTriggers.forEach(trigger => {
+			trigger.addEventListener('click', () => {
+				const image = trigger.getAttribute('data-image');
+				const title = trigger.getAttribute('data-title');
+				const description = trigger.getAttribute('data-description');
+
+				if (image && lightboxImage) {
+					lightboxImage.src = image;
+					lightboxImage.alt = title || 'Artwork';
+				}
+				if (lightboxTitle) lightboxTitle.textContent = title || '';
+				if (lightboxDescription) lightboxDescription.textContent = description || '';
+
+				lightbox.classList.remove('hidden');
+				document.body.style.overflow = 'hidden';
+
+				// Focus the close button for accessibility
+				lightboxClose.focus();
+			});
+		});
+
+		// Close lightbox functions
+		const closeLightbox = () => {
+			lightbox.classList.add('hidden');
+			document.body.style.overflow = '';
+		};
+
+		lightboxClose.addEventListener('click', closeLightbox);
+		lightboxBackdrop.addEventListener('click', closeLightbox);
+
+		// Close on ESC key
+		document.addEventListener('keydown', (e) => {
+			if (e.key === 'Escape' && !lightbox.classList.contains('hidden')) {
+				closeLightbox();
+			}
+		});
+	});
+</script>
+
+<style>
+	/* Smooth fade-in animation for lightbox */
+	#artwork-lightbox {
+		animation: fadeIn 0.2s ease-out;
+	}
+
+	@keyframes fadeIn {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
+	}
+
+	#artwork-lightbox.hidden {
+		display: none;
+	}
+</style>

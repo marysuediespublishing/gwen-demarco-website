@@ -1105,3 +1105,37 @@
     as a graceful fallback
   - Test workflow: create new artwork entry → upload image → focal point
     picker should populate immediately without needing to publish first
+
+- [x] **T108** - NEW: Create Artwork page with series grouping, hover preview, and overflow pages
+  - refs: D001, T104, T106
+  - Create src/pages/artwork.astro for the main artwork gallery page
+  - Add "Artwork" link to site navigation between "Locations" and "Blog"
+    (update the nav component in src/components/ or src/layouts/)
+  - Page layout:
+    - Hero section matching site style (gradient background, title, subtitle)
+    - Group artwork by book series using each artwork entry's book field
+      (resolve book → series relationship via the books collection)
+    - Sort series groups same as /series page (featured first, then by start date)
+    - Within each group, show featured artwork first, then remaining
+  - Thumbnail display:
+    - Use smaller thumbnails than other pages (e.g., 4-6 per row on desktop)
+    - Use the focal point data for object-position on each thumbnail
+    - On hover, display the full uncropped image in a lightbox/overlay
+      (centered on screen, dimmed background, click or Esc to close)
+    - Smooth transition on hover/open
+  - Thumbnail limit per series:
+    - Set a configurable limit (e.g., 8-12 thumbnails per series group)
+    - If a series has more artwork than the limit, show a "More..." button
+      below the thumbnail grid
+    - "More..." button links to /artwork/[series-slug]
+  - Create src/pages/artwork/[...slug].astro for per-series artwork pages:
+    - Shows all artwork thumbnails for that specific series
+    - Same hover-to-preview behavior as main page
+    - Breadcrumb navigation back to /artwork
+    - Series title as page heading
+  - Handle artwork not associated with any book — group in an
+    "Other Artwork" section at the bottom
+  - Test /artwork page with multiple series and varying artwork counts
+  - Test hover preview works on both main and per-series pages
+  - Test "More..." button appears only when artwork exceeds the limit
+  - Test nav link appears in correct position on all pages
