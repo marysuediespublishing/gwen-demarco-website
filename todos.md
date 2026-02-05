@@ -724,3 +724,31 @@
   - Check if links are hardcoded in Footer.astro or pulled from site settings
   - Update wherever defined and verify all three changes display correctly
   - Test that both external links open to the correct pages
+
+- [x] **T089** - ENHANCE: Add Mailchimp newsletter signup popup modal across the site
+  - refs: D002, D008
+  - Create a reusable newsletter popup/modal component that opens when any subscribe button is clicked
+  - The modal should appear on subscribe clicks in: header, homepage "Join the Supernatural Side" section, contact page, and any other subscribe CTAs
+  - **Design:** Style similar to danegriggs.com signup popup but with urban fantasy theme (dark background, purple accents, ember orange CTA)
+  - **Copy for the modal:**
+    - Heading: "Join the Supernatural Side"
+    - Subtext: "Get exclusive content, early access to new releases, and behind-the-scenes peeks into the weird and wonderful worlds of urban fantasy."
+    - Bullet points / benefits:
+      - Free starter content with bonus material
+      - Early access to new releases
+      - Exclusive character backstories
+      - Behind-the-scenes writing updates
+    - Button text: "Subscribe Now for Free Ebook"
+  - **Mailchimp integration:**
+    - Form action: https://gwendemarco.us10.list-manage.com/subscribe/post?u=0c90903297efa3d16036ca013&id=e084610bed&f_id=00ef48e4f0
+    - Only required field: Email address
+    - Include hidden bot-trap field (name: b_0c90903297efa3d16036ca013_e084610bed)
+    - Form should POST directly to Mailchimp or use AJAX submission
+  - **UX requirements:**
+    - Modal overlay with backdrop blur/dim
+    - Close button (X) and click-outside-to-close
+    - Smooth open/close animation
+    - Mobile responsive
+    - Accessible (focus trap, ESC to close, aria labels)
+  - Replace any existing non-functional newsletter forms with this working Mailchimp integration
+  - Test that form submissions reach Mailchimp successfully

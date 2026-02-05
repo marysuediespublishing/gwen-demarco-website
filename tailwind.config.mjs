@@ -90,6 +90,8 @@ export default {
         'fog-drift-slow': 'fog-drift 35s linear infinite',
         'flicker': 'flicker 4s ease-in-out infinite',
         'glow-pulse': 'glow-pulse 3s ease-in-out infinite',
+        'fade-in': 'fade-in 0.2s ease-out',
+        'slide-up': 'slide-up 0.3s ease-out',
       },
       keyframes: {
         'mystic-glow': {
@@ -123,6 +125,14 @@ export default {
             boxShadow: '0 0 25px rgba(107, 70, 193, 0.5), 0 0 50px rgba(107, 70, 193, 0.2)',
             borderColor: 'rgba(107, 70, 193, 0.7)'
           },
+        },
+        'fade-in': {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+        'slide-up': {
+          '0%': { opacity: '0', transform: 'translateY(20px) scale(0.95)' },
+          '100%': { opacity: '1', transform: 'translateY(0) scale(1)' },
         },
       },
       aspectRatio: {

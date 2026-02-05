@@ -3,6 +3,7 @@ import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import FogBackground from '../components/ui/FogBackground';
+import NewsletterCTA from '../components/ui/NewsletterCTA';
 
 export interface Props {
   title: string;
@@ -78,6 +79,9 @@ const socialImageURL = image ? new URL(image, Astro.url) : undefined;
 
     <Footer />
 
+    <!-- Global newsletter signup modal (triggered via custom event) -->
+    <NewsletterCTA client:load />
+
     <!-- Global scripts -->
     <script is:inline>
       // Enhanced focus management
@@ -89,6 +93,14 @@ const socialImageURL = image ? new URL(image, Astro.url) : undefined;
 
       document.addEventListener('mousedown', () => {
         document.body.classList.remove('user-is-tabbing');
+      });
+
+      // Wire up all .newsletter-trigger buttons to open the newsletter modal
+      document.addEventListener('click', (e) => {
+        if (e.target.closest('.newsletter-trigger')) {
+          e.preventDefault();
+          document.dispatchEvent(new CustomEvent('open-newsletter-modal'));
+        }
       });
     </script>
   </body>
