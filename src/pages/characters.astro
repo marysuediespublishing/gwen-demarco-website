@@ -62,6 +62,9 @@ const charactersWithStats = allCharacters.map(character => {
 		seriesSlug = bookToSeriesMap.get(character.data.books[0]) || null;
 	}
 
+	// Get featured status (default false if not set)
+	const isFeatured = character.data.featured || false;
+
 	return {
 		...character,
 		mainBookCount,
@@ -69,6 +72,7 @@ const charactersWithStats = allCharacters.map(character => {
 		totalAppearances: mainBookCount + cameoCount,
 		speciesInfo,
 		seriesSlug,
+		isFeatured,
 	};
 });
 
@@ -87,11 +91,23 @@ charactersWithStats.forEach(character => {
 	}
 });
 
-// Sort characters within each group by name
+// Sort characters within each group: featured first, then by name
 charactersBySeries.forEach((characters, key) => {
-	characters.sort((a, b) => a.data.name.localeCompare(b.data.name));
+	characters.sort((a, b) => {
+		// Featured characters first
+		if (a.isFeatured && !b.isFeatured) return -1;
+		if (!a.isFeatured && b.isFeatured) return 1;
+		// Then sort by name
+		return a.data.name.localeCompare(b.data.name);
+	});
 });
-otherCharacters.sort((a, b) => a.data.name.localeCompare(b.data.name));
+otherCharacters.sort((a, b) => {
+	// Featured characters first
+	if (a.isFeatured && !b.isFeatured) return -1;
+	if (!a.isFeatured && b.isFeatured) return 1;
+	// Then sort by name
+	return a.data.name.localeCompare(b.data.name);
+});
 
 // Sort series: featured first, then by start date (to match /series page order)
 const sortedSeriesKeys = Array.from(charactersBySeries.keys()).sort((aKey, bKey) => {
@@ -174,7 +190,12 @@ const seriesGroups = sortedSeriesKeys.map(slug => {
 							{group.characters.map((character) => (
 								<a
 									href={`/characters/${character.id}`}
-									class="group block bg-midnight-purple/50 rounded-xl overflow-hidden shadow-lg hover:shadow-mystic transition-all duration-300 hover:-translate-y-2 border border-mystic-violet/20 hover:border-mystic-violet/50"
+									class:list={[
+										"group block bg-midnight-purple/50 rounded-xl overflow-hidden shadow-lg hover:shadow-mystic transition-all duration-300 hover:-translate-y-2",
+										character.isFeatured
+											? "border-2 border-ember-orange/60 hover:border-ember-orange ring-2 ring-ember-orange/20"
+											: "border border-mystic-violet/20 hover:border-mystic-violet/50"
+									]}
 								>
 									<!-- Character Image -->
 									<div class="relative aspect-[4/3] overflow-hidden">
@@ -194,6 +215,13 @@ const seriesGroups = sortedSeriesKeys.map(slug => {
 										)}
 										<!-- Overlay -->
 										<div class="absolute inset-0 bg-gradient-to-t from-shadow-black/60 to-transparent"></div>
+
+										<!-- Featured Badge -->
+										{character.isFeatured && (
+											<div class="absolute top-3 left-3 px-3 py-1 bg-gradient-to-r from-ember-orange to-ember-orange/80 text-bone-white text-xs font-bold uppercase tracking-wide rounded-full shadow-lg">
+												Featured
+											</div>
+										)}
 
 										<!-- Species Badge -->
 										{character.speciesInfo && (
@@ -271,7 +299,12 @@ const seriesGroups = sortedSeriesKeys.map(slug => {
 							{otherCharacters.map((character) => (
 								<a
 									href={`/characters/${character.id}`}
-									class="group block bg-midnight-purple/50 rounded-xl overflow-hidden shadow-lg hover:shadow-mystic transition-all duration-300 hover:-translate-y-2 border border-mystic-violet/20 hover:border-mystic-violet/50"
+									class:list={[
+										"group block bg-midnight-purple/50 rounded-xl overflow-hidden shadow-lg hover:shadow-mystic transition-all duration-300 hover:-translate-y-2",
+										character.isFeatured
+											? "border-2 border-ember-orange/60 hover:border-ember-orange ring-2 ring-ember-orange/20"
+											: "border border-mystic-violet/20 hover:border-mystic-violet/50"
+									]}
 								>
 									<!-- Character Image -->
 									<div class="relative aspect-[4/3] overflow-hidden">
@@ -291,6 +324,13 @@ const seriesGroups = sortedSeriesKeys.map(slug => {
 										)}
 										<!-- Overlay -->
 										<div class="absolute inset-0 bg-gradient-to-t from-shadow-black/60 to-transparent"></div>
+
+										<!-- Featured Badge -->
+										{character.isFeatured && (
+											<div class="absolute top-3 left-3 px-3 py-1 bg-gradient-to-r from-ember-orange to-ember-orange/80 text-bone-white text-xs font-bold uppercase tracking-wide rounded-full shadow-lg">
+												Featured
+											</div>
+										)}
 
 										<!-- Species Badge -->
 										{character.speciesInfo && (

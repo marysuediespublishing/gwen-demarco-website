@@ -924,3 +924,27 @@
   - Check the characters collection config in public/admin/config.yml
     to confirm the exact field name used for series association
   - Test with characters from all series to confirm correct grouping
+
+- [x] **T101** - ENHANCE: Add featured toggle for characters, display featured first
+  - refs: D001, T099, T100
+  - In public/admin/config.yml, add a featured field to the characters collection:
+```yaml
+    - name: featured
+      label: Featured
+      widget: boolean
+      default: false
+      required: false
+```
+  - In src/pages/characters.astro, update the display logic:
+    - Within each series group, sort featured characters to the top
+    - Featured characters should have a visual indicator
+      (e.g., a "Featured" badge, highlighted border, or subtle glow effect
+      matching the site's mystic-violet/ember-orange theme)
+    - Featured cards could be slightly larger or more prominent than
+      non-featured cards to draw attention
+  - Sort order within each series group should be:
+    1. Featured characters first
+    2. Then remaining characters sorted by series order or name
+  - Test in /admin that the featured toggle appears on character entries
+  - Test on /characters page that featured characters display first
+    within their series group with visual distinction

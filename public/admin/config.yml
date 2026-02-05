@@ -209,6 +209,7 @@ collections:
         value_field: "slug"
         display_fields: ["name"]
         required: false
+      - { label: "Featured", name: "featured", widget: "boolean", default: false, required: false }
       - { label: "Content", name: "body", widget: "markdown", required: false }
 
   # Site settings
