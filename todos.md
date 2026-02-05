@@ -1149,3 +1149,12 @@
     (check series pages, book pages, homepage, etc.)
   - Test that navigation displays correctly without the link
   - Test that no broken links remain referencing /reading-order
+
+- [x] **T110** - ENHANCE: Add "click thumbnail to see full image" note on Artwork page
+  - refs: D001, T108
+  - In src/pages/artwork.astro, add a subtle note/hint text
+  - Place it below the hero section subtitle or above the first series group
+  - Text: "Click on a thumbnail to see the full image" or similar
+  - Style it to be informative but unobtrusive (e.g., text-fog-gray, text-sm,
+    italic, or with a small icon like a cursor/magnifying glass)
+  - Test on /artwork page that the note is visible and fits the design
