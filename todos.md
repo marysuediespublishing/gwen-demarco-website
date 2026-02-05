@@ -599,3 +599,17 @@
   - Stats are likely in src/content/settings/site-config.md or hardcoded in src/pages/index.astro
   - Check both locations and update wherever the values are defined
   - Verify changes display correctly on homepage
+
+
+- [x] **T078** - FIX: Book cover images not displaying on homepage featured books section
+  - refs: D002, D014
+  - Book images uploaded via Decap CMS admin are not rendering on homepage
+  - This may share the same root cause as T076 (books listing page)
+  - Debug steps:
+    1. Check how the homepage featured books section references book images
+    2. Compare image path handling between homepage and /books page
+    3. Check if homepage uses a different component or inline markup for book cards
+    4. Inspect browser dev tools for 404 paths on homepage specifically
+  - Ensure fix is consistent with T076 so images work everywhere
+  - Verify book covers display in the featured books section on homepage
+  - Run npm run build to confirm clean output

@@ -51,6 +51,9 @@ const recentPosts = allPosts
 	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
 	.slice(0, 3);
 
+// Get Sophie and The Odd Ones cover for Start Reading CTA
+const sophieBook = allBooks.find(b => b.id === 'sophie-and-the-odd-ones');
+
 // Helper to get series display name
 const seriesMap = new Map(allSeries.map(s => [s.id, s.data.title]));
 function getSeriesDisplay(seriesSlug: string | undefined): string {
@@ -158,12 +161,16 @@ function getSeriesDisplay(seriesSlug: string | undefined): string {
 					<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
 						{featuredBooks.map((book) => (
 							<a href={`/books/${book.id}`} class="card card-hover group p-4 flex flex-col h-full">
-								<!-- Book cover placeholder -->
+								<!-- Book cover -->
 								<div class="w-full aspect-[2/3] bg-gradient-to-br from-mystic-violet/30 to-midnight-purple rounded-lg mb-4 flex items-center justify-center border border-mystic-violet/30 group-hover:border-ember-orange/50 group-hover:shadow-mystic transition-all duration-300 overflow-hidden relative">
-									<div class="text-center text-bone-white/70 px-2">
-										<span class="text-4xl block mb-2">📖</span>
-										<span class="text-xs font-medium line-clamp-2">{book.data.title}</span>
-									</div>
+									{book.data.cover ? (
+										<img src={book.data.cover} alt={book.data.title} class="w-full h-full object-cover" loading="lazy" />
+									) : (
+										<div class="text-center text-bone-white/70 px-2">
+											<span class="text-4xl block mb-2">📖</span>
+											<span class="text-xs font-medium line-clamp-2">{book.data.title}</span>
+										</div>
+									)}
 									{/* Hover glow effect */}
 									<div class="absolute inset-0 bg-gradient-to-t from-ember-orange/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 								</div>
@@ -229,12 +236,16 @@ function getSeriesDisplay(seriesSlug: string | undefined): string {
 						<!-- Book Feature -->
 						<div class="flex flex-col items-center lg:items-start">
 							<a href="/books/sophie-and-the-odd-ones" class="group relative">
-								<!-- Book cover placeholder with glow -->
+								<!-- Book cover with glow -->
 								<div class="w-48 sm:w-56 md:w-64 aspect-[2/3] bg-gradient-to-br from-mystic-violet/40 to-midnight-purple rounded-lg border-2 border-mystic-violet/50 flex items-center justify-center shadow-mystic group-hover:shadow-ember group-hover:border-ember-orange/70 transition-all duration-500 overflow-hidden">
-									<div class="text-center text-bone-white/80 px-4">
-										<span class="text-6xl block mb-3">📖</span>
-										<span class="text-sm font-medium">Sophie and The Odd Ones</span>
-									</div>
+									{sophieBook?.data.cover ? (
+										<img src={sophieBook.data.cover} alt="Sophie and The Odd Ones" class="w-full h-full object-cover" loading="lazy" />
+									) : (
+										<div class="text-center text-bone-white/80 px-4">
+											<span class="text-6xl block mb-3">📖</span>
+											<span class="text-sm font-medium">Sophie and The Odd Ones</span>
+										</div>
+									)}
 									<!-- Hover overlay -->
 									<div class="absolute inset-0 bg-gradient-to-t from-ember-orange/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 								</div>
