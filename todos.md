@@ -691,3 +691,11 @@
   - Save to public/images/ and update the homepage component
   - Ensure it's the same size as the Goodreads circular logo
   - Verify both logos look consistent and balanced on desktop and mobile
+
+- [x] **T086** - UPDATE: Change newsletter subscribe button text on homepage
+  - refs: D008, D014
+  - In the "Join the Supernatural Side" section at bottom of homepage
+  - Change the "Subscribe Now" button text to "Subscribe Now for Free Ebook"
+  - Button may be in the NewsletterCTA component or hardcoded in index.astro
+  - Check both locations and update wherever defined
+  - Verify button text displays correctly and doesn't overflow on mobile
