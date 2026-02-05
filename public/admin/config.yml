@@ -321,6 +321,24 @@ collections:
         display_fields: ["title"]
         required: false
       - { label: "Featured", name: "featured", widget: "boolean", default: false, required: false }
+      - label: "Thumbnail Focal Point X"
+        name: "focal_x"
+        widget: "number"
+        default: 50
+        value_type: "int"
+        min: 0
+        max: 100
+        required: false
+        hint: "Horizontal center of thumbnail crop. 0 = left edge, 50 = center, 100 = right edge"
+      - label: "Thumbnail Focal Point Y"
+        name: "focal_y"
+        widget: "number"
+        default: 50
+        value_type: "int"
+        min: 0
+        max: 100
+        required: false
+        hint: "Vertical center of thumbnail crop. 0 = top edge, 50 = center, 100 = bottom edge"
       - { label: "Content", name: "body", widget: "markdown", required: false }
 
   # Pages collection

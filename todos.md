@@ -1017,3 +1017,39 @@
   - Test creating a new artwork entry with image upload, description,
     book dropdown, and featured toggle
   - Verify the entry saves correctly and the markdown file is created
+
+- [x] **T105** - ENHANCE: Add focal point picker for artwork thumbnail cropping
+  - refs: D001, T104
+  - In public/admin/config.yml, update the artwork collection to add focal point fields:
+```yaml
+    - name: focal_x
+      label: Thumbnail Focal Point X (0-100, left to right)
+      widget: number
+      default: 50
+      value_type: int
+      min: 0
+      max: 100
+      required: false
+      hint: "Horizontal center of thumbnail crop. 0 = left edge, 50 = center, 100 = right edge"
+    - name: focal_y
+      label: Thumbnail Focal Point Y (0-100, top to bottom)
+      widget: number
+      default: 50
+      value_type: int
+      min: 0
+      max: 100
+      required: false
+      hint: "Vertical center of thumbnail crop. 0 = top edge, 50 = center, 100 = bottom edge"
+```
+  - Update the Astro content collection schema to include focal_x and focal_y
+  - When displaying artwork thumbnails on any page, use CSS object-position
+    to crop around the focal point:
+```css
+    object-fit: cover;
+    object-position: {focal_x}% {focal_y}%;
+```
+  - Full artwork view continues to display the complete uncropped image
+  - Default focal point is 50/50 (center) if not set
+  - Test in /admin that focal point fields appear on artwork entries
+  - Test that adjusting focal point values changes thumbnail cropping on display
+  - Add a hint or help text in the admin explaining how X/Y values work

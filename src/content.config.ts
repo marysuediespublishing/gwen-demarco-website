@@ -169,6 +169,8 @@ const artwork = defineCollection({
     description: z.string().optional(),
     book: z.string().optional(),
     featured: z.boolean().default(false),
+    focal_x: z.number().min(0).max(100).default(50),
+    focal_y: z.number().min(0).max(100).default(50),
   }),
 });
 
