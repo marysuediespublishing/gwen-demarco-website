@@ -15,10 +15,10 @@ stats:
   seriesComplete: 4
   averageRating: "4.4"
   totalReviews: "13K+"
-  goodreadsRating: "4.3"
-  goodreadsReviewCount: "180+"
-  amazonRating: "4.5"
-  amazonReviewCount: "320+"
+  goodreadsRating: "4.5"
+  goodreadsReviewCount: "9K+"
+  amazonRating: "4.6"
+  amazonReviewCount: "13K+"
 newsletter:
   leadMagnetTitle: Join the Supernatural Side
   leadMagnetDescription: Get exclusive content, early access to new releases, and behind-the-scenes peeks into the weird and wonderful worlds of urban fantasy.

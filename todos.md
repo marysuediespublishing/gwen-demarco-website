@@ -646,3 +646,14 @@
   - Check both locations and update wherever defined
   - Verify all three links/stats display correctly on homepage
   - Test that Goodreads and Amazon links open to correct external pages
+
+- [x] **T082** - UPDATE: Fix ratings and review counts in "Readers Love These Books" section
+  - refs: D005, D014
+  - Update the following stats on homepage "Readers Love These Books" section:
+    - Amazon reviews: change "320+ reviews" to "13K+"
+    - Amazon average rating: change to 4.6
+    - Goodreads ratings: change "180+ ratings" to "9K+"
+    - Goodreads average rating: change to 4.5
+  - Values may be hardcoded in src/pages/index.astro or in src/content/settings/site-config.md
+  - Check both locations and update wherever defined
+  - Verify all four values display correctly on homepage
