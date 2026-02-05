@@ -613,3 +613,15 @@
   - Ensure fix is consistent with T076 so images work everywhere
   - Verify book covers display in the featured books section on homepage
   - Run npm run build to confirm clean output
+
+
+- [x] **T079** - FIX: Testimonials on homepage showing book slug instead of book title
+  - refs: D011, D014
+  - In the "What Readers Are Saying" section on homepage, book references display as slugs (e.g., "sophie-and-the-odd-ones") instead of readable titles (e.g., "Sophie and The Odd Ones")
+  - This is likely because T070 changed the book field to a relation widget using slug as value_field
+  - The homepage testimonials component needs to resolve the slug back to the book title
+  - Fix by either:
+    1. Looking up the book entry by slug and displaying its title
+    2. Or changing the relation widget value_field to title instead of slug
+  - Check both homepage and any other pages that display testimonials
+  - Verify the book title displays as readable text everywhere testimonials appear

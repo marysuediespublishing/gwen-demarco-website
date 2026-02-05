@@ -60,6 +60,13 @@ function getSeriesDisplay(seriesSlug: string | undefined): string {
 	if (!seriesSlug) return '';
 	return seriesMap.get(seriesSlug) || seriesSlug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
 }
+
+// Helper to get book title from slug (bookTitle field stores slug since T070)
+const bookTitleMap = new Map(allBooks.map(b => [b.id, b.data.title]));
+function getBookTitle(bookSlug: string | undefined): string {
+	if (!bookSlug) return '';
+	return bookTitleMap.get(bookSlug) || bookSlug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+}
 ---
 
 <Layout title={`${SITE_TITLE} | Paranormal Romance Author`}>
@@ -472,7 +479,7 @@ function getSeriesDisplay(seriesSlug: string | undefined): string {
 									</div>
 									{testimonial.data.bookTitle && (
 										<div class="text-xs text-fog-gray mt-1">
-											on <span class="text-mystic-teal">{testimonial.data.bookTitle}</span>
+											on <span class="text-mystic-teal">{getBookTitle(testimonial.data.bookTitle)}</span>
 											<span class="capitalize ml-1">({testimonial.data.reviewerPlatform})</span>
 										</div>
 									)}

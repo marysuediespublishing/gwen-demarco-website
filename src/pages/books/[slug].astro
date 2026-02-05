@@ -91,7 +91,7 @@ let bookTestimonials: any[] = [];
 try {
   const testimonials = await getCollection('testimonials');
   bookTestimonials = testimonials.filter(t =>
-    t.data.bookTitle === book.data.title
+    t.data.bookTitle === book.id
   );
 } catch (error) {
   // No testimonials collection or no matching testimonials
