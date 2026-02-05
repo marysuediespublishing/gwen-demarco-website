@@ -153,10 +153,9 @@ collections:
       - { label: "Verified Purchase", name: "verified", widget: "boolean", default: false }
       - label: "Date"
         name: "date"
-        widget: "datetime"
-        date_format: "YYYY-MM-DD"
-        time_format: false
-        format: "YYYY-MM-DD"
+        widget: "string"
+        default: "2025-01-01"
+        hint: "Enter date as YYYY-MM-DD (e.g., 2025-02-04)"
       - { label: "Featured Testimonial", name: "featured", widget: "boolean", default: false }
       - label: "Category"
         name: "category"

@@ -491,3 +491,39 @@
   - Alternatively, can use widget: string with a pattern for simpler input
   - Test in /admin that date picker works without time component
   - Verify existing testimonial dates still display correctly
+
+- [x] **T072** - FIX: Testimonials date field auto-fills year as 1900 when typing
+  - refs: D001, D011
+  - The datetime widget has known bugs with manual year entry
+  - In public/admin/config.yml, replace datetime widget with string widget for testimonials date
+  - Use a simple string input with a pattern for date format
+  - Example config:
+```yaml
+    - name: date
+      label: Date
+      widget: string
+      default: "2025-01-01"
+      hint: "Enter date as YYYY-MM-DD (e.g., 2025-02-04)"
+```
+  - Alternatively, use hidden widget with default: "{{now}}" if date is always "today"
+  - This avoids the buggy datetime picker entirely
+  - Test in /admin that date can be typed without auto-fill issues
+  - Verify testimonials still sort/display correctly with string dates
+
+- [ ] **T073** - ENHANCE: Show book title alongside reviewer name in Testimonials list view
+  - refs: D001, D011
+  - In public/admin/config.yml, update the testimonials collection
+  - Add or modify the summary field to display both reviewer and book
+  - Example config:
+```yaml
+    collections:
+      - name: testimonials
+        label: Testimonials
+        folder: src/content/testimonials
+        summary: "{{reader}} - {{book}}"
+        fields:
+          ...
+```
+  - The summary template uses field names from the collection
+  - If book is now a relation (per T070), may need to use the slug or adjust
+  - Test in /admin that testimonials list shows "Reviewer Name - Book Title"
