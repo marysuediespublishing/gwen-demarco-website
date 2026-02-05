@@ -133,6 +133,7 @@ collections:
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     extension: "md"
     format: "frontmatter"
+    summary: "{{reviewerName}} - {{bookTitle}}"
     fields:
       - { label: "Reviewer Name", name: "reviewerName", widget: "string" }
       - label: "Platform"

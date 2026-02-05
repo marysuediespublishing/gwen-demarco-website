@@ -510,7 +510,7 @@
   - Test in /admin that date can be typed without auto-fill issues
   - Verify testimonials still sort/display correctly with string dates
 
-- [ ] **T073** - ENHANCE: Show book title alongside reviewer name in Testimonials list view
+- [x] **T073** - ENHANCE: Show book title alongside reviewer name in Testimonials list view
   - refs: D001, D011
   - In public/admin/config.yml, update the testimonials collection
   - Add or modify the summary field to display both reviewer and book
