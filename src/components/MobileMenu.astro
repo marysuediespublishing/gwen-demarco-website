@@ -87,6 +87,17 @@ import HeaderLink from './HeaderLink.astro';
 			>
 				Contact
 			</HeaderLink>
+
+			<!-- Newsletter Subscribe -->
+			<div class="pt-2 mt-2 border-t border-mystic-violet/20">
+				<button
+					type="button"
+					class="w-full px-4 py-3 btn-primary rounded-md min-h-[44px] flex items-center justify-center font-semibold newsletter-trigger"
+					data-testid="mobile-subscribe-button"
+				>
+					Join the Supernatural Side
+				</button>
+			</div>
 		</div>
 	</div>
 </div>
@@ -122,6 +133,16 @@ import HeaderLink from './HeaderLink.astro';
 					closeIcon.classList.add('hidden');
 				}
 			});
+
+			// Close menu when newsletter subscribe button is clicked
+			const subscribeBtn = mobileMenu.querySelector('.newsletter-trigger');
+			if (subscribeBtn) {
+				subscribeBtn.addEventListener('click', () => {
+					mobileMenu.classList.add('hidden');
+					hamburgerIcon.classList.remove('hidden');
+					closeIcon.classList.add('hidden');
+				});
+			}
 		}
 	});
 </script>

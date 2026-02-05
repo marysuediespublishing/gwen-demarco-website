@@ -752,3 +752,18 @@
     - Accessible (focus trap, ESC to close, aria labels)
   - Replace any existing non-functional newsletter forms with this working Mailchimp integration
   - Test that form submissions reach Mailchimp successfully
+
+- [x] **T090** - FIX: Newsletter subscribe button in header does not open popup
+  - refs: D008, D002
+  - **Root cause:** The header button has class `newsletter-trigger` and inline JS references `newsletter-modal`, but no modal element exists in the DOM. Clicking the button does nothing because there's no modal to show.
+  - **Fix:** Ensure the newsletter modal component (created in T089) is included in the base Layout.astro so it renders on every page
+  - Debug steps:
+    1. Check if a NewsletterModal component exists in src/components/
+    2. If it exists, add it to src/layouts/Layout.astro before the closing </body> tag
+    3. If it doesn't exist, it needs to be created per T089 specs first
+    4. Verify the modal has id="newsletter-modal" matching what the JS expects
+    5. Verify the inline script correctly toggles the modal's visibility on trigger click
+  - There are 2 `.newsletter-trigger` buttons on the homepage (header + bottom CTA) — both should open the same modal
+  - Test that clicking "Join the Supernatural Side" in the header opens the Mailchimp signup popup
+  - Test that clicking "Subscribe Now for Free Ebook" at the bottom also opens it
+  - Test close behavior: X button, click outside, ESC key
