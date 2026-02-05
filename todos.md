@@ -657,3 +657,14 @@
   - Values may be hardcoded in src/pages/index.astro or in src/content/settings/site-config.md
   - Check both locations and update wherever defined
   - Verify all four values display correctly on homepage
+
+- [x] **T083** - FIX: Replace incorrect Goodreads logo in "Readers Love These Books" section
+  - refs: D014
+  - The Goodreads logo on the homepage is incorrect
+  - Replace with the correct Goodreads logo: tan/beige circle with brown lowercase "g" in center
+  - Options:
+    1. Download the official Goodreads logo and save to public/images/
+    2. Or create an SVG matching the brand (tan circle, brown lowercase g)
+  - Update the homepage component to reference the new logo
+  - Ensure the logo is appropriately sized and consistent with the Amazon logo next to it
+  - Verify the logo displays correctly on both desktop and mobile
