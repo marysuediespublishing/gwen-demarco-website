@@ -903,3 +903,24 @@
   - Test /characters page displays all characters from CMS
   - Test individual character pages render correctly
   - Test nav link appears in correct position and works on all pages
+
+- [x] **T100** - ENHANCE: Group characters by book series on Characters page
+  - refs: D001, T099
+  - In src/pages/characters.astro, group characters by their series field
+  - Fetch both the characters and series collections
+  - Group characters using their series field (may be series name or slug)
+  - Display each group under a series heading, similar to how
+    the /series page sections content by series
+  - Each series group should have:
+    - Series title as a section header
+    - Brief series identifier or badge (e.g., book count, status)
+    - Character cards grid underneath
+  - Sort series groups in the same order as /series page
+    (featured first, then by start date)
+  - Within each group, sort characters by series order or name
+  - Handle characters with no series assigned — place in an
+    "Other Characters" section at the bottom
+  - Link series headings to the corresponding /series/[slug] page
+  - Check the characters collection config in public/admin/config.yml
+    to confirm the exact field name used for series association
+  - Test with characters from all series to confirm correct grouping
