@@ -527,3 +527,27 @@
   - The summary template uses field names from the collection
   - If book is now a relation (per T070), may need to use the slug or adjust
   - Test in /admin that testimonials list shows "Reviewer Name - Book Title"
+
+- [x] **T074** - ENHANCE: Testimonials date field with mm/dd/yyyy format and calendar picker
+  - refs: D001, D011
+  - This supersedes T071 and T072 - attempt to configure datetime widget properly
+  - In public/admin/config.yml, update testimonials date field
+  - Configure with US date format display and calendar picker
+  - Example config:
+```yaml
+    - name: date
+      label: Date
+      widget: datetime
+      date_format: "MM/DD/YYYY"
+      time_format: false
+      format: "YYYY-MM-DD"
+      default: "{{now}}"
+      picker_utc: false
+```
+  - date_format controls display in picker (MM/DD/YYYY for US)
+  - format controls how it's stored in markdown (ISO format for sorting)
+  - time_format: false removes the time component entirely
+  - default: "{{now}}" sets current date when creating new entries
+  - picker_utc: false ensures local timezone
+  - Test in /admin that calendar picker works and defaults to today
+  - If datetime widget bugs persist, fall back to T072 string approach
