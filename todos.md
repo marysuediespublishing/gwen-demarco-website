@@ -1169,3 +1169,21 @@
     (this replaces that approach — one note per section instead of one global note)
   - Style consistently with the rest of the page (e.g., text-fog-gray, text-sm)
   - Test on /artwork page that each series section shows the updated text
+
+- [x] **T112** - FIX: Update artwork page thumbnail grid and "View More" button
+  - refs: D001, T108
+  - In src/pages/artwork.astro, update the thumbnail display settings:
+  - Set max thumbnails per series group to 18
+  - Set grid to 6 images per row on desktop (e.g., grid-cols-6)
+    - Adjust responsive breakpoints as needed (e.g., grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6)
+  - Update the "More..." / overflow button:
+    - Change button text to "View All ## Artworks →" where ## is the
+      total number of artworks for that series
+    - Include the arrow (→) at the end of the button text
+    - Remove any "+# more" text or badge from the button
+    - Button only appears when series has more than 18 artworks
+    - Button still links to /artwork/[series-slug]
+  - Test with series that have more than 18 artworks to confirm
+    button appears with correct total count
+  - Test with series that have 18 or fewer to confirm button is hidden
+  - Test responsive grid at all breakpoints

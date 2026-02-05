@@ -123,7 +123,7 @@ const seriesGroups = sortedSeriesKeys.map(slug => {
 });
 
 // Thumbnail limit per series
-const THUMBNAIL_LIMIT = 8;
+const THUMBNAIL_LIMIT = 18;
 ---
 
 <Layout title={`Artwork Gallery - ${SITE_TITLE}`} description="Explore artwork and illustrations from Gwen DeMarco's paranormal romance novels. Character art, scene illustrations, and more from the world of urban fantasy.">
@@ -212,11 +212,7 @@ const THUMBNAIL_LIMIT = 8;
 										href={`/artwork/${group.series.slug}`}
 										class="inline-flex items-center gap-2 px-6 py-3 bg-midnight-purple/50 hover:bg-midnight-purple border border-mystic-violet/30 hover:border-mystic-violet/60 rounded-lg text-moon-silver hover:text-ember-orange transition-all duration-300"
 									>
-										<span>View All {group.artworks.length} Artworks</span>
-										<span class="text-ember-orange">+{remainingCount} more</span>
-										<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
-										</svg>
+										<span>View All {group.artworks.length} Artworks →</span>
 									</a>
 								</div>
 							)}
