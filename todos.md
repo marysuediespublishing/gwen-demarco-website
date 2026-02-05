@@ -869,3 +869,16 @@
   - The Mudlark series (screenshot 2) shows the desired large cover look
   - The Auras & Embers series (screenshot 1) shows the current broken small layout
   - Test all series on /series page to confirm large fanned covers display correctly
+
+- [x] **T097** - ENHANCE: Make book cover images clickable on series detail pages
+  - refs: D001
+  - On individual series pages (e.g., /series/witches-of-kirra-cross),
+    book cover images should link to the individual book page
+  - Find the series detail template (likely src/pages/series/[...slug].astro
+    or similar dynamic route)
+  - Wrap each book cover <img> element in an <a href={`/books/${book.slug}`}> tag
+  - Add cursor-pointer and hover effect (e.g., hover:scale-105 transition)
+    so it's clear the image is clickable
+  - Ensure alt text remains on the image for accessibility
+  - Test on /series/witches-of-kirra-cross and other series detail pages
+  - Verify links go to the correct individual book pages

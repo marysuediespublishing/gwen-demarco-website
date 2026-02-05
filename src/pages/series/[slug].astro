@@ -352,13 +352,13 @@ try {
                   <img
                     src={book.data.cover}
                     alt={`${book.data.title} book cover`}
-                    class="w-full aspect-[2/3] object-cover rounded-lg mb-3"
+                    class="w-full aspect-[2/3] object-cover rounded-lg mb-3 cursor-pointer group-hover:scale-105 transition-transform duration-300"
                     width="300"
                     height="450"
                     loading="lazy"
                   />
                 ) : (
-                  <div class="w-full aspect-[2/3] bg-gradient-to-br from-mystic-violet/20 to-midnight-purple rounded-lg mb-3 flex items-center justify-center border border-mystic-violet/30 group-hover:border-ember-orange/50 transition-colors">
+                  <div class="w-full aspect-[2/3] bg-gradient-to-br from-mystic-violet/20 to-midnight-purple rounded-lg mb-3 flex items-center justify-center border border-mystic-violet/30 group-hover:border-ember-orange/50 group-hover:scale-105 transition-all duration-300 cursor-pointer">
                     <span class="text-4xl opacity-60">📖</span>
                   </div>
                 )}
