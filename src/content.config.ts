@@ -169,8 +169,11 @@ const artwork = defineCollection({
     description: z.string().optional(),
     book: z.string().optional(),
     featured: z.boolean().default(false),
-    focal_x: z.number().min(0).max(100).default(50),
-    focal_y: z.number().min(0).max(100).default(50),
+    // Combined focal point stored as "X,Y" string (e.g., "50,50")
+    focal_point: z.string().default('50,50'),
+    // Keep backwards compatibility with old fields
+    focal_x: z.number().min(0).max(100).optional(),
+    focal_y: z.number().min(0).max(100).optional(),
   }),
 });
 

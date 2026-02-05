@@ -10,7 +10,11 @@
   <body>
     <!-- Include the script that builds the page and powers Decap CMS -->
     <script src="https://unpkg.com/decap-cms@^3.8.2/dist/decap-cms.js"></script>
+    <!-- Custom focal point widget -->
+    <script src="/admin/focal-point-widget.js"></script>
     <script>
+      // Register the custom focal point widget
+      CMS.registerWidget('focal-point', FocalPointControl, FocalPointPreview);
       // Custom preview templates for better content editing experience
       CMS.registerPreviewTemplate('blog', createPreviewTemplate('blog'));
       CMS.registerPreviewTemplate('books', createPreviewTemplate('books'));

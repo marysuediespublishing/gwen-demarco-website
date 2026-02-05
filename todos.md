@@ -1053,3 +1053,34 @@
   - Test in /admin that focal point fields appear on artwork entries
   - Test that adjusting focal point values changes thumbnail cropping on display
   - Add a hint or help text in the admin explaining how X/Y values work
+
+- [x] **T106** - ENHANCE: Visual focal point picker widget for artwork thumbnails
+  - refs: D001, T104, T105
+  - Replace the numeric focal_x/focal_y fields with a custom Decap CMS widget
+  - Create a custom widget (e.g., public/admin/focal-point-widget.js) that:
+    - Displays the uploaded artwork image in the admin
+    - Shows a draggable/clickable crosshair or pin overlay on the image
+    - Clicking or dragging on the image sets the focal point X/Y values
+    - Displays a preview thumbnail crop using the species page card aspect ratio
+      (reference src/pages/species.astro for the exact aspect ratio used)
+    - Stores the value as a JSON string like "50,50" or an object {x: 50, y: 50}
+  - Register the custom widget in public/admin/index.html using:
+```javascript
+    CMS.registerWidget('focal-point', FocalPointControl, FocalPointPreview);
+```
+  - Update public/admin/config.yml to replace focal_x and focal_y with
+    a single field using the custom widget:
+```yaml
+    - name: focal_point
+      label: Thumbnail Focal Point
+      widget: focal-point
+      default: "50,50"
+      required: false
+      hint: "Click on the image to set the thumbnail crop center"
+```
+  - Update Astro content schema and any templates that reference focal_x/focal_y
+    to parse the new combined focal_point field
+  - CSS thumbnail display still uses object-position with the parsed X/Y values
+  - Test in /admin that clicking the image updates the focal point visually
+  - Test that the preview thumbnail matches what displays on the site
+  - Test that saved values persist correctly after publish
