@@ -820,3 +820,19 @@
     - Series slug mismatch (e.g., "auras-embers" vs "auras-and-embers")
     - Image paths in frontmatter don't match actual file locations
   - After fix, verify both Auras & Embers books display stacked covers on /series page
+
+- [x] **T094** - FIX: Sophie Feegle series cover image quality issue on /series page
+  - refs: D006
+  - User reports the "top image" in the Sophie Feegle stacked covers looks bad compared to others
+  - Investigation found suspicious image filenames in public/images/:
+    - `ebook.jpg` - generic name, used for "Sophie and The Odd Ones"
+    - `front.jpg` - generic name, used for "Against All Odds"
+    - `danegriggs-ebook.jpg` - wrong name (from reference site), used for "Odd Times for Sophie Feegle"
+  - Debug steps:
+    1. Check which specific image appears blurry/low quality on the /series page
+    2. Compare the source image resolution and quality in public/images/
+    3. Check if the image file needs to be replaced with a higher quality version
+    4. Verify CSS isn't applying unwanted blur/scaling effects to stacked images
+  - Likely fix: Replace low-quality image file with proper high-resolution book cover
+  - Also consider renaming files to use consistent naming convention (e.g., sophie-and-the-odd-ones-cover.jpg)
+  - Test that all 5 Sophie Feegle covers display crisply in the stacked arrangement

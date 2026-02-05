@@ -1,21 +1,22 @@
 ---
 title: Sophie and The Odd Ones
 author: Gwen DeMarco
-cover: ../../assets/covers/sophie-and-the-odd-ones.svg
-description: Sophie Feegle works at the San Francisco City Morgue, where the dead
-  keep their secrets—until they don't. When supernatural creatures start turning
-  up on her table, Sophie discovers her ordinary life is about to get very strange
-  indeed.
+description: Sophie Feegle works at the San Francisco City Morgue, where the
+  dead keep their secrets—until they don't. When supernatural creatures start
+  turning up on her table, Sophie discovers her ordinary life is about to get
+  very strange indeed.
+cover: /images/sophie-and-the-odd-ones-ebook.jpg
 series: Sophie Feegle
 seriesOrder: 1
 pubDate: 2020-08-01T00:00:00.000Z
-rating: 4.3
-ratingCount: 245
+rating: 4.5
+ratingCount: 4695
 species:
   - shifters
   - ogres
   - vampires
   - humans
+  - fae
 heatLevel: medium
 setting:
   - san-francisco
@@ -24,28 +25,44 @@ genres:
   - urban fantasy
   - paranormal romance
 isKU: true
-amazonUrl: https://www.amazon.com/Sophie-Odd-Ones-Gwen-DeMarco-ebook/dp/B08CHKH9SY
+amazonUrl: https://www.amazon.com/dp/B08CHKH9SY
+goodreadsUrl: https://www.goodreads.com/book/show/56194589-sophie-and-the-odd-ones
 price: $4.99
+wordCount: 80261
+pageCount: 258
 status: published
 featured: true
 ---
-
 # Sophie and The Odd Ones
 
 The first book in the **Sophie Feegle** series introduces readers to Gwen DeMarco's signature blend of supernatural mystery, snarky heroines, and the weird and wonderful world of urban fantasy.
 
 ## Synopsis
 
-Sophie Feegle thought she had her life figured out. A steady job at the San Francisco City Morgue, a comfortable routine, and absolutely no complications. Then the bodies started getting weird.
+Sophie Feegle needs a break. Rent is due on her crappy apartment, she's halfway through her last loaf of bread, and her ambitions don't stretch much further than keeping her landlord off her back and scraping together enough cash for whiskey at the neighborhood bar.
 
-When supernatural creatures begin showing up on her examination table, Sophie's ordinary existence takes a sharp turn into the extraordinary. Shifters, ogres, vampires—they're all real, and they're all dead. Now Sophie has to figure out why, and more importantly, who's responsible.
+When a chance encounter with a quiet stranger leads to a job offer at the San Francisco City Morgue, Sophie jumps at it. She never expected to find her calling on the graveyard shift, surrounded by dead bodies and the strange characters that make up the morgue's staff. Finding out that your friends and coworkers are shifters, ogres, and other non-human creatures is a shock—but Sophie quickly realizes these are her people, and she's finally found her perfect gig.
 
-With a cast of quirky characters, a grumpy love interest, and more supernatural surprises than she can handle, Sophie is about to discover that San Francisco's underworld is a lot more literal than she ever imagined.
+And then things get odd. Well… odder. Unusual murders keep ending up on Sophie's autopsy table, hinting at strange powers at work within the city. Something nefarious is building in San Francisco, and it's up to Sophie and her friends to thwart the evil on the rise.
 
 ## What Makes This Book Special
 
-- **Snarky Heroine**: Sophie is exactly the kind of protagonist who isn't afraid to say what she's thinking
-- **Grumpy Love Interest**: A male lead who growls more than he smiles—just the way we like it
-- **Found Family**: Discover a cast of oddballs who become Sophie's unlikely support system
-- **Urban Fantasy Setting**: San Francisco comes alive with supernatural secrets lurking in every shadow
-- **Paranormal Mystery**: Who—or what—is killing the odd ones?
+* * **Snarky Heroine:**
+
+     Sophie is exactly the kind of protagonist who isn't afraid to say what she's thinking
+
+  * **Found Family:**
+
+     From morgue coworkers to the naughty old lady next door, discover a cast of oddballs who become Sophie's unlikely support system
+
+  * **Urban Fantasy Setting:**
+
+     San Francisco comes alive with supernatural secrets lurking beneath the surface
+
+  * **Paranormal Mystery:**
+
+     Who—or what—is behind the unusual murders piling up on Sophie's table?
+
+  * **Humor and Heart:**
+
+     A story about a down-on-her-luck woman who finally finds where she belongs—it just happens to be surrounded by the dead and the non-human

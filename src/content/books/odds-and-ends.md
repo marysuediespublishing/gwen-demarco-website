@@ -1,13 +1,20 @@
 ---
 title: Odds and Ends
 author: Gwen DeMarco
-cover: ../../assets/covers/odds-and-ends.svg
-description: In the thrilling conclusion to the Sophie Feegle series, Sophie must tie up all the loose ends—both supernatural and personal. With her found family by her side, she faces one final challenge that will determine the fate of San Francisco's paranormal community forever.
+description: "In the thrilling conclusion to the Sophie Feegle series, a cryptic
+  message from the Great Mother sends Sophie on a quest to uncover her erased
+  past—and the dark destiny that comes with it. As Queen Maeve's hybrid soldiers
+  prepare a full-scale attack on San Francisco, Sophie must journey to other
+  realms, gather an army, and confront the darkness threatening everything she
+  holds dear. With her found family by her side, she faces one final challenge:
+  embracing her true identity before her dark magic consumes her—and the fate of
+  San Francisco's paranormal community along with it."
+cover: /images/odds-and-ends-ebook.jpg
 series: Sophie Feegle
 seriesOrder: 5
 pubDate: 2023-06-01T00:00:00.000Z
-rating: 4.7
-ratingCount: 98
+rating: 4.8
+ratingCount: 1189
 species:
   - shifters
   - ogres
@@ -18,38 +25,60 @@ heatLevel: medium
 setting:
   - san-francisco
   - san-francisco-morgue
+  - otherworld
+  - ireland
 genres:
   - urban fantasy
   - paranormal romance
 isKU: true
-amazonUrl: https://www.amazon.com/Odds-Ends-Sophie-Feegle-Book-ebook/dp/B0C3WL6RVY
+amazonUrl: https://www.amazon.com/dp/B0CB1VMP6C
+goodreadsUrl: https://www.goodreads.com/book/show/183023366-odds-and-ends
 price: $4.99
+wordCount: 98621
+pageCount: 318
 status: published
 featured: false
 ---
-
 # Odds and Ends
 
-The epic conclusion to the **Sophie Feegle** series brings all the threads together in a satisfying finale that fans have been waiting for.
+The epic conclusion to the **Sophie Feegle** series brings all the threads together in a heart-pounding finale that fans have been waiting for.
 
 ## Synopsis
 
-Sophie Feegle has been through hell and back—sometimes literally. She's faced down ancient threats, navigated supernatural politics, and found love with her grumpy protector. But there are still loose ends that need tying up, and Sophie has never been one to leave a job unfinished.
+Sophie Feegle has been through hell and back—sometimes literally. She's faced down ancient threats, navigated supernatural politics, and fallen for the grumpiest man in San Francisco. But when a cryptic message from the Great Mother sends her on a mission to uncover her own erased past, Sophie realizes the fight is far from over.
 
-When the dust settles from the battle that nearly destroyed everything, Sophie discovers that some enemies don't stay defeated and some secrets refuse to stay buried. The supernatural community is rebuilding, but cracks are already forming in the fragile peace.
+Her quest leads her to Queen Maeve's former stronghold on Earth, where she discovers a shocking truth about her history—and the destiny she never asked for. As Maeve's hybrid soldiers prepare to launch a full-scale attack on San Francisco, Sophie must journey to other realms, rally an army, and confront a darkness that threatens to consume everything she holds dear.
 
-As Sophie works to protect her found family and secure their future, she must confront the consequences of every choice she's made. Friends become enemies, enemies become unlikely allies, and Sophie learns that the hardest battles aren't always the ones fought with claws and fangs.
+But the greatest threat might come from within. Sophie's dark magic is growing stronger, and the secrets of her past could unravel everything she's built—including herself. With her loyal friends and newfound allies at her side, she must face her deepest fears and embrace her true identity before it's too late.
 
 In this final adventure, Sophie Feegle will discover who she truly is—and what she's willing to sacrifice for a happy ending.
 
 ## What Makes This Book Special
 
-- **Series Conclusion**: All the storylines from the previous four books come together
-- **Emotional Payoffs**: Character arcs reach their satisfying conclusions
-- **Romance Resolution**: Sophie and her love interest finally get their happily ever after
-- **Found Family Triumph**: Watch the odd ones face their greatest challenge—and win
-- **Bittersweet Endings**: Some doors close, but new ones open
+* * **Series Conclusion:**
+
+     All the storylines from the previous four books come together
+
+  * **Emotional Payoffs:**
+
+     Character arcs reach their satisfying conclusions
+
+  * **Romance Resolution:**
+
+     Sophie and Mac finally get their happily ever after
+
+  * **Found Family Triumph:**
+
+     Watch the odd ones face their greatest challenge—and win
+
+  * **Epic Scale:**
+
+     Realm-hopping, army-gathering, and a battle for San Francisco itself
+
+  * **Well-Earned HEA:**
+
+     Five books of struggle, growth, and heart—paid off in full
 
 ## A Perfect Ending
 
-Fans of the Sophie Feegle series will find everything they've been hoping for in this conclusion. Gwen DeMarco delivers her signature blend of snark, heart, and supernatural adventure, wrapping up five books of character development in a way that honors everything that came before.
+Fans of the Sophie Feegle series will find everything they've been hoping for in this conclusion. Gwen DeMarco masterfully weaves magic, adventure, and the power of friendship into a finale filled with twists and turns that will keep you on the edge of your seat until the very last page.
