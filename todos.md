@@ -472,3 +472,22 @@
 ```
   - Test in /admin that the dropdown populates with all books
   - Verify existing testimonial entries still work after the change
+
+
+- [x] **T071** - FIX: Testimonials date field should be date-only, not datetime
+  - refs: D001, D011
+  - In public/admin/config.yml, update the testimonials collection
+  - Change the date field from datetime widget to date-only
+  - Remove time component entirely by setting time_format to false
+  - Example config:
+```yaml
+    - name: date
+      label: Date
+      widget: datetime
+      date_format: "YYYY-MM-DD"
+      time_format: false
+      format: "YYYY-MM-DD"
+```
+  - Alternatively, can use widget: string with a pattern for simpler input
+  - Test in /admin that date picker works without time component
+  - Verify existing testimonial dates still display correctly
