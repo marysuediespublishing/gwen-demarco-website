@@ -882,3 +882,24 @@
   - Ensure alt text remains on the image for accessibility
   - Test on /series/witches-of-kirra-cross and other series detail pages
   - Verify links go to the correct individual book pages
+
+- [x] **T099** - NEW: Create Characters page matching Species page layout, add to navigation
+  - refs: D001
+  - Create src/pages/characters.astro modeled after src/pages/species.astro
+  - Use the characters collection from Decap CMS (see public/admin/config.yml for field names)
+  - Match the same layout pattern as the species page:
+    - Hero section with gradient background and page title/description
+    - Grid of character cards with images, names, and key details
+    - Hover effects and card styling consistent with species page
+    - Link each card to an individual character detail page
+  - Create src/pages/characters/[...slug].astro for individual character pages
+    (model after src/pages/species/[...slug].astro)
+  - Pull all character data from the characters content collection
+    (e.g., name, image, description, species, series, etc.)
+  - Add "Characters" link to the site navigation/header component
+    - Place it between "Species" and "Locations" in the nav order
+    - Find the nav component (likely in src/components/ or src/layouts/)
+    - Ensure it matches existing nav link styling
+  - Test /characters page displays all characters from CMS
+  - Test individual character pages render correctly
+  - Test nav link appears in correct position and works on all pages

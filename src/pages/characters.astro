@@ -1,0 +1,184 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { SITE_TITLE } from '../consts';
+import { getCollection } from 'astro:content';
+
+// Get all characters
+const allCharacters = await getCollection('characters');
+
+// Get all books and species for context
+const allBooks = await getCollection('books');
+const allSpecies = await getCollection('species');
+
+// Add appearance count for each character
+const charactersWithStats = allCharacters.map(character => {
+	// Count main book appearances
+	const mainBookCount = character.data.books?.length || 0;
+
+	// Count cameo appearances
+	const cameoCount = character.data.cameos?.length || 0;
+
+	// Get species info if available
+	const speciesInfo = character.data.species
+		? allSpecies.find(s => s.id === character.data.species)
+		: null;
+
+	return {
+		...character,
+		mainBookCount,
+		cameoCount,
+		totalAppearances: mainBookCount + cameoCount,
+		speciesInfo,
+	};
+}).sort((a, b) => a.data.name.localeCompare(b.data.name));
+---
+
+<Layout title={`Characters - ${SITE_TITLE}`} description="Meet the unforgettable characters from Gwen DeMarco's paranormal romance novels. From snarky heroines to grumpy heroes, explore their stories.">
+	<main id="main-content" class="relative">
+		<!-- Hero Section -->
+		<section class="relative py-16 bg-gradient-night overflow-hidden">
+			<!-- Background fog effect -->
+			<div class="absolute inset-0 bg-gradient-fog opacity-30"></div>
+			<div class="absolute inset-0 bg-gradient-to-t from-shadow-black/60 to-transparent"></div>
+
+			<div class="container mx-auto px-4 relative z-10">
+				<div class="max-w-5xl mx-auto text-center">
+					<h1 class="text-4xl md:text-6xl font-primary font-bold text-bone-white mb-6">
+						<span class="bg-gradient-to-r from-mystic-violet via-ember-orange to-mystic-teal bg-clip-text text-transparent">
+							Characters
+						</span>
+					</h1>
+					<p class="text-xl md:text-2xl text-ember-orange font-medium mb-4">
+						Meet the faces of urban fantasy
+					</p>
+					<p class="text-lg text-moon-silver/90 max-w-3xl mx-auto leading-relaxed">
+						From snarky heroines to grumpy heroes, explore the unforgettable characters who bring these supernatural worlds to life. Each one has their own story, secrets, and reasons to keep reading.
+					</p>
+				</div>
+			</div>
+		</section>
+
+		<!-- Characters Grid -->
+		<section class="py-16 bg-dark-surface">
+			<div class="container mx-auto px-4">
+				<div class="max-w-7xl mx-auto">
+					<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+						{charactersWithStats.map((character) => (
+							<a
+								href={`/characters/${character.id}`}
+								class="group block bg-midnight-purple/50 rounded-xl overflow-hidden shadow-lg hover:shadow-mystic transition-all duration-300 hover:-translate-y-2 border border-mystic-violet/20 hover:border-mystic-violet/50"
+							>
+								<!-- Character Image -->
+								<div class="relative aspect-[4/3] overflow-hidden">
+									{character.data.image ? (
+										<img
+											src={character.data.image}
+											alt={`${character.data.name} character artwork`}
+											class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-300"
+										/>
+									) : (
+										<div class="w-full h-full bg-gradient-to-br from-mystic-violet/40 to-midnight-purple flex items-center justify-center">
+											<div class="text-center text-moon-silver">
+												<div class="text-6xl mb-4 opacity-80">👤</div>
+												<div class="text-lg font-bold text-bone-white">{character.data.name}</div>
+											</div>
+										</div>
+									)}
+									<!-- Overlay -->
+									<div class="absolute inset-0 bg-gradient-to-t from-shadow-black/60 to-transparent"></div>
+
+									<!-- Species Badge -->
+									{character.speciesInfo && (
+										<div class="absolute top-3 right-3 px-3 py-1 bg-mystic-violet/80 text-bone-white text-xs font-medium rounded-full backdrop-blur-sm">
+											{character.speciesInfo.data.name}
+										</div>
+									)}
+								</div>
+
+								<!-- Character Info -->
+								<div class="p-6">
+									<h3 class="text-2xl font-primary font-bold text-bone-white mb-3 group-hover:text-ember-orange transition-colors">
+										{character.data.name}
+									</h3>
+
+									{character.data.description && (
+										<p class="text-moon-silver/80 text-sm leading-relaxed mb-4 line-clamp-3">
+											{character.data.description}
+										</p>
+									)}
+
+									<!-- Stats -->
+									<div class="flex items-center justify-between text-sm text-fog-gray">
+										<div class="flex items-center space-x-4">
+											{character.mainBookCount > 0 && (
+												<span class="flex items-center space-x-1">
+													<svg class="w-4 h-4 text-ember-orange" fill="currentColor" viewBox="0 0 20 20">
+														<path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V4.804z"></path>
+													</svg>
+													<span>{character.mainBookCount} {character.mainBookCount === 1 ? 'book' : 'books'}</span>
+												</span>
+											)}
+
+											{character.cameoCount > 0 && (
+												<span class="flex items-center space-x-1">
+													<svg class="w-4 h-4 text-mystic-teal" fill="currentColor" viewBox="0 0 20 20">
+														<path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
+														<path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path>
+													</svg>
+													<span>{character.cameoCount} {character.cameoCount === 1 ? 'cameo' : 'cameos'}</span>
+												</span>
+											)}
+										</div>
+
+										<div class="text-mystic-teal font-medium group-hover:text-ember-orange transition-colors">
+											Learn More &rarr;
+										</div>
+									</div>
+								</div>
+							</a>
+						))}
+					</div>
+
+					{charactersWithStats.length === 0 && (
+						<div class="text-center py-16">
+							<div class="text-6xl mb-4">👤</div>
+							<h3 class="text-2xl font-bold text-bone-white mb-2">No Characters Found</h3>
+							<p class="text-fog-gray">Character profiles are being added soon.</p>
+						</div>
+					)}
+				</div>
+			</div>
+		</section>
+
+		<!-- Browse More CTA -->
+		<section class="py-16 bg-gradient-to-r from-midnight-purple via-shadow-black to-midnight-purple">
+			<div class="container mx-auto px-4 text-center">
+				<div class="max-w-3xl mx-auto space-y-8">
+					<h2 class="text-3xl md:text-4xl font-primary font-bold text-bone-white">
+						Discover Their Stories
+					</h2>
+					<p class="text-lg text-moon-silver/90">
+						Follow these unforgettable characters through their adventures in Gwen DeMarco's paranormal romance novels
+					</p>
+					<div class="flex flex-col sm:flex-row gap-4 justify-center">
+						<a href="/series" class="btn btn-primary btn-lg">
+							Browse Series
+						</a>
+						<a href="/books" class="btn btn-outline btn-lg">
+							View All Books
+						</a>
+					</div>
+				</div>
+			</div>
+		</section>
+	</main>
+</Layout>
+
+<style>
+	.line-clamp-3 {
+		display: -webkit-box;
+		-webkit-line-clamp: 3;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+</style>
