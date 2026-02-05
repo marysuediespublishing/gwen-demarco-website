@@ -851,3 +851,33 @@
   - Verify that updating a book's cover image in /admin
     automatically reflects on the /series page
   - Test with at least one real cover image to confirm the pipeline works
+
+- [x] **T075** - FIX: Series page book cover display - limit to 3, remove stack effect and badge
+  - refs: D001
+  - In src/pages/series.astro, rework the "Book Stack Visualization" section
+  - Currently displays up to 4 rotated/overlapping book covers with a "+N" orange badge
+  - Change slice from .slice(0, 4) to .slice(0, 3) — show max 3 books per series
+  - Remove the fanned/stacked effect (rotation via transform, translation, z-index layering)
+  - Display books in a clean side-by-side or slight overlap layout instead
+  - Remove the "+N" orange circle badge entirely (the series.books.length > 4 block)
+  - Each book image should still pull from book.data.cover (already correct)
+  - Keep the placeholder fallback for books missing a cover image
+  - Keep the hover overlay with book title and "View Book" link
+  - Maintain responsive sizing and aspect-[2/3] container
+  - Match the clean look that Kingdom of Erishum currently has on /series
+  - Test with all series on /series page to confirm clean display
+
+- [x] **T075** - FIX: Series page book cover display - limit to 3, remove stack effect and badge
+  - refs: D001
+  - In src/pages/series.astro, rework the "Book Stack Visualization" section
+  - Currently displays up to 4 rotated/overlapping book covers with a "+N" orange badge
+  - Change slice from .slice(0, 4) to .slice(0, 3) — show max 3 books per series
+  - Remove the fanned/stacked effect (rotation via transform, translation, z-index layering)
+  - Display books in a clean side-by-side or slight overlap layout instead
+  - Remove the "+N" orange circle badge entirely (the series.books.length > 4 block)
+  - Each book image should still pull from book.data.cover (already correct)
+  - Keep the placeholder fallback for books missing a cover image
+  - Keep the hover overlay with book title and "View Book" link
+  - Maintain responsive sizing and aspect-[2/3] container
+  - Match the clean look that Kingdom of Erishum currently has on /series
+  - Test with all series on /series page to confirm clean display

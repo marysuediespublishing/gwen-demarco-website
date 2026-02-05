@@ -20,3 +20,18 @@
 - Reduced individual book width to 140px to fit 3 books nicely
 - Adjusted font sizes and padding in hover overlay for smaller cards
 - Build passes with 63 pages
+
+## Attempt 2
+
+**Approach:** Verify the work is still in place and mark duplicate todo as complete.
+
+**Result:** Success
+
+**Details:**
+- Verified `src/pages/series.astro` still has the correct implementation:
+  - `.slice(0, 3)` on line 185 limits to 3 books
+  - Flexbox side-by-side layout with `-20px` margin overlap
+  - No rotation transforms
+  - No "+N" badge
+- Build passes with 63 pages
+- This is a duplicate todo entry that should be marked complete
