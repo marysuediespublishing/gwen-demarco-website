@@ -36,7 +36,7 @@ const seriesBooks = allBooks
     const bookSeries = book.data.series;
     return bookSeries === seriesItem.data.title ||
            bookSeries === seriesItem.id ||
-           bookSeries?.toLowerCase().replace(/\s+/g, '-') === seriesItem.id;
+           bookSeries?.toLowerCase().replace(/&/g, 'and').replace(/\s+/g, '-') === seriesItem.id;
   })
   .map(book => ({
     ...book,

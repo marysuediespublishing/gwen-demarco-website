@@ -805,3 +805,18 @@
   - Pull cover image paths from each book's frontmatter (cover field)
   - Handle missing covers gracefully with placeholder
   - Test on /series page that all series show their book covers stacked
+
+- [x] **T093** - FIX: Auras & Embers series missing book cover images on /series page
+  - refs: D003, D006
+  - The /series page shows stacked book covers for Kingdom of Erishum and Sophie Feegle, but Auras & Embers shows 0 images
+  - Debug steps:
+    1. Check src/content/books/gideon-bean.md and spirit-marked.md frontmatter
+    2. Verify they have a `cover` field with a valid image path
+    3. Verify the `series` field matches the series slug exactly (should be "auras-and-embers")
+    4. Check if cover images exist at the paths specified in frontmatter
+    5. If images are missing, add them via /admin or copy to public/images/
+  - Likely causes:
+    - Cover images not uploaded for Gideon Bean and Spirit Marked
+    - Series slug mismatch (e.g., "auras-embers" vs "auras-and-embers")
+    - Image paths in frontmatter don't match actual file locations
+  - After fix, verify both Auras & Embers books display stacked covers on /series page
