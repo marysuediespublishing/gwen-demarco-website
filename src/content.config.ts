@@ -92,6 +92,7 @@ const characters = defineCollection({
     cameos: z.array(z.string()).default([]),
     image: z.string().optional(),
     species: z.string().optional(),
+    featured: z.boolean().default(false),
   }),
 });
 

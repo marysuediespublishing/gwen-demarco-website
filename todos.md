@@ -948,3 +948,20 @@
   - Test in /admin that the featured toggle appears on character entries
   - Test on /characters page that featured characters display first
     within their series group with visual distinction
+
+- [x] **T102** - FIX: Featured characters not sorting to top within series groups
+  - refs: D001, T099, T100, T101
+  - On /characters page, featured characters (e.g., Sophie Feegle, Mac Volpes)
+    should display before non-featured characters (e.g., Ace) within their series group
+  - In src/pages/characters.astro, find the character sorting logic within each series group
+  - Update the sort to prioritize featured: true characters first:
+```javascript
+    characters.sort((a, b) => {
+      if (a.data.featured && !b.data.featured) return -1;
+      if (!a.data.featured && b.data.featured) return 1;
+      return (a.data.seriesOrder || 999) - (b.data.seriesOrder || 999);
+    });
+```
+  - This mirrors the same pattern used for series sorting on the /series page
+  - Verify Sophie Feegle and Mac Volpes appear before Ace in the Sophie Feegle section
+  - Test with other series groups to confirm featured sorting works across all groups
