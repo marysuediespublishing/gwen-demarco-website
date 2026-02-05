@@ -785,3 +785,23 @@
     - Check for duplicate React installations with `npm ls react`
   - After fixing, the newsletter modal should render and the subscribe button should work
   - Test that clicking "Join the Supernatural Side" opens the popup without console errors
+
+
+- [x] **T092** - ENHANCE: Display stacked book covers on series listing page
+  - refs: D003, D004
+  - On the /series page, each series card should show the cover images of all books in that series
+  - Covers should be "stacked" visually (overlapping or fanned out) to show multiple books at a glance
+  - Implementation steps:
+    1. In the series listing page (src/pages/series/index.astro or similar), query the books collection
+    2. For each series, filter books that belong to that series
+    3. Sort books by series order/number
+    4. Display book covers in a stacked arrangement (e.g., offset positioning, slight rotation, or cascading overlap)
+  - Design considerations:
+    - Stack 3-5 covers max to avoid clutter
+    - Use CSS transforms for offset/overlap effect (e.g., translateX, rotate)
+    - Ensure the first book in the series is most prominent/on top
+    - Add subtle shadow to create depth
+    - Keep it responsive for mobile
+  - Pull cover image paths from each book's frontmatter (cover field)
+  - Handle missing covers gracefully with placeholder
+  - Test on /series page that all series show their book covers stacked

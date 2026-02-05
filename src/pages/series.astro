@@ -191,14 +191,22 @@ const sortedSeries = seriesWithBooks.sort((a, b) => {
 													zIndex: 4 - bookIndex
 												}}
 											>
-												{/* Book cover placeholder */}
-												<div class="w-full h-full bg-gradient-to-br from-mystic-violet/40 to-midnight-purple rounded-xl shadow-2xl flex items-center justify-center border border-mystic-violet/50 transition-all duration-300 hover:border-ember-orange/70 hover:shadow-mystic">
-													<div class="text-center text-moon-silver p-4">
-														<div class="text-5xl mb-3 opacity-70">📖</div>
-														<div class="text-sm font-bold text-bone-white line-clamp-2">{book.data.title}</div>
-														<div class="text-xs text-ember-orange mt-1">Book {book.data.seriesOrder}</div>
+												{book.data.cover ? (
+													<img
+														src={book.data.cover}
+														alt={book.data.title}
+														class="w-full h-full object-cover rounded-xl shadow-2xl border border-mystic-violet/50 transition-all duration-300 hover:border-ember-orange/70 hover:shadow-mystic"
+														loading="lazy"
+													/>
+												) : (
+													<div class="w-full h-full bg-gradient-to-br from-mystic-violet/40 to-midnight-purple rounded-xl shadow-2xl flex items-center justify-center border border-mystic-violet/50 transition-all duration-300 hover:border-ember-orange/70 hover:shadow-mystic">
+														<div class="text-center text-moon-silver p-4">
+															<div class="text-5xl mb-3 opacity-70">📖</div>
+															<div class="text-sm font-bold text-bone-white line-clamp-2">{book.data.title}</div>
+															<div class="text-xs text-ember-orange mt-1">Book {book.data.seriesOrder}</div>
+														</div>
 													</div>
-												</div>
+												)}
 
 												<!-- Book info overlay on hover -->
 												<div class="absolute inset-0 bg-shadow-black/95 opacity-0 hover:opacity-100 transition-opacity duration-300 rounded-xl flex items-center justify-center p-4">
