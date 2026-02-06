@@ -65,6 +65,17 @@ collections:
         options: ["published", "pre-order", "upcoming", "draft"]
         default: "published"
       - { label: "Featured Book", name: "featured", widget: "boolean", default: false }
+      - label: "Featured on Homepage"
+        name: "featured_homepage"
+        widget: "boolean"
+        default: false
+        required: false
+        hint: "Display this book as the hero feature on the homepage"
+      - label: "Featured Text"
+        name: "featured_text"
+        widget: "text"
+        required: false
+        hint: "Custom text/excerpt displayed in the homepage hero section for this book"
       - label: "Languages Available"
         name: "languages"
         widget: "list"

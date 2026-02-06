@@ -54,8 +54,11 @@ const recentPosts = allPosts
 // Get Sophie and The Odd Ones cover for Start Reading CTA
 const sophieBook = allBooks.find(b => b.id === 'sophie-and-the-odd-ones');
 
-// Get latest book with hero_image for homepage hero banner
-const latestHeroBook = allBooks
+// Get featured homepage book (featured_homepage: true), fallback to latest with hero_image, then latest published
+const featuredHomepageBook = allBooks
+	.filter(book => book.data.featured_homepage && book.data.status === 'published')
+	.sort((a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime())[0];
+const latestHeroBook = featuredHomepageBook || allBooks
 	.filter(book => book.data.hero_image && book.data.status === 'published')
 	.sort((a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime())[0];
 // Fallback: latest published book if none have hero_image
@@ -133,7 +136,7 @@ function getBookTitle(bookSlug: string | undefined): string {
 
 							{/* Teaser/description */}
 							<p class="text-lg text-moon-silver/90 leading-relaxed max-w-xl mx-auto lg:mx-0">
-								{latestBook.data.description?.split('.').slice(0, 2).join('.').trim()}.
+								{latestBook.data.featured_text || (latestBook.data.description?.split('.').slice(0, 2).join('.').trim() + '.')}
 							</p>
 
 							{/* Rating */}

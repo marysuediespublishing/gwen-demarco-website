@@ -1628,3 +1628,31 @@
 
   - Test that the text feels balanced — not too far left, not too far right
   - Test readability of all text including title, tagline, and CTA buttons
+
+- [x] **T133** - ENHANCE: Add "Featured on Homepage" option with text field to Book admin
+  - refs: D001, T129
+  - In public/admin/config.yml, add two new fields to the books collection
+    directly below the existing featured field:
+```yaml
+    - name: featured_homepage
+      label: Featured on Homepage
+      widget: boolean
+      default: false
+      required: false
+      hint: "Display this book as the hero feature on the homepage"
+    - name: featured_text
+      label: Featured Text
+      widget: text
+      required: false
+      hint: "Custom text/excerpt displayed in the homepage hero section for this book"
+```
+  - Update the Astro content collection schema to include both new fields
+  - Update src/pages/index.astro hero section (from T129) to use these fields:
+    - Instead of determining latest book by publication date,
+      look for the book with featured_homepage: true
+    - Use featured_text as the tagline/excerpt displayed in the hero
+    - If multiple books have featured_homepage: true, use the most recent one
+    - Fall back to latest book by publication date if none are marked
+  - Test in /admin that both fields appear on book entries under Featured Book
+  - Test that toggling featured_homepage and adding featured_text
+    updates the homepage hero content
