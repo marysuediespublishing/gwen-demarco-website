@@ -1514,3 +1514,15 @@
     and link correctly
   - Test on book pages with no languages to confirm section is hidden
   - Verify the Share section is fully removed with no leftover markup
+
+- [x] **T127** - FIX: Remove Home link from navigation, make site logo/name link to homepage
+  - refs: D001
+  - Find the nav component (likely in src/components/ or src/layouts/)
+  - Remove the "Home" link from the navigation menu items
+  - Ensure the "Gwen DeMarco" site name/logo in the header is wrapped
+    in an <a href="/"> tag linking to the homepage
+  - If it already links to home, just confirm it works and remove the
+    separate Home nav item
+  - Test that clicking "Gwen DeMarco" in the header navigates to /
+  - Test on all pages to confirm consistent behavior
+  - Verify mobile/hamburger menu also removes Home and retains logo link
