@@ -1809,3 +1809,37 @@
 
   - Test gradient darkness with different hero images for readability
   - Test series title hover on desktop to confirm white text on orange background
+
+- [x] **T139** - FIX: Remove visible edge lines on hero text gradient
+  - refs: D001, T137, T138
+  - In src/pages/index.astro, the radial gradient behind the hero text
+    currently has visible hard edges/lines where the gradient ends
+  - Update the gradient to ensure it fades completely smoothly to
+    fully transparent (0% opacity) at all edges with no abrupt cutoff
+  - Check for:
+    - The radial gradient ending at transparent — ensure the final stop
+      is truly rgba(0,0,0,0) or transparent at 100%
+    - Enough gradient stops for a smooth transition — add intermediate
+      stops if needed to avoid banding
+    - The ::before pseudo-element or overlay div may have a border,
+      box-shadow, or background-clip causing a visible edge — remove any
+    - The container's overflow or border-radius could clip the gradient
+      creating a line — set overflow: visible if needed
+  - Example smoother gradient with more stops:
+```css
+    radial-gradient(
+      ellipse at center,
+      rgba(0, 0, 0, 0.95) 0%,
+      rgba(0, 0, 0, 0.9) 15%,
+      rgba(0, 0, 0, 0.75) 30%,
+      rgba(0, 0, 0, 0.55) 45%,
+      rgba(0, 0, 0, 0.3) 60%,
+      rgba(0, 0, 0, 0.12) 75%,
+      rgba(0, 0, 0, 0.03) 90%,
+      transparent 100%
+    );
+```
+  - Also increase the inset on the pseudo-element if the gradient is
+    being cut off by the container bounds (e.g., inset: -50% -40%)
+  - Test on homepage that there are no visible lines or edges anywhere
+    around the gradient — it should blend seamlessly into the hero image
