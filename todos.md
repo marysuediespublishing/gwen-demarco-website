@@ -1362,3 +1362,26 @@
   - Test on multiple series pages to confirm all three sections display correctly
   - Test links go to correct character, location, and artwork pages
   - Test artwork thumbnail hover/click behavior matches /artwork page
+
+- [x] **T122** - FIX: Move series markdown content to directly below World Building notes
+  - refs: D001
+  - In src/pages/series/[...slug].astro, find the "Series Content (Markdown Body)" section
+  - Currently it renders as a separate full-width section below the hero area:
+```astro
+    {Content && (
+      <section class="py-16 bg-dark-surface">
+        ...
+        <Content />
+        ...
+      </section>
+    )}
+```
+  - Move the Content rendering to inside the right column (lg:col-span-2),
+    directly below the World Building card
+  - Remove the separate full-width section wrapper
+  - Style the content block to fit within the right column layout
+    (keep prose prose-invert styling but remove the separate section padding)
+  - Ensure it appears after World Building notes and before the
+    Reading Order and CTA buttons
+  - Test on series pages that have markdown body content
+  - Test on series pages with no body content to confirm no empty space appears

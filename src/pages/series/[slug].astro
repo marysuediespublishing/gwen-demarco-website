@@ -364,6 +364,13 @@ try {
                   </div>
                 )}
 
+                <!-- Series Content (Markdown Body) -->
+                {Content && (
+                  <div class="prose prose-lg prose-invert">
+                    <Content />
+                  </div>
+                )}
+
                 <!-- Reading Order -->
                 {seriesItem.data.readingOrder && seriesItem.data.readingOrder.length > 0 && (
                   <div class="card p-6">
@@ -417,17 +424,6 @@ try {
         </div>
       </div>
     </section>
-
-    <!-- Series Content (Markdown Body) -->
-    {Content && (
-      <section class="py-16 bg-dark-surface">
-        <div class="container mx-auto px-4">
-          <div class="max-w-4xl mx-auto prose prose-lg prose-invert">
-            <Content />
-          </div>
-        </div>
-      </section>
-    )}
 
     <!-- Artwork Sample Section -->
     {seriesArtwork.length > 0 && (
