@@ -97,9 +97,9 @@ function getBookTitle(bookSlug: string | undefined): string {
 					<div class="absolute inset-0 bg-gradient-night"></div>
 				)}
 
-				{/* Dark gradient overlays for text readability */}
-				<div class="absolute inset-0 bg-gradient-to-r from-shadow-black via-shadow-black/85 to-shadow-black/40 lg:to-transparent"></div>
-				<div class="absolute inset-0 bg-gradient-to-t from-shadow-black via-transparent to-shadow-black/60"></div>
+				{/* Dark gradient overlays for text readability - concentrated behind text area */}
+				<div class="absolute inset-0 bg-gradient-to-r from-shadow-black/40 via-shadow-black/80 to-shadow-black/40 lg:from-transparent lg:via-shadow-black/85 lg:to-shadow-black/50"></div>
+				<div class="absolute inset-0 bg-gradient-to-t from-shadow-black via-transparent to-shadow-black/50"></div>
 
 				{/* Subtle fog layer */}
 				<div class="absolute inset-0 overflow-hidden pointer-events-none">
@@ -107,21 +107,23 @@ function getBookTitle(bookSlug: string | undefined): string {
 				</div>
 
 				<div class="container mx-auto px-4 relative z-10 py-20 lg:py-0">
-					<div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center max-w-7xl mx-auto">
-						{/* Left: Text content */}
-						<div class="text-center lg:text-left space-y-6 order-2 lg:order-1">
-							{/* Series badge */}
+					<div class="grid grid-cols-1 lg:grid-cols-[2fr_3fr_2fr] gap-8 lg:gap-12 items-center max-w-7xl mx-auto">
+						{/* Left: Text content - shifted right via grid column start */}
+						<div class="text-center lg:text-left space-y-6 order-2 lg:order-1 lg:col-start-2">
+							{/* Series badge - links to series page */}
 							{latestBook.data.series && (
 								<div class="flex justify-center lg:justify-start">
-									<span class="badge badge-primary text-sm px-4 py-1.5">
+									<a href={`/series/${latestBook.data.series}`} class="badge badge-primary text-sm px-4 py-1.5 hover:bg-ember-orange hover:border-ember-orange transition-colors duration-200">
 										{getSeriesDisplay(latestBook.data.series)}
-									</span>
+									</a>
 								</div>
 							)}
 
-							{/* Book title */}
-							<h1 class="text-4xl sm:text-5xl lg:text-6xl font-primary font-bold text-bone-white leading-tight">
-								{latestBook.data.title}
+							{/* Book title - links to book page */}
+							<h1 class="text-4xl sm:text-5xl lg:text-6xl font-primary font-bold leading-tight">
+								<a href={`/books/${latestBook.id}`} class="text-bone-white hover:text-ember-orange transition-colors duration-200">
+									{latestBook.data.title}
+								</a>
 							</h1>
 
 							{/* Author name */}
@@ -188,7 +190,7 @@ function getBookTitle(bookSlug: string | undefined): string {
 						</div>
 
 						{/* Right: Book cover with 3D effect */}
-						<div class="flex justify-center order-1 lg:order-2">
+						<div class="flex justify-center order-1 lg:order-2 lg:col-start-3">
 							<a href={`/books/${latestBook.id}`} class="group relative">
 								<div class="relative w-56 sm:w-64 lg:w-72 xl:w-80 transform perspective-1000 group-hover:scale-105 transition-transform duration-500">
 									{/* Shadow/reflection underneath */}

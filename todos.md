@@ -1580,3 +1580,32 @@
     3. Featured Books
     4. Rest of existing homepage content
   - Test that the homepage feels cohesive with the new hero + stats flow
+
+- [x] **T131** - FIX: Adjust homepage hero layout, gradient, and add title links
+  - refs: D001, T129
+  - In src/pages/index.astro, update the hero section:
+
+  **1. Shift featured book text/copy to the right:**
+  - Move the left-side text content (title, tagline, CTAs) further right
+  - Add more left padding or adjust grid columns so the text starts
+    more toward center-left, leaving more of the hero image visible
+    on the far left
+
+  **2. Adjust the dark gradient overlay:**
+  - Reduce the fade/gradient on the far left so more of the hero
+    background image is visible on that side
+  - Keep the gradient darker directly behind the text area for readability
+  - The gradient should be concentrated behind the text rather than
+    covering the full left half of the image
+  - Consider a more targeted gradient shape (e.g., radial or narrower
+    linear gradient) instead of a full left-to-right sweep
+
+  **3. Make book title and series title clickable links:**
+  - Book title should link to the individual book page (/books/[book-slug])
+  - Series title should link to the series page (/series/[series-slug])
+  - Add hover styling consistent with the site (e.g., hover:text-ember-orange
+    or subtle underline, transition-colors)
+
+  - Test that the hero image is more visible on the left edge
+  - Test that text remains readable against the darker gradient behind it
+  - Test both title links navigate to the correct pages
