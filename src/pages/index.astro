@@ -328,56 +328,78 @@ function getBookTitle(bookSlug: string | undefined): string {
 		</section>
 
 		<!-- Featured Series Section -->
-		<section class="py-16 px-4 bg-dark-surface">
-			<div class="container mx-auto">
-				<div class="text-center mb-12">
-					<h2 class="font-primary text-3xl md:text-4xl font-bold text-bone-white mb-4">
-						Featured Series
-					</h2>
-					<p class="text-lg text-fog-gray max-w-2xl mx-auto">
-						Dive into supernatural worlds filled with snarky heroines, grumpy heroes, and the magic of found family
-					</p>
+		{featuredSeries.length > 0 && (
+			<section class="py-16 px-4 bg-dark-surface">
+				<div class="container mx-auto">
+					<div class="text-center mb-12">
+						<h2 class="font-primary text-3xl md:text-4xl font-bold text-bone-white mb-4">
+							Featured Series
+						</h2>
+						<p class="text-lg text-fog-gray max-w-2xl mx-auto">
+							Dive into supernatural worlds filled with snarky heroines, grumpy heroes, and the magic of found family
+						</p>
+					</div>
+
+					<div class={`grid grid-cols-1 sm:grid-cols-2 ${featuredSeries.length >= 3 ? 'lg:grid-cols-3' : ''} gap-6 sm:gap-8 max-w-5xl mx-auto`}>
+						{featuredSeries.map((series, index) => {
+							// Alternate colors for visual variety
+							const colorSchemes = [
+								{ gradient: 'from-mystic-violet to-ember-orange', shadow: 'shadow-mystic', hoverShadow: 'group-hover:shadow-ember', titleColor: 'text-ember-orange', hoverTitleColor: 'group-hover:text-mystic-teal' },
+								{ gradient: 'from-mystic-teal to-mystic-violet', shadow: 'shadow-teal', hoverShadow: 'group-hover:shadow-mystic', titleColor: 'text-mystic-teal', hoverTitleColor: 'group-hover:text-ember-orange' },
+								{ gradient: 'from-ember-orange to-mystic-violet', shadow: 'shadow-ember', hoverShadow: 'group-hover:shadow-mystic', titleColor: 'text-ember-orange', hoverTitleColor: 'group-hover:text-mystic-teal' },
+							];
+							const colors = colorSchemes[index % colorSchemes.length];
+
+							// Icons based on series characteristics
+							const getSeriesIcon = (title: string) => {
+								if (title.toLowerCase().includes('sophie') || title.toLowerCase().includes('feegle')) return '👻';
+								if (title.toLowerCase().includes('erishum') || title.toLowerCase().includes('kingdom')) return '👑';
+								if (title.toLowerCase().includes('aura') || title.toLowerCase().includes('ember')) return '🔥';
+								if (title.toLowerCase().includes('witch')) return '🧙‍♀️';
+								return '📚';
+							};
+
+							// Badge text based on completion status
+							const getBadgeInfo = (status: string | undefined, bookCount: number | undefined) => {
+								if (status === 'complete') {
+									if (bookCount === 3) return { text: 'Trilogy', class: 'badge-secondary' };
+									return { text: `${bookCount || '?'} Books`, class: 'badge-primary' };
+								}
+								return { text: 'Ongoing', class: 'badge-outline' };
+							};
+							const badge = getBadgeInfo(series.data.completionStatus, series.data.bookCount);
+
+							// Last item spans 2 columns on sm if odd number of items
+							const isLastOdd = index === featuredSeries.length - 1 && featuredSeries.length % 2 === 1;
+
+							return (
+								<a
+									href={`/series/${series.id}`}
+									class={`card card-hover p-5 sm:p-6 text-center group ${isLastOdd ? 'sm:col-span-2 lg:col-span-1' : ''}`}
+								>
+									<div class={`w-14 h-14 sm:w-16 sm:h-16 mx-auto mb-4 bg-gradient-to-br ${colors.gradient} rounded-full flex items-center justify-center ${colors.shadow} ${colors.hoverShadow} transition-shadow duration-300`}>
+										<span class="text-xl sm:text-2xl">{getSeriesIcon(series.data.title)}</span>
+									</div>
+									<h3 class={`font-primary text-lg sm:text-xl font-bold ${colors.titleColor} mb-2 ${colors.hoverTitleColor} transition-colors`}>
+										{series.data.title.replace(' Series', '')}
+									</h3>
+									<p class="text-fog-gray text-sm sm:text-base mb-4 line-clamp-3">
+										{series.data.description?.split('.').slice(0, 2).join('.') + '.' || 'Explore this supernatural series.'}
+									</p>
+									<span class={`badge ${badge.class}`}>{badge.text}</span>
+								</a>
+							);
+						})}
+					</div>
+
+					<div class="text-center mt-12">
+						<a href="/series" class="btn btn-outline btn-lg px-8 py-4">
+							View All Series
+						</a>
+					</div>
 				</div>
-
-				<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 max-w-5xl mx-auto">
-					<!-- Sophie Feegle -->
-					<a href="/series/sophie-feegle" class="card card-hover p-5 sm:p-6 text-center group">
-						<div class="w-14 h-14 sm:w-16 sm:h-16 mx-auto mb-4 bg-gradient-to-br from-mystic-violet to-ember-orange rounded-full flex items-center justify-center shadow-mystic group-hover:shadow-ember transition-shadow duration-300">
-							<span class="text-xl sm:text-2xl">&#128123;</span>
-						</div>
-						<h3 class="font-primary text-lg sm:text-xl font-bold text-ember-orange mb-2 group-hover:text-mystic-teal transition-colors">Sophie Feegle</h3>
-						<p class="text-fog-gray text-sm sm:text-base mb-4">Urban fantasy set in San Francisco's supernatural underbelly. Shifters, ogres, and one very determined morgue assistant.</p>
-						<span class="badge badge-primary">5 Books</span>
-					</a>
-
-					<!-- Kingdom of Erishum -->
-					<a href="/series/kingdom-of-erishum" class="card card-hover p-5 sm:p-6 text-center group">
-						<div class="w-14 h-14 sm:w-16 sm:h-16 mx-auto mb-4 bg-gradient-to-br from-mystic-teal to-mystic-violet rounded-full flex items-center justify-center shadow-teal group-hover:shadow-mystic transition-shadow duration-300">
-							<span class="text-xl sm:text-2xl">&#128081;</span>
-						</div>
-						<h3 class="font-primary text-lg sm:text-xl font-bold text-mystic-teal mb-2 group-hover:text-ember-orange transition-colors">Kingdom of Erishum</h3>
-						<p class="text-fog-gray text-sm sm:text-base mb-4">Epic fantasy trilogy with street-level heroism, ancient creatures, and impossible odds.</p>
-						<span class="badge badge-secondary">Trilogy</span>
-					</a>
-
-					<!-- Auras & Embers -->
-					<a href="/series/auras-and-embers" class="card card-hover p-5 sm:p-6 text-center group sm:col-span-2 lg:col-span-1">
-						<div class="w-14 h-14 sm:w-16 sm:h-16 mx-auto mb-4 bg-gradient-to-br from-ember-orange to-mystic-violet rounded-full flex items-center justify-center shadow-ember group-hover:shadow-mystic transition-shadow duration-300">
-							<span class="text-xl sm:text-2xl">&#128293;</span>
-						</div>
-						<h3 class="font-primary text-lg sm:text-xl font-bold text-ember-orange mb-2 group-hover:text-mystic-teal transition-colors">Auras & Embers</h3>
-						<p class="text-fog-gray text-sm sm:text-base mb-4">Urban fantasy with auramancers, phoenix shifters, and dangerous magic that demands a price.</p>
-						<span class="badge badge-outline">Ongoing</span>
-					</a>
-				</div>
-
-				<div class="text-center mt-12">
-					<a href="/series" class="btn btn-outline btn-lg px-8 py-4">
-						View All Series
-					</a>
-				</div>
-			</div>
-		</section>
+			</section>
+		)}
 
 		<!-- Why Readers Love Section -->
 		<section class="py-16 px-4 bg-bg-secondary">

@@ -1203,3 +1203,19 @@
   - If book is a relation field (per T104), the summary may need to use
     the slug value — adjust display accordingly
   - Test in /admin that the artwork list shows "Artwork Title - Book Title"
+
+- [x] **T114** - FIX: Homepage Featured Series section should only show series marked as featured
+  - refs: D001
+  - Find the homepage template (likely src/pages/index.astro)
+  - Locate the "Featured Series" section
+  - Update the query to filter series where featured === true:
+```javascript
+    const featuredSeries = allSeries.filter(series => series.data.featured === true);
+```
+  - Currently it may be showing all series or using a different criteria
+    (e.g., slice, hardcoded list, or sort-based)
+  - Only series with featured: true set in the Series admin should appear
+  - If no series are marked as featured, either hide the section entirely
+    or show a fallback message
+  - Test by toggling the featured flag on different series in /admin
+    and confirming the homepage updates accordingly
