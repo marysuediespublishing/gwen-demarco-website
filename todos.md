@@ -1385,3 +1385,38 @@
     Reading Order and CTA buttons
   - Test on series pages that have markdown body content
   - Test on series pages with no body content to confirm no empty space appears
+
+- [x] **T123** - ENHANCE: Add Locations section and Artwork sample to individual book pages
+  - refs: D001, T104, T108, T115
+  - In the individual book page template (likely src/pages/books/[...slug].astro),
+    make two additions:
+
+  **1. Locations section under Book Details:**
+  - Add a "Locations" section in the Book Details area
+    (near the existing Settings, Species, Characters sections)
+  - Fetch locations collection, filter for locations associated with this book
+    (match via the book's settings/locations field or via location's book/series field)
+  - Display each location name as a link to /locations/[location-slug]
+  - Style consistently with how Species and Characters are displayed
+    in the same section
+  - Handle edge case where a location has no matching page
+    (display as plain text without a link)
+  - Hide section if no locations match the book
+
+  **2. Artwork sample section below "More from this Series":**
+  - Add a new section at the bottom of the page, under the existing
+    "More from this Series" section
+  - Fetch artwork collection, filter for artwork associated with this book
+    (match via the artwork's book field)
+  - Show up to 5 thumbnails using focal point data for object-position
+  - Featured artwork first, then remaining
+  - Display thumbnails in a row (grid-cols-5 or flex, responsive)
+  - Include click-to-view-full-image behavior matching /artwork page
+  - Below thumbnails, add a "View All Artwork →" link to the artwork
+    series page (/artwork/[series-slug])
+  - Hide section entirely if no artwork exists for this book
+
+  - Test on multiple book pages to confirm both sections display correctly
+  - Test location links go to correct individual location pages
+  - Test artwork thumbnail hover/click behavior matches /artwork page
+  - Test books with no locations or artwork to confirm sections are hidden
