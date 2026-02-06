@@ -1273,3 +1273,17 @@
     to non-featured characters — same styling, no visual distinction
   - Test on book pages that have both featured and non-featured characters
     to confirm they all look the same, with featured listed first
+
+- [x] **T118** - ENHANCE: Add Facebook and Instagram links to Contact page
+  - refs: D001
+  - In the Contact page template (likely src/pages/contact.astro)
+  - Find the "Find Me Online" section
+  - Add Facebook link: https://www.facebook.com/GwenDeMarcoAuthor
+  - Add Instagram link: http://instagram.com/gwendemarcoauthor
+  - Style consistently with any existing social links in that section
+    (matching icons, hover effects, layout)
+  - Use appropriate social media icons (Facebook and Instagram)
+    - Check if the site already uses an icon library (e.g., SVG icons, lucide, etc.)
+    - Match the icon style of any existing social links
+  - Test that both links open in a new tab (target="_blank" rel="noopener noreferrer")
+  - Test on /contact page that links display correctly and are clickable
