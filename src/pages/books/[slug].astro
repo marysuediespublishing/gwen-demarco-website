@@ -592,58 +592,6 @@ const heatLevelDisplay: Record<string, { label: string; color: string }> = {
       </section>
     )}
 
-    <!-- Similar Books -->
-    {similarBooks.length > 0 && (
-      <section class="py-16 bg-dark-surface">
-        <div class="container mx-auto px-4">
-          <div class="text-center mb-12">
-            <h2 class="text-3xl md:text-4xl font-primary font-bold text-bone-white mb-4">
-              Readers Also Enjoyed
-            </h2>
-            <p class="text-lg text-fog-gray">
-              Books featuring similar supernatural creatures and themes
-            </p>
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-6xl mx-auto">
-            {similarBooks.map((similarBook) => (
-              <a href={`/books/${similarBook.slug}`} class="card card-hover group p-4">
-                {similarBook.data.cover ? (
-                  <img
-                    src={similarBook.data.cover}
-                    alt={`${similarBook.data.title} book cover`}
-                    class="w-full aspect-[2/3] object-cover rounded-lg mb-3"
-                    width="300"
-                    height="450"
-                    loading="lazy"
-                  />
-                ) : (
-                  <div class="w-full aspect-[2/3] bg-gradient-to-br from-mystic-violet/20 to-midnight-purple rounded-lg mb-3 flex items-center justify-center border border-mystic-violet/30 group-hover:border-ember-orange/50 transition-colors">
-                    <span class="text-3xl opacity-60">📖</span>
-                  </div>
-                )}
-
-                {similarBook.data.series && (
-                  <span class="badge badge-outline text-xs mb-2">{similarBook.data.series}</span>
-                )}
-
-                <h3 class="font-primary text-lg font-bold text-ember-orange mb-1 group-hover:text-mystic-teal transition-colors line-clamp-2">
-                  {similarBook.data.title}
-                </h3>
-
-                {similarBook.data.rating && (
-                  <div class="flex items-center space-x-1">
-                    <span class="text-ember-orange text-sm">★</span>
-                    <span class="text-moon-silver text-xs">{similarBook.data.rating}</span>
-                  </div>
-                )}
-              </a>
-            ))}
-          </div>
-        </div>
-      </section>
-    )}
-
     <!-- Book Artwork Section -->
     {bookArtwork.length > 0 && (
       <section class="py-16 bg-bg-secondary">
@@ -693,6 +641,58 @@ const heatLevelDisplay: Record<string, { label: string; color: string }> = {
                 </a>
               </div>
             )}
+          </div>
+        </div>
+      </section>
+    )}
+
+    <!-- Similar Books -->
+    {similarBooks.length > 0 && (
+      <section class="py-16 bg-dark-surface">
+        <div class="container mx-auto px-4">
+          <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-primary font-bold text-bone-white mb-4">
+              Readers Also Enjoyed
+            </h2>
+            <p class="text-lg text-fog-gray">
+              Books featuring similar supernatural creatures and themes
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-6xl mx-auto">
+            {similarBooks.map((similarBook) => (
+              <a href={`/books/${similarBook.slug}`} class="card card-hover group p-4">
+                {similarBook.data.cover ? (
+                  <img
+                    src={similarBook.data.cover}
+                    alt={`${similarBook.data.title} book cover`}
+                    class="w-full aspect-[2/3] object-cover rounded-lg mb-3"
+                    width="300"
+                    height="450"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div class="w-full aspect-[2/3] bg-gradient-to-br from-mystic-violet/20 to-midnight-purple rounded-lg mb-3 flex items-center justify-center border border-mystic-violet/30 group-hover:border-ember-orange/50 transition-colors">
+                    <span class="text-3xl opacity-60">📖</span>
+                  </div>
+                )}
+
+                {similarBook.data.series && (
+                  <span class="badge badge-outline text-xs mb-2">{similarBook.data.series}</span>
+                )}
+
+                <h3 class="font-primary text-lg font-bold text-ember-orange mb-1 group-hover:text-mystic-teal transition-colors line-clamp-2">
+                  {similarBook.data.title}
+                </h3>
+
+                {similarBook.data.rating && (
+                  <div class="flex items-center space-x-1">
+                    <span class="text-ember-orange text-sm">★</span>
+                    <span class="text-moon-silver text-xs">{similarBook.data.rating}</span>
+                  </div>
+                )}
+              </a>
+            ))}
           </div>
         </div>
       </section>

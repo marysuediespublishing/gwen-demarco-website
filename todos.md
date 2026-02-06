@@ -1420,3 +1420,18 @@
   - Test location links go to correct individual location pages
   - Test artwork thumbnail hover/click behavior matches /artwork page
   - Test books with no locations or artwork to confirm sections are hidden
+
+- [x] **T124** - FIX: Move artwork section above "Readers Also Enjoy" on individual book pages
+  - refs: D001, T123
+  - In the individual book page template (likely src/pages/books/[...slug].astro)
+  - Find the artwork sample section added by T123
+  - Move it to appear above the "Readers Also Enjoy" section
+  - Keep all artwork functionality the same (5 thumbnails, focal point cropping,
+    click to view full image, "View All Artwork →" link)
+  - Verify the page section order is:
+    1. Book hero/details
+    2. More from this Series
+    3. Artwork sample
+    4. Readers Also Enjoy
+    5. Newsletter CTA (if present)
+  - Test on book pages with and without artwork to confirm correct placement
