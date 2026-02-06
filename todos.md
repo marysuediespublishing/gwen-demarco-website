@@ -1565,7 +1565,7 @@
   - Test with the newest book to confirm hero_image displays as background
     and book cover displays prominently
 
-- [ ] **T130** - FIX: Move author stats row below the hero section on homepage
+- [x] **T130** - FIX: Move author stats row below the hero section on homepage
   - refs: D001, T129
   - In src/pages/index.astro, find the stats row (Books Published, Pages Read,
     Reader Ratings, Series)
