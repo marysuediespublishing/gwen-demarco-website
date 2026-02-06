@@ -1493,3 +1493,24 @@
     - Multiple languages can be added via the list widget
     - Each language entry has a dropdown and a URL input
     - Entries save and persist correctly
+
+- [x] **T126** - FIX: Replace Share links with "Available In" languages section on book pages
+  - refs: D001, T125
+  - In the individual book page template (likely src/pages/books/[...slug].astro)
+  - Find the Share section with links to X, Facebook, and Pinterest
+  - Remove the Share section entirely
+  - Replace it with an "Available In:" section that lists languages
+    from the book's languages field (added in T125)
+  - For each language entry:
+    - Display the language name as clickable text
+    - Link to the URL stored for that language
+    - Open in new tab (target="_blank" rel="noopener noreferrer")
+    - If a language has no URL, display as plain text (not clickable)
+  - Style language links consistently with the rest of the Book Details
+    section (e.g., badge style, comma-separated links, or inline list)
+  - Add hover effect matching site style (e.g., hover:text-ember-orange)
+  - If the book has no languages added, hide the section entirely
+  - Test on book pages with multiple languages to confirm all display
+    and link correctly
+  - Test on book pages with no languages to confirm section is hidden
+  - Verify the Share section is fully removed with no leftover markup
