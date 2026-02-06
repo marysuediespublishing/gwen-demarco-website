@@ -22,11 +22,6 @@ const sortedBooks = books.sort((a, b) =>
 // Get featured books
 const featuredBooks = books.filter(book => book.data.featured);
 
-// Get latest releases (last 6 months)
-const sixMonthsAgo = new Date();
-sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
-const latestReleases = books.filter(book => new Date(book.data.pubDate) > sixMonthsAgo);
-
 // Calculate average rating
 const booksWithRatings = books.filter(book => book.data.rating);
 const avgRating = booksWithRatings.length > 0
@@ -168,91 +163,6 @@ function getSeriesDisplay(seriesSlug: string | undefined): string {
 			</section>
 		)}
 
-		<!-- Latest Releases Section -->
-		{latestReleases.length > 0 && (
-			<section class="py-16 bg-bg-secondary">
-				<div class="container mx-auto px-4">
-					<div class="text-center mb-12">
-						<h2 class="text-3xl md:text-4xl font-primary font-bold text-bone-white mb-4">
-							Latest Releases
-						</h2>
-						<p class="text-lg text-fog-gray max-w-2xl mx-auto">
-							Fresh off the press - the newest supernatural adventures
-						</p>
-					</div>
-
-					<div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
-						{latestReleases.slice(0, 8).map((book) => (
-							<a href={`/books/${book.slug}`} class="card card-hover group p-3 sm:p-4">
-								<!-- Book cover -->
-								{book.data.cover ? (
-									<img
-										src={book.data.cover}
-										alt={`${book.data.title} book cover`}
-										class="w-full aspect-[2/3] object-cover rounded-lg mb-3 border border-mystic-violet/30 group-hover:border-ember-orange/50 transition-colors"
-										loading="lazy"
-									/>
-								) : (
-									<div class="w-full aspect-[2/3] bg-gradient-to-br from-mystic-violet/20 to-midnight-purple rounded-lg mb-3 flex items-center justify-center border border-mystic-violet/30 group-hover:border-ember-orange/50 transition-colors">
-										<span class="text-3xl opacity-60">📖</span>
-									</div>
-								)}
-
-								<!-- Title -->
-								<h3 class="font-primary text-lg font-bold text-ember-orange mb-1 group-hover:text-mystic-teal transition-colors line-clamp-2">
-									{book.data.title}
-								</h3>
-
-								<!-- Series -->
-								{book.data.series && (
-									<p class="text-fog-gray text-xs mb-2">{getSeriesDisplay(book.data.series)}</p>
-								)}
-
-								<!-- Rating -->
-								{book.data.rating && (
-									<div class="flex items-center space-x-1">
-										<span class="text-ember-orange text-sm">★</span>
-										<span class="text-moon-silver text-xs">{book.data.rating}</span>
-									</div>
-								)}
-							</a>
-						))}
-					</div>
-
-					{latestReleases.length > 8 && (
-						<div class="text-center mt-8">
-							<a href="#all-books" class="btn btn-primary btn-lg">
-								View All Latest Releases
-							</a>
-						</div>
-					)}
-				</div>
-			</section>
-		)}
-
-		<!-- Series CTA Section -->
-		<section class="py-16 bg-gradient-to-r from-midnight-purple/30 via-shadow-black to-midnight-purple/30">
-			<div class="container mx-auto px-4 text-center">
-				<div class="max-w-3xl mx-auto">
-					<h2 class="text-3xl md:text-4xl font-primary font-bold text-bone-white mb-4">
-						Explore My Series
-					</h2>
-					<p class="text-lg text-fog-gray mb-8">
-						Dive deep into interconnected worlds with rich character development across multiple books
-					</p>
-					<a
-						href="/series"
-						class="btn btn-primary btn-lg px-8 py-4 text-lg inline-flex items-center space-x-2"
-					>
-						<span>View All Series</span>
-						<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-						</svg>
-					</a>
-				</div>
-			</div>
-		</section>
-
 		<!-- All Books Section -->
 		<section id="all-books" class="py-16 bg-dark-surface">
 			<div class="container mx-auto px-4">
@@ -314,6 +224,29 @@ function getSeriesDisplay(seriesSlug: string | undefined): string {
 							</div>
 						</a>
 					))}
+				</div>
+			</div>
+		</section>
+
+		<!-- Series CTA Section -->
+		<section class="py-16 bg-gradient-to-r from-midnight-purple/30 via-shadow-black to-midnight-purple/30">
+			<div class="container mx-auto px-4 text-center">
+				<div class="max-w-3xl mx-auto">
+					<h2 class="text-3xl md:text-4xl font-primary font-bold text-bone-white mb-4">
+						Explore My Series
+					</h2>
+					<p class="text-lg text-fog-gray mb-8">
+						Dive deep into interconnected worlds with rich character development across multiple books
+					</p>
+					<a
+						href="/series"
+						class="btn btn-primary btn-lg px-8 py-4 text-lg inline-flex items-center space-x-2"
+					>
+						<span>View All Series</span>
+						<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+						</svg>
+					</a>
 				</div>
 			</div>
 		</section>

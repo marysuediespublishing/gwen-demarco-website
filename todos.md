@@ -1866,3 +1866,25 @@
   - Test by verifying counts match the actual number of entries
     in the Books and Series admin collections
   - Test that adding a new book or series updates the homepage count
+
+- [x] **T141** - FIX: Remove Latest Releases and move Explore My Series on Books page
+  - refs: D001
+  - In the Books page template (likely src/pages/books.astro or src/pages/books/index.astro):
+
+  **1. Remove the Latest Releases section:**
+  - Find and delete the entire "Latest Releases" section from the page
+  - Remove any associated data fetching/filtering for latest releases
+    if it's no longer needed elsewhere on the page
+
+  **2. Move Explore My Series section below Complete Book Collection:**
+  - Find the "Explore My Series" section
+  - Move it to appear after the "Complete Book Collection" section
+  - Keep all existing content and styling for the section as-is
+
+  - Updated page section order should be:
+    1. Hero / page header
+    2. Complete Book Collection
+    3. Explore My Series
+    4. Any remaining sections (newsletter CTA, etc.)
+  - Test that the Books page displays correctly with the new layout
+  - Test that no broken references remain from the removed Latest Releases section
