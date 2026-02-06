@@ -1542,3 +1542,41 @@
     cinematic/atmospheric image suitable for a full-width banner background
   - Test in /admin that the hero image field appears on book entries
   - Test uploading a wide banner image and verify it saves correctly
+
+- [x] **T129** - ENHANCE: Add hero image/banner to homepage featuring latest book
+  - refs: D001, T128
+  - In src/pages/index.astro, redesign the hero section inspired by ilona-andrews.com
+  - Create a full-width hero section at the top of the page with:
+    - Background uses the hero_image from the latest book (added in T128)
+    - Latest book cover image prominently displayed on the right side
+    - Book title and a short teaser/excerpt or tagline on the left side
+    - CTA buttons (e.g., "Buy Now", "Learn More") linking to the book's page
+  - Determine "latest book" dynamically:
+    - Query the books collection, sort by publication date descending
+    - Use the first result that has a hero_image set
+    - Fall back to the most recent book without hero_image if none have one
+  - Hero image should be full-width with overlay gradient for text readability
+    (dark gradient from left to ensure text contrast)
+  - Book cover should have a slight 3D tilt or shadow effect like
+    the Ilona Andrews reference screenshots
+  - Make hero section responsive:
+    - Desktop: side-by-side text + book cover over background art
+    - Mobile: stacked with book cover above text
+  - Test with the newest book to confirm hero_image displays as background
+    and book cover displays prominently
+
+- [ ] **T130** - FIX: Move author stats row below the hero section on homepage
+  - refs: D001, T129
+  - In src/pages/index.astro, find the stats row (Books Published, Pages Read,
+    Reader Ratings, Series)
+  - Move it to appear directly below the new hero section from T129
+  - Remove the current tagline, author bio text, and "Explore My Books" /
+    "Meet the Author" buttons from the old hero area (replaced by new hero)
+  - Stats row should span full width with the existing card/badge styling
+  - Remove the down arrow scroll indicator
+  - Page section order should be:
+    1. New hero with latest book + background art
+    2. Stats row (Books Published, Pages Read, etc.)
+    3. Featured Books
+    4. Rest of existing homepage content
+  - Test that the homepage feels cohesive with the new hero + stats flow
