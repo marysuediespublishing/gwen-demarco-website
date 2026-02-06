@@ -1287,3 +1287,30 @@
     - Match the icon style of any existing social links
   - Test that both links open in a new tab (target="_blank" rel="noopener noreferrer")
   - Test on /contact page that links display correctly and are clickable
+
+- [x] **T119** - ENHANCE: Add Characters section to individual species pages
+  - refs: D001, T099, T101
+  - In the individual species page template (likely src/pages/species/[...slug].astro)
+  - Add a "Characters" section on the right side, below the existing "Books" section
+  - Fetch the characters collection and filter for characters whose species
+    matches the current species page (match via species field on character entry)
+  - Sort characters: featured first, then alphabetically by name
+```javascript
+    const speciesCharacters = allCharacters
+      .filter(c => {
+        const charSpecies = c.data.species || [];
+        return charSpecies.includes(speciesItem.id) || charSpecies.includes(speciesItem.data.title);
+      })
+      .sort((a, b) => {
+        if (a.data.featured && !b.data.featured) return -1;
+        if (!a.data.featured && b.data.featured) return 1;
+        return a.data.name.localeCompare(b.data.name);
+      });
+```
+  - Display each character name as a link to /characters/[character-slug]
+  - Style consistently with how Books are listed in the same sidebar area
+  - Do not add any visual distinction between featured and non-featured
+    (just sort featured first, matching T117 approach)
+  - If no characters match the species, hide the section entirely
+  - Test on /species/witches and other species pages
+  - Test that character links go to correct individual character pages

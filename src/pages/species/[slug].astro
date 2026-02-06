@@ -14,9 +14,10 @@ type Props = CollectionEntry<'species'>;
 
 const species = Astro.props;
 
-// Get all series and books to show where this species appears
+// Get all series, books, and characters to show where this species appears
 const allSeries = await getCollection('series');
 const allBooks = await getCollection('books');
+const allCharacters = await getCollection('characters');
 
 // Find series that feature this species
 const featuredSeries = allSeries.filter(series =>
@@ -27,6 +28,28 @@ const featuredSeries = allSeries.filter(series =>
 const featuredBooks = allBooks.filter(book =>
 	book.data.species && book.data.species.includes(species.id)
 ).sort((a, b) => a.data.title.localeCompare(b.data.title));
+
+// Find characters of this species (match species id or name)
+const speciesCharacters = allCharacters
+	.filter(character => {
+		const charSpecies = character.data.species;
+		if (!charSpecies) return false;
+		// Handle both string and array species fields
+		if (typeof charSpecies === 'string') {
+			return charSpecies === species.id || charSpecies.toLowerCase() === species.data.name.toLowerCase();
+		}
+		if (Array.isArray(charSpecies)) {
+			return charSpecies.includes(species.id) || charSpecies.some(s => s.toLowerCase() === species.data.name.toLowerCase());
+		}
+		return false;
+	})
+	.sort((a, b) => {
+		// Featured characters first
+		if (a.data.featured && !b.data.featured) return -1;
+		if (!a.data.featured && b.data.featured) return 1;
+		// Then alphabetically by name
+		return a.data.name.localeCompare(b.data.name);
+	});
 
 // Function to format species name for display
 const formatSpeciesName = (name: string): string => {
@@ -189,6 +212,28 @@ const { Content } = await render(species);
 													class="block text-sm text-moon-silver/80 hover:text-ember-orange transition-colors"
 												>
 													{book.data.title}
+												</a>
+											))}
+										</div>
+									</div>
+								)}
+
+								<!-- Characters List -->
+								{speciesCharacters.length > 0 && (
+									<div class="bg-midnight-purple/50 rounded-lg p-4 border border-mystic-violet/20">
+										<h3 class="text-lg font-bold text-bone-white mb-3 flex items-center">
+											<svg class="w-5 h-5 text-mystic-teal mr-2" fill="currentColor" viewBox="0 0 20 20">
+												<path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
+											</svg>
+											Characters ({speciesCharacters.length})
+										</h3>
+										<div class="space-y-2 max-h-48 overflow-y-auto">
+											{speciesCharacters.map((character) => (
+												<a
+													href={`/characters/${character.data.slug}`}
+													class="block text-sm text-moon-silver/80 hover:text-ember-orange transition-colors"
+												>
+													{character.data.name}
 												</a>
 											))}
 										</div>
