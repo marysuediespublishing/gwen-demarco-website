@@ -218,9 +218,9 @@ function getBookTitle(bookSlug: string | undefined): string {
 										<div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
 									</div>
 
-									{/* "New Release" floating badge */}
-									<div class="absolute -top-3 -right-3 bg-ember-orange text-bone-white text-xs font-bold px-3 py-1.5 rounded-full shadow-ember animate-pulse z-10">
-										New Release
+									{/* Floating badge - uses featured_text from admin or "New Release" fallback */}
+									<div class="absolute -top-3 -right-3 bg-ember-orange text-bone-white text-xs font-bold px-3 py-1.5 rounded-full shadow-ember animate-pulse z-10 whitespace-nowrap">
+										{latestBook.data.featured_text || "New Release"}
 									</div>
 								</div>
 							</a>

@@ -1656,3 +1656,30 @@
   - Test in /admin that both fields appear on book entries under Featured Book
   - Test that toggling featured_homepage and adding featured_text
     updates the homepage hero content
+
+- [x] **T134** - FIX: Homepage hero uses Featured on Homepage book and custom badge text
+  - refs: D001, T129, T133
+  - In src/pages/index.astro, update the hero section logic:
+
+  **1. Use Featured on Homepage book instead of newest book:**
+  - Change the book selection query to find the book with
+    featured_homepage: true instead of sorting by publication date
+  - If multiple books have featured_homepage: true, use the most recent one
+  - If no book has featured_homepage: true, fall back to newest book
+  - Use the selected book's hero_image (T128) as the background
+  - Use the selected book's cover as the displayed cover image
+
+  **2. Replace "New Release" badge with Featured Text:**
+  - Find the orange glowing circle/badge that currently says "New Release"
+  - Replace the hardcoded "New Release" text with the book's
+    featured_text field from the admin (T133)
+  - If featured_text is empty or not set, fall back to "New Release"
+  - Ensure the text fits within the badge — if the featured_text is
+    longer, allow the badge to resize or wrap text appropriately
+  - Keep the orange glowing circle styling as-is
+
+  - Test by setting different books as Featured on Homepage in /admin
+    and confirming the hero updates with the correct book, hero image,
+    cover, and badge text
+  - Test with featured_text of varying lengths to ensure badge looks good
+  - Test fallback behavior when no book has featured_homepage toggled on
