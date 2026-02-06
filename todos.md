@@ -1775,3 +1775,37 @@
   - Test on desktop and mobile to confirm gradient stays behind text
   - Test with different hero images (light and dark) for readability
   - Remove any leftover fixed gradient overlays from previous implementations
+
+- [x] **T138** - FIX: Darken hero text gradient and update series title hover style
+  - refs: D001, T137
+  - In src/pages/index.astro, update the hero section:
+
+  **1. Darken the radial gradient behind the text:**
+  - Increase the opacity values in the radial gradient from T137
+  - Example updated gradient:
+```css
+    radial-gradient(
+      ellipse at center,
+      rgba(0, 0, 0, 0.95) 0%,
+      rgba(0, 0, 0, 0.85) 30%,
+      rgba(0, 0, 0, 0.6) 55%,
+      rgba(0, 0, 0, 0.2) 75%,
+      transparent 100%
+    );
+```
+  - Adjust as needed to ensure strong readability while keeping soft bleed edges
+
+  **2. Update series title hover style:**
+  - Find the series title link in the hero section
+  - On hover, change text color to white and add an orange background:
+```css
+    hover:text-white hover:bg-ember-orange
+```
+  - Add padding so the orange background has some breathing room around the text
+  - Add rounded corners for a polished look (e.g., rounded-md)
+  - Add smooth transition (transition-all duration-200)
+  - Ensure the default (non-hover) state still looks consistent with
+    the rest of the hero text
+
+  - Test gradient darkness with different hero images for readability
+  - Test series title hover on desktop to confirm white text on orange background

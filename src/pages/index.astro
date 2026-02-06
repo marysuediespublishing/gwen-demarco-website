@@ -121,11 +121,11 @@ function getFirstTwoSentences(description: string | undefined): string {
 						{/* Left: Text content */}
 						<div class="relative text-center lg:text-left space-y-6 order-2 lg:order-1">
 							{/* Radial gradient backdrop centered on text container */}
-							<div class="absolute pointer-events-none" style="inset: -40% -30%; background: radial-gradient(ellipse at center, rgba(10,10,15,0.85) 0%, rgba(10,10,15,0.7) 30%, rgba(10,10,15,0.4) 55%, rgba(10,10,15,0.1) 75%, transparent 100%); z-index: -1;"></div>
+							<div class="absolute pointer-events-none" style="inset: -40% -30%; background: radial-gradient(ellipse at center, rgba(10,10,15,0.95) 0%, rgba(10,10,15,0.85) 30%, rgba(10,10,15,0.6) 55%, rgba(10,10,15,0.2) 75%, transparent 100%); z-index: -1;"></div>
 							{/* Series badge - links to series page */}
 							{latestBook.data.series && (
 								<div class="flex justify-center lg:justify-start">
-									<a href={`/series/${latestBook.data.series}`} class="badge badge-primary text-sm px-4 py-1.5 hover:bg-ember-orange hover:border-ember-orange transition-colors duration-200">
+									<a href={`/series/${latestBook.data.series}`} class="badge badge-primary text-sm px-4 py-1.5 hover:text-white hover:bg-ember-orange hover:border-ember-orange rounded-md transition-all duration-200">
 										{getSeriesDisplay(latestBook.data.series)}
 									</a>
 								</div>
