@@ -1609,3 +1609,22 @@
   - Test that the hero image is more visible on the left edge
   - Test that text remains readable against the darker gradient behind it
   - Test both title links navigate to the correct pages
+
+- [x] **T132** - FIX: Adjust hero text position and gradient - split the difference
+  - refs: D001, T129, T131
+  - In src/pages/index.astro, update the hero section:
+
+  **1. Move text position halfway back to the left:**
+  - The text was moved too far right in T131
+  - Split the difference between the original position and the current position
+  - Reduce the left padding/offset by roughly half of what T131 added
+
+  **2. Ensure gradient is dark behind the text:**
+  - The hero image background must be visibly darker directly behind
+    the text content area so all text remains easily readable
+  - Keep the far left lighter so the hero image shows through
+  - The dark zone should closely follow where the text actually sits
+  - Test with light and dark hero images to confirm text contrast
+
+  - Test that the text feels balanced — not too far left, not too far right
+  - Test readability of all text including title, tagline, and CTA buttons
