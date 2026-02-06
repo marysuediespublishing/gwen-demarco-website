@@ -1683,3 +1683,38 @@
     cover, and badge text
   - Test with featured_text of varying lengths to ensure badge looks good
   - Test fallback behavior when no book has featured_homepage toggled on
+
+- [x] **T135** - FIX: Move hero text back to the left, adjust gradient to darken 20-45% of screen
+  - refs: D001, T129, T131, T132
+  - In src/pages/index.astro, update the hero section:
+
+  **1. Move text content back to the left:**
+  - Undo the rightward shifts from T131/T132
+  - Position the text content back to the left side of the hero
+  - Remove any extra left padding/offset that was previously added
+
+  **2. Update background gradient over hero image:**
+  - The dark gradient should specifically darken the area between
+    roughly 20% and 45% of the screen width (left to right)
+  - 0-20% from the left: lighter, let the hero image show through
+  - 20-45%: dark overlay zone where the text sits, ensuring readability
+  - 45-100%: fade back out to let the hero image and book cover show
+  - This creates a targeted dark band behind the text rather than
+    a full left-side fade
+  - Example gradient approach:
+```css
+    background: linear-gradient(to right,
+      transparent 0%,
+      rgba(0,0,0,0.1) 15%,
+      rgba(0,0,0,0.8) 20%,
+      rgba(0,0,0,0.85) 35%,
+      rgba(0,0,0,0.8) 45%,
+      rgba(0,0,0,0.1) 55%,
+      transparent 65%
+    );
+```
+  - Adjust exact opacity values as needed for readability vs image visibility
+
+  - Test that text is readable against the darkened band
+  - Test that the hero image is visible on both the far left and right sides
+  - Test on different screen sizes to confirm gradient stays behind text
