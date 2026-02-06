@@ -108,6 +108,11 @@ collections:
             widget: "string"
             required: false
             hint: "Link to purchase this book in this language"
+      - label: "Hero Image"
+        name: "hero_image"
+        widget: "image"
+        required: false
+        hint: "Wide banner image for use as homepage hero background when this book is featured"
       - { label: "Content", name: "body", widget: "markdown" }
 
   # Series collection

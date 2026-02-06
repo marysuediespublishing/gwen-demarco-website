@@ -30,6 +30,7 @@ const books = defineCollection({
       language: z.string(),
       url: z.string().optional(),
     })).optional(),
+    hero_image: z.string().optional(),
   }),
 });
 

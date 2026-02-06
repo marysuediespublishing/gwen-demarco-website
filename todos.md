@@ -1526,3 +1526,19 @@
   - Test that clicking "Gwen DeMarco" in the header navigates to /
   - Test on all pages to confirm consistent behavior
   - Verify mobile/hamburger menu also removes Home and retains logo link
+
+- [x] **T128** - ENHANCE: Add hero image field to Book admin
+  - refs: D001
+  - In public/admin/config.yml, add a hero_image field to the books collection:
+```yaml
+    - name: hero_image
+      label: Hero Image
+      widget: image
+      required: false
+      hint: "Wide banner image for use as homepage hero background when this book is featured"
+```
+  - Update the Astro content collection schema to include hero_image field
+  - This image is separate from the book cover — it should be a wide,
+    cinematic/atmospheric image suitable for a full-width banner background
+  - Test in /admin that the hero image field appears on book entries
+  - Test uploading a wide banner image and verify it saves correctly
