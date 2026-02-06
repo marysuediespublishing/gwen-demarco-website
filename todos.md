@@ -1219,3 +1219,21 @@
     or show a fallback message
   - Test by toggling the featured flag on different series in /admin
     and confirming the homepage updates accordingly
+
+- [x] **T115** - ENHANCE: Make book page Settings link to individual location pages
+  - refs: D001
+  - On individual book pages (e.g., /books/gideon-bean), find the
+    "Book Details" section where Settings are listed
+  - Likely in src/pages/books/[...slug].astro or similar template
+  - Update each setting/location name to be a clickable link:
+    - Link to /locations/[location-slug]
+    - Generate slug from location name (lowercase, spaces to hyphens)
+    - Or if the book data stores location slugs directly, use those
+  - Match existing link styling on the site (e.g., hover:text-ember-orange
+    transition-colors, or badge style like species links)
+  - Verify that the location slugs in the books collection match
+    the actual location page slugs (check src/content/locations/)
+  - Test on /books/gideon-bean that "Gulf Breeze" links to /locations/gulf-breeze
+  - Test on other book pages to confirm all settings link correctly
+  - Handle edge case where a setting has no matching location page
+    (display as plain text without a link)

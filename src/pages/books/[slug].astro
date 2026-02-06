@@ -111,8 +111,11 @@ const speciesData = currentSpecies.length > 0
     })))
   : [];
 
-const settingNames = book.data.setting
-  ? await Promise.all(book.data.setting.map(slug => getLocationName(slug)))
+const settingsData = book.data.setting
+  ? await Promise.all(book.data.setting.map(async slug => ({
+      slug: slug,
+      name: await getLocationName(slug)
+    })))
   : [];
 
 const genreNames = book.data.genres
@@ -321,14 +324,17 @@ const heatLevelDisplay: Record<string, { label: string; color: string }> = {
                       </div>
                     )}
 
-                    {settingNames.length > 0 && (
+                    {settingsData.length > 0 && (
                       <div class="mb-3">
                         <h4 class="text-sm font-medium text-moon-silver mb-2">Setting:</h4>
                         <div class="flex flex-wrap gap-2">
-                          {settingNames.map((settingName, index) => (
-                            <span class="badge badge-secondary text-xs">
-                              {settingName}
-                            </span>
+                          {settingsData.map((setting) => (
+                            <a
+                              href={`/locations/${setting.slug}`}
+                              class="badge badge-secondary text-xs hover:bg-ember-orange/25 transition-colors"
+                            >
+                              {setting.name}
+                            </a>
                           ))}
                         </div>
                       </div>
