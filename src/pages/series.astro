@@ -98,7 +98,9 @@ const sortedSeries = seriesWithBooks.sort((a, b) => {
 								<div class="space-y-4">
 									<div class="flex flex-wrap items-center gap-4">
 										<h2 class="text-3xl md:text-4xl font-primary font-bold text-bone-white">
-											{series.data.title}
+											<a href={`/series/${series.slug}`} class="hover:text-ember-orange transition-colors">
+												{series.data.title}
+											</a>
 										</h2>
 										{series.data.completionStatus === 'complete' && (
 											<span class="badge badge-primary uppercase tracking-wide">

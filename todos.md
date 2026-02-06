@@ -1314,3 +1314,14 @@
   - If no characters match the species, hide the section entirely
   - Test on /species/witches and other species pages
   - Test that character links go to correct individual character pages
+
+- [x] **T120** - ENHANCE: Make series titles clickable links on main Series page
+  - refs: D001
+  - In src/pages/series.astro, find where each series title is displayed
+    (the h2 element with series.data.title inside the series showcase section)
+  - Wrap the title text in an <a> tag linking to /series/[series.slug]
+  - Add hover styling consistent with the site (e.g., hover:text-ember-orange
+    transition-colors)
+  - The "Explore Series" button already links there, but the title itself
+    should also be clickable for better UX
+  - Test on /series page that all series titles link to the correct series pages
