@@ -108,8 +108,7 @@ function getFirstTwoSentences(description: string | undefined): string {
 					<div class="absolute inset-0 bg-gradient-night"></div>
 				)}
 
-				{/* Dark gradient overlays for text readability - targeted band at 20-45% of screen */}
-				<div class="absolute inset-0" style="background: linear-gradient(to right, transparent 0%, rgba(10,10,15,0.1) 15%, rgba(10,10,15,0.8) 20%, rgba(10,10,15,0.85) 35%, rgba(10,10,15,0.8) 45%, rgba(10,10,15,0.1) 55%, transparent 65%);"></div>
+				{/* Vertical gradient overlay for top/bottom fading */}
 				<div class="absolute inset-0 bg-gradient-to-t from-shadow-black via-transparent to-shadow-black/50"></div>
 
 				{/* Subtle fog layer */}
@@ -120,7 +119,9 @@ function getFirstTwoSentences(description: string | undefined): string {
 				<div class="container mx-auto px-4 relative z-10 py-20 lg:py-0">
 					<div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center max-w-7xl mx-auto">
 						{/* Left: Text content */}
-						<div class="text-center lg:text-left space-y-6 order-2 lg:order-1">
+						<div class="relative text-center lg:text-left space-y-6 order-2 lg:order-1">
+							{/* Radial gradient backdrop centered on text container */}
+							<div class="absolute pointer-events-none" style="inset: -40% -30%; background: radial-gradient(ellipse at center, rgba(10,10,15,0.85) 0%, rgba(10,10,15,0.7) 30%, rgba(10,10,15,0.4) 55%, rgba(10,10,15,0.1) 75%, transparent 100%); z-index: -1;"></div>
 							{/* Series badge - links to series page */}
 							{latestBook.data.series && (
 								<div class="flex justify-center lg:justify-start">

@@ -1741,3 +1741,37 @@
     in the orange badge — this change only affects the body text
   - Test with books that have varying description lengths
   - Test that exactly 2 sentences display, cleanly truncated
+
+- [x] **T137** - FIX: Attach dark gradient overlay to hero text container instead of fixed position
+  - refs: D001, T129, T131, T132, T135
+  - In src/pages/index.astro, update the hero section gradient approach:
+  - Remove the current fixed percentage-based gradient overlay on the hero image
+  - Instead, apply a soft radial gradient that emanates from behind the
+    text container element itself
+  - Use a ::before pseudo-element or nested div on the text container with:
+```css
+    position: absolute;
+    inset: -40% -30%;  /* extend well beyond text bounds for soft bleed */
+    background: radial-gradient(
+      ellipse at center,
+      rgba(0, 0, 0, 0.85) 0%,
+      rgba(0, 0, 0, 0.7) 30%,
+      rgba(0, 0, 0, 0.4) 55%,
+      rgba(0, 0, 0, 0.1) 75%,
+      transparent 100%
+    );
+    z-index: -1;
+    pointer-events: none;
+```
+  - This creates an atmospheric dark cloud centered on the text that
+    fades softly into the hero image in all directions
+  - The gradient automatically follows the text no matter where it's
+    positioned or how the layout shifts on different screen sizes
+  - Adjust the inset percentages and gradient stops as needed to ensure:
+    - Text is fully readable at center
+    - Edges bleed softly into the hero image
+    - Hero image remains visible around the edges
+  - Ensure the text container has position: relative for the pseudo-element
+  - Test on desktop and mobile to confirm gradient stays behind text
+  - Test with different hero images (light and dark) for readability
+  - Remove any leftover fixed gradient overlays from previous implementations
