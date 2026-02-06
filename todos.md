@@ -1325,3 +1325,40 @@
   - The "Explore Series" button already links there, but the title itself
     should also be clickable for better UX
   - Test on /series page that all series titles link to the correct series pages
+
+- [x] **T121** - ENHANCE: Add Characters, Locations, and Artwork sections to individual series pages
+  - refs: D001, T099, T104, T108
+  - In src/pages/series/[...slug].astro, make three additions:
+
+  **1. Characters section under Series Info card (right sidebar):**
+  - Add a "Characters" section below the existing "Featured Creatures" section
+    in the Series Stats Card
+  - Fetch characters collection, filter by series match
+  - Sort featured characters first, then alphabetically by name
+  - Display each character name as a link to /characters/[character-slug]
+  - Style consistently with the Featured Creatures badge/link style
+  - Hide section if no characters match the series
+
+  **2. Locations section under Characters in Series Info card:**
+  - Add a "Locations" section below the new Characters section
+  - Fetch locations collection, filter by series match
+    (check how locations associate with series — may be via books or direct field)
+  - Display each location name as a link to /locations/[location-slug]
+  - Style consistently with Characters section above
+  - Hide section if no locations match the series
+
+  **3. Artwork sample section above "Books In This Series":**
+  - Add a new section between the Series Content/hero area and the
+    "Books In This Series" section
+  - Fetch artwork collection, filter for artwork associated with this series
+    (resolve book → series relationship)
+  - Show up to 5 thumbnails using focal point data for object-position
+  - Featured artwork first, then remaining
+  - Display thumbnails in a row (grid-cols-5 or flex)
+  - Include click-to-view-full-image behavior matching /artwork page
+  - Below thumbnails, add a "View All Artwork →" link to /artwork/[series-slug]
+  - Hide section entirely if no artwork exists for the series
+
+  - Test on multiple series pages to confirm all three sections display correctly
+  - Test links go to correct character, location, and artwork pages
+  - Test artwork thumbnail hover/click behavior matches /artwork page

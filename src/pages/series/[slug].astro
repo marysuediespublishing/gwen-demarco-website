@@ -19,6 +19,11 @@ const { Content } = await render(seriesItem);
 // Fetch series collection for related series
 const seriesCollection = await getCollection('series');
 
+// Fetch characters, locations, and artwork collections
+const allCharacters = await getCollection('characters');
+const allLocations = await getCollection('locations');
+const allArtwork = await getCollection('artwork');
+
 // Helper function to map series names to slugs
 function getSeriesSlug(seriesName: string): string {
   const seriesMap: Record<string, string> = {
@@ -96,6 +101,66 @@ const averageRating = sortedSeriesBooks.length > 0
   ? sortedSeriesBooks.reduce((sum, book) => sum + (book.data.rating || 0), 0) / sortedSeriesBooks.length
   : 0;
 const totalWordCount = sortedSeriesBooks.reduce((sum, book) => sum + (book.data.wordCount || 0), 0);
+
+// Get book slugs for this series
+const seriesBookSlugs = sortedSeriesBooks.map(book => book.slug);
+
+// Filter characters that appear in books from this series
+const seriesCharacters = allCharacters
+  .filter(character => {
+    const charBooks = character.data.books || [];
+    const charCameos = character.data.cameos || [];
+    const allCharBookSlugs = [...charBooks, ...charCameos];
+    return allCharBookSlugs.some(bookSlug => seriesBookSlugs.includes(bookSlug));
+  })
+  .sort((a, b) => {
+    // Featured characters first
+    if (a.data.featured && !b.data.featured) return -1;
+    if (!a.data.featured && b.data.featured) return 1;
+    // Then alphabetically by name
+    return a.data.name.localeCompare(b.data.name);
+  });
+
+// Filter locations that appear in books from this series
+const seriesLocationSlugs = new Set<string>();
+sortedSeriesBooks.forEach(book => {
+  const bookSettings = book.data.setting || [];
+  bookSettings.forEach((setting: string) => seriesLocationSlugs.add(setting));
+});
+const seriesLocations = allLocations.filter(location =>
+  seriesLocationSlugs.has(location.id) || seriesLocationSlugs.has(location.data.slug || '')
+);
+
+// Helper function to parse focal point
+const parseFocalPoint = (focalPoint: string | undefined): { x: number; y: number } => {
+  if (!focalPoint) return { x: 50, y: 50 };
+  const [x, y] = focalPoint.split(',').map(v => parseInt(v.trim(), 10));
+  return { x: isNaN(x) ? 50 : x, y: isNaN(y) ? 50 : y };
+};
+
+// Filter artwork for this series (via book relationship)
+const seriesArtwork = allArtwork
+  .filter(artwork => {
+    if (!artwork.data.book) return false;
+    return seriesBookSlugs.includes(artwork.data.book);
+  })
+  .map(artwork => ({
+    ...artwork,
+    focalPoint: parseFocalPoint(artwork.data.focal_point),
+  }))
+  .sort((a, b) => {
+    // Featured artwork first
+    if (a.data.featured && !b.data.featured) return -1;
+    if (!a.data.featured && b.data.featured) return 1;
+    // Then by title
+    return a.data.title.localeCompare(b.data.title);
+  })
+  .slice(0, 5); // Limit to 5 thumbnails
+
+// Count total artwork for this series (for "View All" link)
+const totalSeriesArtwork = allArtwork.filter(artwork =>
+  artwork.data.book && seriesBookSlugs.includes(artwork.data.book)
+).length;
 
 // Get site config for newsletter
 let siteConfig: any = {};
@@ -228,6 +293,40 @@ try {
                     </div>
                   );
                 })()}
+
+                {/* Characters Section */}
+                {seriesCharacters.length > 0 && (
+                  <div class="mt-6 pt-4 border-t border-dark-border">
+                    <h4 class="text-sm font-medium text-moon-silver mb-3">Characters:</h4>
+                    <div class="flex flex-wrap gap-2">
+                      {seriesCharacters.map((character) => (
+                        <a
+                          href={`/characters/${character.id}`}
+                          class="badge badge-primary text-xs hover:bg-ember-orange/25 transition-colors"
+                        >
+                          {character.data.name}
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Locations Section */}
+                {seriesLocations.length > 0 && (
+                  <div class="mt-6 pt-4 border-t border-dark-border">
+                    <h4 class="text-sm font-medium text-moon-silver mb-3">Locations:</h4>
+                    <div class="flex flex-wrap gap-2">
+                      {seriesLocations.map((location) => (
+                        <a
+                          href={`/locations/${location.id}`}
+                          class="badge badge-primary text-xs hover:bg-ember-orange/25 transition-colors"
+                        >
+                          {location.data.name}
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -325,6 +424,60 @@ try {
         <div class="container mx-auto px-4">
           <div class="max-w-4xl mx-auto prose prose-lg prose-invert">
             <Content />
+          </div>
+        </div>
+      </section>
+    )}
+
+    <!-- Artwork Sample Section -->
+    {seriesArtwork.length > 0 && (
+      <section class="py-16 bg-bg-secondary">
+        <div class="container mx-auto px-4">
+          <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-8">
+              <h2 class="text-3xl md:text-4xl font-primary font-bold text-bone-white mb-4">
+                Series Artwork
+              </h2>
+              <p class="text-fog-gray">
+                Click on any thumbnail to see full image
+              </p>
+            </div>
+
+            <!-- Artwork Thumbnails Grid -->
+            <div class="flex flex-wrap justify-center gap-4 mb-8">
+              {seriesArtwork.map((artwork) => (
+                <button
+                  type="button"
+                  class="group relative w-32 h-32 md:w-40 md:h-40 overflow-hidden rounded-lg bg-midnight-purple/50 border border-mystic-violet/20 hover:border-mystic-violet/50 transition-all duration-300 hover:shadow-mystic cursor-pointer artwork-trigger"
+                  data-image={artwork.data.image}
+                  data-title={artwork.data.title}
+                  data-description={artwork.data.description || ''}
+                >
+                  <img
+                    src={artwork.data.image}
+                    alt={artwork.data.title}
+                    class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                    style={`object-position: ${artwork.focalPoint.x}% ${artwork.focalPoint.y}%;`}
+                  />
+                  <!-- Hover overlay -->
+                  <div class="absolute inset-0 bg-gradient-to-t from-shadow-black/80 via-shadow-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-2">
+                    <p class="text-bone-white text-xs font-medium truncate">{artwork.data.title}</p>
+                  </div>
+                </button>
+              ))}
+            </div>
+
+            {/* View All Artwork Link */}
+            {totalSeriesArtwork > 0 && (
+              <div class="text-center">
+                <a
+                  href={`/artwork/${seriesItem.id}`}
+                  class="inline-flex items-center gap-2 text-mystic-teal hover:text-ember-orange transition-colors font-medium"
+                >
+                  View All {totalSeriesArtwork} Artworks →
+                </a>
+              </div>
+            )}
           </div>
         </div>
       </section>
@@ -481,4 +634,115 @@ try {
       </div>
     </section>
   </main>
+
+  <!-- Artwork Lightbox Modal -->
+  {seriesArtwork.length > 0 && (
+    <div id="artwork-lightbox" class="fixed inset-0 z-50 hidden">
+      <!-- Backdrop -->
+      <div id="lightbox-backdrop" class="absolute inset-0 bg-shadow-black/95 backdrop-blur-sm"></div>
+
+      <!-- Content Container -->
+      <div class="relative w-full h-full flex items-center justify-center p-4 md:p-8">
+        <!-- Close Button -->
+        <button
+          id="lightbox-close"
+          type="button"
+          class="absolute top-4 right-4 z-10 p-2 text-moon-silver hover:text-ember-orange transition-colors bg-midnight-purple/50 rounded-full backdrop-blur-sm"
+          aria-label="Close lightbox"
+        >
+          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+
+        <!-- Image and Info Container -->
+        <div class="max-w-5xl max-h-full flex flex-col items-center">
+          <img
+            id="lightbox-image"
+            src=""
+            alt=""
+            class="max-w-full max-h-[80vh] object-contain rounded-lg shadow-2xl"
+          />
+          <div class="mt-4 text-center">
+            <h3 id="lightbox-title" class="text-xl md:text-2xl font-primary font-bold text-bone-white mb-2"></h3>
+            <p id="lightbox-description" class="text-moon-silver/80 text-sm md:text-base max-w-lg"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  )}
 </Layout>
+
+{seriesArtwork.length > 0 && (
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const lightbox = document.getElementById('artwork-lightbox');
+      const lightboxImage = document.getElementById('lightbox-image') as HTMLImageElement;
+      const lightboxTitle = document.getElementById('lightbox-title');
+      const lightboxDescription = document.getElementById('lightbox-description');
+      const lightboxClose = document.getElementById('lightbox-close');
+      const lightboxBackdrop = document.getElementById('lightbox-backdrop');
+      const artworkTriggers = document.querySelectorAll('.artwork-trigger');
+
+      if (!lightbox || !lightboxImage || !lightboxTitle || !lightboxDescription || !lightboxClose || !lightboxBackdrop) return;
+
+      // Open lightbox
+      artworkTriggers.forEach(trigger => {
+        trigger.addEventListener('click', () => {
+          const image = trigger.getAttribute('data-image');
+          const title = trigger.getAttribute('data-title');
+          const description = trigger.getAttribute('data-description');
+
+          if (image && lightboxImage) {
+            lightboxImage.src = image;
+            lightboxImage.alt = title || 'Artwork';
+          }
+          if (lightboxTitle) lightboxTitle.textContent = title || '';
+          if (lightboxDescription) lightboxDescription.textContent = description || '';
+
+          lightbox.classList.remove('hidden');
+          document.body.style.overflow = 'hidden';
+
+          // Focus the close button for accessibility
+          lightboxClose.focus();
+        });
+      });
+
+      // Close lightbox functions
+      const closeLightbox = () => {
+        lightbox.classList.add('hidden');
+        document.body.style.overflow = '';
+      };
+
+      lightboxClose.addEventListener('click', closeLightbox);
+      lightboxBackdrop.addEventListener('click', closeLightbox);
+
+      // Close on ESC key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !lightbox.classList.contains('hidden')) {
+          closeLightbox();
+        }
+      });
+    });
+  </script>
+)}
+
+<style>
+  /* Smooth fade-in animation for lightbox */
+  #artwork-lightbox {
+    animation: fadeIn 0.2s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  #artwork-lightbox.hidden {
+    display: none;
+  }
+</style>
