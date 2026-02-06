@@ -1908,3 +1908,22 @@
     (could be publishDate, date, pubDate, etc.)
   - Test on character pages that appear in multiple books to confirm
     books are listed from oldest to newest publication
+
+- [x] **T143** - FIX: Sort "Books Set There" by publication date on location pages
+  - refs: D001
+  - In the individual location page template
+    (likely src/pages/locations/[...slug].astro)
+  - Find the "Books Set There" section where books are listed
+  - Update the sort order to use each book's publication date,
+    oldest to newest:
+```javascript
+    books.sort((a, b) => {
+      const dateA = new Date(a.data.publishDate || a.data.date || 0);
+      const dateB = new Date(b.data.publishDate || b.data.date || 0);
+      return dateA.getTime() - dateB.getTime();
+    });
+```
+  - Check the books collection schema for the correct date field name
+    (could be publishDate, date, pubDate, etc.) — use same field as T142
+  - Test on location pages that appear in multiple books to confirm
+    books are listed from oldest to newest publication

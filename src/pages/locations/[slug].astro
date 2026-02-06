@@ -21,7 +21,7 @@ const allBooks = await getCollection('books');
 // Find books set in this location
 const relatedBooks = allBooks.filter(book =>
 	book.data.setting && book.data.setting.includes(location.id)
-).sort((a, b) => a.data.title.localeCompare(b.data.title));
+).sort((a, b) => new Date(a.data.pubDate).getTime() - new Date(b.data.pubDate).getTime());
 
 // Function to split long text into paragraphs for better readability
 const formatTextWithParagraphs = (text: string): string[] => {
