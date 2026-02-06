@@ -1718,3 +1718,26 @@
   - Test that text is readable against the darkened band
   - Test that the hero image is visible on both the far left and right sides
   - Test on different screen sizes to confirm gradient stays behind text
+
+- [x] **T136** - FIX: Replace Featured Text with first 2 sentences of book description on homepage hero
+  - refs: D001, T129, T133, T134
+  - In src/pages/index.astro, update the hero section:
+  - Find where the featured text / tagline is displayed under the author name
+  - Instead of using the featured_text field from the book admin,
+    pull the book's description field
+  - Extract the first 2 sentences from the description:
+```javascript
+    const firstTwoSentences = book.data.description
+      .match(/[^.!?]*[.!?]/g)
+      ?.slice(0, 2)
+      .join(' ')
+      .trim();
+```
+  - Display those 2 sentences as the hero excerpt text
+  - Handle edge cases:
+    - If the description has fewer than 2 sentences, show whatever is there
+    - If description is empty, hide the text area or show a fallback
+  - The featured_text field (T133) can remain in the admin for use
+    in the orange badge — this change only affects the body text
+  - Test with books that have varying description lengths
+  - Test that exactly 2 sentences display, cleanly truncated

@@ -79,6 +79,14 @@ function getBookTitle(bookSlug: string | undefined): string {
 	if (!bookSlug) return '';
 	return bookTitleMap.get(bookSlug) || bookSlug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
 }
+
+// Helper to extract first 2 sentences from a description
+function getFirstTwoSentences(description: string | undefined): string {
+	if (!description) return '';
+	const sentences = description.match(/[^.!?]*[.!?]/g);
+	if (!sentences) return description;
+	return sentences.slice(0, 2).join(' ').trim();
+}
 ---
 
 <Layout title={`${SITE_TITLE} | Paranormal Romance Author`}>
@@ -135,9 +143,11 @@ function getBookTitle(bookSlug: string | undefined): string {
 							</p>
 
 							{/* Teaser/description */}
-							<p class="text-lg text-moon-silver/90 leading-relaxed max-w-xl mx-auto lg:mx-0">
-								{latestBook.data.featured_text || (latestBook.data.description?.split('.').slice(0, 2).join('.').trim() + '.')}
-							</p>
+							{getFirstTwoSentences(latestBook.data.description) && (
+								<p class="text-lg text-moon-silver/90 leading-relaxed max-w-xl mx-auto lg:mx-0">
+									{getFirstTwoSentences(latestBook.data.description)}
+								</p>
+							)}
 
 							{/* Rating */}
 							{latestBook.data.rating > 0 && (
