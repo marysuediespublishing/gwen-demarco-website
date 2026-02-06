@@ -1237,3 +1237,28 @@
   - Test on other book pages to confirm all settings link correctly
   - Handle edge case where a setting has no matching location page
     (display as plain text without a link)
+
+- [x] **T116** - ENHANCE: Add Characters section to individual book pages under Book Details
+  - refs: D001, T099, T101
+  - In the individual book page template (likely src/pages/books/[...slug].astro)
+  - Add a "Characters" section above the existing "Species" section in Book Details
+  - Fetch the characters collection and filter for characters associated with
+    the current book (match via book or series field on the character entry)
+  - Sort characters: featured characters first, then by name or series order
+```javascript
+    const bookCharacters = allCharacters
+      .filter(c => /* matches current book or series */)
+      .sort((a, b) => {
+        if (a.data.featured && !b.data.featured) return -1;
+        if (!a.data.featured && b.data.featured) return 1;
+        return a.data.name.localeCompare(b.data.name);
+      });
+```
+  - Display each character name as a link to /characters/[character-slug]
+  - Style links consistently with how Species links are displayed in the same section
+    (e.g., badges or comma-separated linked names)
+  - Featured characters could have a subtle visual indicator
+    (e.g., "Main Character" badge) matching the /characters page styling
+  - If no characters are associated with the book, hide the section entirely
+  - Test on multiple book pages to confirm correct characters appear
+  - Test that links go to the correct individual character pages

@@ -63,6 +63,18 @@ function formatGenreName(genre: string): string {
 // Fetch all books for related content
 const allBooks = await getCollection('books');
 
+// Fetch characters for this book
+const allCharacters = await getCollection('characters');
+const bookCharacters = allCharacters
+  .filter(c => c.data.books?.includes(book.id))
+  .sort((a, b) => {
+    // Featured characters first
+    if (a.data.featured && !b.data.featured) return -1;
+    if (!a.data.featured && b.data.featured) return 1;
+    // Then alphabetically by name
+    return (a.data.name || '').localeCompare(b.data.name || '');
+  });
+
 // Process all books for related recommendations
 const allBooksProcessed = allBooks.map(book => ({
   ...book,
@@ -308,6 +320,25 @@ const heatLevelDisplay: Record<string, { label: string; color: string }> = {
 
                   <!-- Tags/Categories -->
                   <div class="mt-6 pt-4 border-t border-dark-border">
+                    {bookCharacters.length > 0 && (
+                      <div class="mb-3">
+                        <h4 class="text-sm font-medium text-moon-silver mb-2">Characters:</h4>
+                        <div class="flex flex-wrap gap-2">
+                          {bookCharacters.map((character) => (
+                            <a
+                              href={`/characters/${character.data.slug}`}
+                              class="badge badge-primary text-xs hover:bg-ember-orange/25 transition-colors inline-flex items-center gap-1"
+                            >
+                              {character.data.name}
+                              {character.data.featured && (
+                                <span class="text-ember-orange text-[10px]" title="Main Character">★</span>
+                              )}
+                            </a>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
                     {speciesData.length > 0 && (
                       <div class="mb-3">
                         <h4 class="text-sm font-medium text-moon-silver mb-2">Species:</h4>
