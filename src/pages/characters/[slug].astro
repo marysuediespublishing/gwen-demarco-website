@@ -18,14 +18,18 @@ const character = Astro.props;
 const allBooks = await getCollection('books');
 const allSpecies = await getCollection('species');
 
-// Get books this character appears in (main appearances)
+// Get books this character appears in (main appearances), sorted by publication date
 const mainBooks = character.data.books
-	? allBooks.filter(book => character.data.books?.includes(book.id))
+	? allBooks
+		.filter(book => character.data.books?.includes(book.id))
+		.sort((a, b) => new Date(a.data.pubDate).getTime() - new Date(b.data.pubDate).getTime())
 	: [];
 
-// Get books this character has cameos in
+// Get books this character has cameos in, sorted by publication date
 const cameoBooks = character.data.cameos
-	? allBooks.filter(book => character.data.cameos?.includes(book.id))
+	? allBooks
+		.filter(book => character.data.cameos?.includes(book.id))
+		.sort((a, b) => new Date(a.data.pubDate).getTime() - new Date(b.data.pubDate).getTime())
 	: [];
 
 // Get species info if available

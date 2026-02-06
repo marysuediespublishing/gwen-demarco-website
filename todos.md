@@ -1888,3 +1888,23 @@
     4. Any remaining sections (newsletter CTA, etc.)
   - Test that the Books page displays correctly with the new layout
   - Test that no broken references remain from the removed Latest Releases section
+
+- [x] **T142** - FIX: Sort Main Appearances by book publication date on character pages
+  - refs: D001, T099
+  - In the individual character page template
+    (likely src/pages/characters/[...slug].astro)
+  - Find the "Main Appearances" section where books are listed
+  - Update the sort order to use each book's publication date,
+    oldest to newest:
+```javascript
+    appearances.sort((a, b) => {
+      const dateA = new Date(a.data.publishDate || a.data.date || 0);
+      const dateB = new Date(b.data.publishDate || b.data.date || 0);
+      return dateA.getTime() - dateB.getTime();
+    });
+```
+  - If publication date is not available, fall back to seriesOrder
+  - Check the books collection schema for the correct date field name
+    (could be publishDate, date, pubDate, etc.)
+  - Test on character pages that appear in multiple books to confirm
+    books are listed from oldest to newest publication
