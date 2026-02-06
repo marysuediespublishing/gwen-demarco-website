@@ -1435,3 +1435,61 @@
     4. Readers Also Enjoy
     5. Newsletter CTA (if present)
   - Test on book pages with and without artwork to confirm correct placement
+
+- [x] **T125** - ENHANCE: Add Languages Available field to Book admin with URL per language
+  - refs: D001
+  - In public/admin/config.yml, add a languages field to the books collection
+    using a list widget with nested fields:
+```yaml
+    - name: languages
+      label: Languages Available
+      widget: list
+      required: false
+      fields:
+        - name: language
+          label: Language
+          widget: select
+          options:
+            - Arabic
+            - Chinese (Simplified)
+            - Chinese (Traditional)
+            - Czech
+            - Danish
+            - Dutch
+            - English
+            - Finnish
+            - French
+            - German
+            - Greek
+            - Hebrew
+            - Hindi
+            - Hungarian
+            - Indonesian
+            - Italian
+            - Japanese
+            - Korean
+            - Norwegian
+            - Polish
+            - Portuguese
+            - Romanian
+            - Russian
+            - Spanish
+            - Swedish
+            - Thai
+            - Turkish
+            - Ukrainian
+            - Vietnamese
+        - name: url
+          label: URL
+          widget: string
+          required: false
+          hint: "Link to purchase this book in this language"
+```
+  - Options list is alphabetical; add or remove languages as needed
+  - Each list entry gives a language dropdown and a URL input field
+  - Update the Astro content collection schema to include the languages field
+  - Test in /admin that:
+    - Languages field appears on book entries
+    - Multiple languages can be added via the list widget
+    - Each language entry has a dropdown and a URL input
+    - Entries save and persist correctly

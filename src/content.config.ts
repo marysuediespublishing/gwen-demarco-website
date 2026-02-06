@@ -26,6 +26,10 @@ const books = defineCollection({
     pageCount: z.number().optional(),
     status: z.enum(['published', 'pre-order', 'upcoming', 'draft']).default('published'),
     featured: z.boolean().default(false),
+    languages: z.array(z.object({
+      language: z.string(),
+      url: z.string().optional(),
+    })).optional(),
   }),
 });
 

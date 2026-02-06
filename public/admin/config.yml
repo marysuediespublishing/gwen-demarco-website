@@ -65,6 +65,49 @@ collections:
         options: ["published", "pre-order", "upcoming", "draft"]
         default: "published"
       - { label: "Featured Book", name: "featured", widget: "boolean", default: false }
+      - label: "Languages Available"
+        name: "languages"
+        widget: "list"
+        required: false
+        fields:
+          - label: "Language"
+            name: "language"
+            widget: "select"
+            options:
+              - Arabic
+              - Chinese (Simplified)
+              - Chinese (Traditional)
+              - Czech
+              - Danish
+              - Dutch
+              - English
+              - Finnish
+              - French
+              - German
+              - Greek
+              - Hebrew
+              - Hindi
+              - Hungarian
+              - Indonesian
+              - Italian
+              - Japanese
+              - Korean
+              - Norwegian
+              - Polish
+              - Portuguese
+              - Romanian
+              - Russian
+              - Spanish
+              - Swedish
+              - Thai
+              - Turkish
+              - Ukrainian
+              - Vietnamese
+          - label: "URL"
+            name: "url"
+            widget: "string"
+            required: false
+            hint: "Link to purchase this book in this language"
       - { label: "Content", name: "body", widget: "markdown" }
 
   # Series collection
