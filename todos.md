@@ -1262,3 +1262,14 @@
   - If no characters are associated with the book, hide the section entirely
   - Test on multiple book pages to confirm correct characters appear
   - Test that links go to the correct individual character pages
+
+- [x] **T117** - FIX: Remove asterisk/star indicator from featured characters on book pages
+  - refs: D001, T116
+  - In the individual book page template (likely src/pages/books/[...slug].astro)
+  - Find where characters are displayed in the Book Details section
+  - Remove any asterisk (*), star, or "Main Character" badge/indicator
+    next to featured character names
+  - Featured characters should still sort first, just display identically
+    to non-featured characters — same styling, no visual distinction
+  - Test on book pages that have both featured and non-featured characters
+    to confirm they all look the same, with featured listed first

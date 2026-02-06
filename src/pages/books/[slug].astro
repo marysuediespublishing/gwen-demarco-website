@@ -327,12 +327,9 @@ const heatLevelDisplay: Record<string, { label: string; color: string }> = {
                           {bookCharacters.map((character) => (
                             <a
                               href={`/characters/${character.data.slug}`}
-                              class="badge badge-primary text-xs hover:bg-ember-orange/25 transition-colors inline-flex items-center gap-1"
+                              class="badge badge-primary text-xs hover:bg-ember-orange/25 transition-colors"
                             >
                               {character.data.name}
-                              {character.data.featured && (
-                                <span class="text-ember-orange text-[10px]" title="Main Character">★</span>
-                              )}
                             </a>
                           ))}
                         </div>
