@@ -1843,3 +1843,26 @@
     being cut off by the container bounds (e.g., inset: -50% -40%)
   - Test on homepage that there are no visible lines or edges anywhere
     around the gradient — it should blend seamlessly into the hero image
+
+- [x] **T140** - FIX: Homepage stats should dynamically pull book and series counts from CMS
+  - refs: D001
+  - In src/pages/index.astro, find the stats row that displays
+    "Books Published" and "Series" counts
+  - These values may currently be hardcoded (e.g., "11" and "4")
+  - Replace with dynamic counts from the content collections:
+```javascript
+    const allBooks = await getCollection('books');
+    const allSeries = await getCollection('series');
+    const bookCount = allBooks.length;
+    const seriesCount = allSeries.length;
+```
+  - Update the template to use these variables instead of hardcoded numbers
+  - This ensures that when new books or series are added in the admin,
+    the homepage stats update automatically
+  - Also check "Pages Read" and "Reader Ratings" stats — if these are
+    hardcoded, consider whether they should also be calculated dynamically
+    (e.g., summing ratings across all books) or remain manually set
+    in a site settings CMS field
+  - Test by verifying counts match the actual number of entries
+    in the Books and Series admin collections
+  - Test that adding a new book or series updates the homepage count
