@@ -1187,3 +1187,19 @@
     button appears with correct total count
   - Test with series that have 18 or fewer to confirm button is hidden
   - Test responsive grid at all breakpoints
+
+- [x] **T113** - ENHANCE: Show book title alongside artwork title in admin list view
+  - refs: D001, T104, T073
+  - In public/admin/config.yml, update the artwork collection
+  - Add or modify the summary field to display both title and book:
+```yaml
+    collections:
+      - name: artwork
+        label: Artwork
+        folder: src/content/artwork
+        summary: "{{title}} - {{book}}"
+        ...
+```
+  - If book is a relation field (per T104), the summary may need to use
+    the slug value — adjust display accordingly
+  - Test in /admin that the artwork list shows "Artwork Title - Book Title"

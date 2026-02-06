@@ -308,6 +308,7 @@ collections:
     slug: "{{slug}}"
     extension: "md"
     format: "frontmatter"
+    summary: "{{title}} - {{book}}"
     fields:
       - { label: "Title", name: "title", widget: "string" }
       - { label: "Image", name: "image", widget: "image", required: true }
