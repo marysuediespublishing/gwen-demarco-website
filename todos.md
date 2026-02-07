@@ -1927,3 +1927,66 @@
     (could be publishDate, date, pubDate, etc.) — use same field as T142
   - Test on location pages that appear in multiple books to confirm
     books are listed from oldest to newest publication
+
+- [x] **T144** - ENHANCE: Add blog categories with admin management, filtering, and display
+  - refs: D001
+  - This requires multiple coordinated changes:
+
+  **1. Create Categories collection in Decap CMS:**
+  - In public/admin/config.yml, add a new collection for blog categories:
+```yaml
+    - name: blog_categories
+      label: Blog Categories
+      folder: src/content/blog-categories
+      create: true
+      delete: true
+      slug: "{{slug}}"
+      fields:
+        - name: title
+          label: Category Name
+          widget: string
+        - name: description
+          label: Description
+          widget: text
+          required: false
+```
+  - Create the folder src/content/blog-categories/
+  - Add blog categories to the Astro content collection schema in src/content/config.ts
+
+  **2. Add category dropdown to Blog Post admin:**
+  - In public/admin/config.yml, add a category field to the blog posts collection:
+```yaml
+    - name: category
+      label: Category
+      widget: relation
+      collection: blog_categories
+      search_fields: [title]
+      value_field: "{{slug}}"
+      display_fields: [title]
+      required: false
+```
+
+  **3. Update main Blog page (/blog) with category filtering:**
+  - In the blog page template (likely src/pages/blog.astro or src/pages/blog/index.astro)
+  - Fetch all blog categories from the collection
+  - Display category filter buttons/tabs above the blog post list
+    (e.g., "All" plus one button per category)
+  - Implement client-side filtering: clicking a category shows only
+    posts in that category, "All" shows everything
+  - Style active category filter with ember-orange or similar highlight
+  - Show the category name on each blog post card in the listing
+
+  **4. Display category on individual blog post pages:**
+  - In the individual blog post template
+    (likely src/pages/blog/[...slug].astro)
+  - Find where the category is displayed at the top of the post
+  - Resolve the category slug to the category title for display
+  - Make the category name a clickable link back to /blog filtered
+    by that category (e.g., /blog?category=[slug] or /blog#[slug])
+  - Style consistently with existing post metadata (date, author, etc.)
+
+  - Test in /admin that categories can be created, edited, and deleted
+  - Test that blog posts show the category dropdown populated with categories
+  - Test on /blog that category filters work correctly
+  - Test on individual blog posts that category displays and links correctly
+  - Test that posts with no category assigned display gracefully

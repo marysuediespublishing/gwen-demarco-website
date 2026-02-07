@@ -162,6 +162,19 @@ collections:
       - { label: "Featured Series", name: "featured", widget: "boolean", default: false }
       - { label: "Content", name: "body", widget: "markdown" }
 
+  # Blog Categories collection
+  - name: "blog_categories"
+    label: "Blog Categories"
+    folder: "src/content/blog-categories"
+    create: true
+    delete: true
+    slug: "{{slug}}"
+    extension: "md"
+    format: "frontmatter"
+    fields:
+      - { label: "Category Name", name: "title", widget: "string" }
+      - { label: "Description", name: "description", widget: "text", required: false }
+
   # Blog collection
   - name: "blog"
     label: "Blog Posts"
@@ -179,9 +192,12 @@ collections:
       - { label: "Tags", name: "tags", widget: "list", default: [] }
       - label: "Category"
         name: "category"
-        widget: "select"
-        options: ["species-lore", "world-building", "writing-process", "behind-scenes"]
-        default: "writing-process"
+        widget: "relation"
+        collection: "blog_categories"
+        search_fields: ["title"]
+        value_field: "{{slug}}"
+        display_fields: ["title"]
+        required: false
       - { label: "Content", name: "body", widget: "markdown" }
 
   # Testimonials collection

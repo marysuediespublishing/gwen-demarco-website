@@ -6,12 +6,13 @@ import FormattedDate from '../components/FormattedDate.astro';
 type Props = CollectionEntry<'blog'>['data'] & {
 	previousPost?: CollectionEntry<'blog'> | null;
 	nextPost?: CollectionEntry<'blog'> | null;
+	categoryMap?: Record<string, string>;
 };
 
-const { title, description, pubDate, updatedDate, heroImage, bookSlug, tags, category, readingTime, previousPost, nextPost } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, bookSlug, tags, category, readingTime, previousPost, nextPost, categoryMap = {} } = Astro.props;
 
-// Format category for display
-const formatCategory = (cat: string) => cat.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+// Resolve category slug to display title using the category map, with fallback
+const getCategoryTitle = (cat: string) => categoryMap[cat] || cat.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 ---
 
 <Layout title={`${title} - Gwen DeMarco`} description={description}>
@@ -27,9 +28,9 @@ const formatCategory = (cat: string) => cat.split('-').map(word => word.charAt(0
 					<!-- Category badge -->
 					{category && (
 						<div class="text-center mb-4">
-							<span class="badge badge-series text-sm">
-								{formatCategory(category)}
-							</span>
+							<a href={`/blog/?category=${category}`} class="badge badge-series text-sm hover:bg-mystic-violet/30 transition-colors">
+								{getCategoryTitle(category)}
+							</a>
 						</div>
 					)}
 

@@ -7,8 +7,15 @@ const posts = (await getCollection('blog')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
 
-// Get unique categories for filtering
+// Fetch blog categories collection for resolving slugs to titles
+const blogCategories = await getCollection('blogCategories');
+const categoryMap = new Map(blogCategories.map(cat => [cat.id, cat.data.title]));
+
+// Get unique category slugs that are actually in use
 const categories = [...new Set(posts.map(post => post.data.category).filter(Boolean))];
+
+// Helper to resolve category slug to display title
+const getCategoryTitle = (slug: string) => categoryMap.get(slug) || slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 ---
 
 <Layout title="Blog - Gwen DeMarco" description="Insights from my writing journey, book launch announcements, and behind-the-scenes peeks into the weird and wonderful worlds of urban fantasy.">
@@ -53,9 +60,7 @@ const categories = [...new Set(posts.map(post => post.data.category).filter(Bool
 								class="filter-btn badge badge-outline hover:badge-primary transition-all duration-200"
 								data-category={category}
 							>
-								{category?.toString().split('-').map(word =>
-									word.charAt(0).toUpperCase() + word.slice(1)
-								).join(' ')}
+								{getCategoryTitle(category!.toString())}
 							</button>
 						))}
 					</div>
@@ -110,9 +115,7 @@ const categories = [...new Set(posts.map(post => post.data.category).filter(Bool
 												{/* Category badge */}
 												{post.data.category && (
 													<span class="badge badge-series text-xs mb-3">
-														{post.data.category.toString().split('-').map(word =>
-															word.charAt(0).toUpperCase() + word.slice(1)
-														).join(' ')}
+														{getCategoryTitle(post.data.category.toString())}
 													</span>
 												)}
 
@@ -200,24 +203,35 @@ const categories = [...new Set(posts.map(post => post.data.category).filter(Bool
 		const filterButtons = document.querySelectorAll('.filter-btn');
 		const blogPosts = document.querySelectorAll('.blog-post');
 
+		const filterByCategory = (category: string) => {
+			// Update active button
+			filterButtons.forEach(btn => btn.classList.remove('active'));
+			const activeBtn = document.querySelector(`.filter-btn[data-category="${category}"]`);
+			activeBtn?.classList.add('active');
+
+			// Filter posts
+			blogPosts.forEach(post => {
+				const postCategory = post.getAttribute('data-category');
+				if (category === 'all' || postCategory === category) {
+					post.classList.remove('hidden');
+				} else {
+					post.classList.add('hidden');
+				}
+			});
+		};
+
 		filterButtons.forEach(button => {
 			button.addEventListener('click', () => {
 				const category = button.getAttribute('data-category');
-
-				// Update active button
-				filterButtons.forEach(btn => btn.classList.remove('active'));
-				button.classList.add('active');
-
-				// Filter posts
-				blogPosts.forEach(post => {
-					const postCategory = post.getAttribute('data-category');
-					if (category === 'all' || postCategory === category) {
-						post.classList.remove('hidden');
-					} else {
-						post.classList.add('hidden');
-					}
-				});
+				if (category) filterByCategory(category);
 			});
 		});
+
+		// Check URL for category parameter (e.g., /blog/?category=book-launches)
+		const urlParams = new URLSearchParams(window.location.search);
+		const categoryParam = urlParams.get('category');
+		if (categoryParam) {
+			filterByCategory(categoryParam);
+		}
 	});
 </script>

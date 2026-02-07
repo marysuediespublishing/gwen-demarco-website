@@ -56,6 +56,15 @@ const series = defineCollection({
   }),
 });
 
+// Blog Categories collection - CMS-managed blog categories
+const blogCategories = defineCollection({
+  loader: glob({ base: './src/content/blog-categories', pattern: '**/*.{md,mdx}' }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string().optional(),
+  }),
+});
+
 // Blog collection - blog posts
 const blog = defineCollection({
   loader: glob({ base: './src/content/blog', pattern: '**/*.{md,mdx}' }),
@@ -67,7 +76,7 @@ const blog = defineCollection({
     heroImage: z.string().optional(),
     bookSlug: z.string().optional(),
     tags: z.array(z.string()).default([]),
-    category: z.enum(['book-launches', 'species-lore', 'world-building', 'writing-process', 'behind-scenes']).default('writing-process'),
+    category: z.string().optional(),
     readingTime: z.string().optional(),
   }),
 });
@@ -214,6 +223,7 @@ const pages = defineCollection({
 export const collections = {
   books,
   series,
+  blogCategories,
   blog,
   testimonials,
   characters,
