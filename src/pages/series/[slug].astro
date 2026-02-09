@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import { SITE_TITLE } from '../../consts';
 import { type CollectionEntry, getCollection, render } from 'astro:content';
+import StarRating from '../../components/StarRating.astro';
 
 export async function getStaticPaths() {
   const seriesCollection = await getCollection('series');
@@ -238,11 +239,12 @@ try {
                     </span>
                   </div>
                   {(seriesItem.data.overallRating || averageRating > 0) && (
-                    <div class="flex justify-between">
+                    <div class="flex justify-between items-center">
                       <span class="text-fog-gray">Rating:</span>
-                      <span class="text-moon-silver font-medium">
-                        {(seriesItem.data.overallRating || averageRating).toFixed(1)} <span class="text-ember-orange">★</span>
-                      </span>
+                      <div class="flex items-center space-x-1.5">
+                        <StarRating rating={seriesItem.data.overallRating || averageRating} size="w-3.5 h-3.5" id={`series-info-${seriesItem.id}`} />
+                        <span class="text-moon-silver font-medium">{(seriesItem.data.overallRating || averageRating).toFixed(1)}</span>
+                      </div>
                     </div>
                   )}
                   {(seriesItem.data.totalRatings || totalRatings > 0) && (
@@ -521,8 +523,8 @@ try {
                 </h3>
 
                 {book.data.rating && (
-                  <div class="flex items-center space-x-1">
-                    <span class="text-ember-orange text-sm">★</span>
+                  <div class="flex items-center space-x-1.5">
+                    <StarRating rating={book.data.rating} size="w-3 h-3" id={`seriesbook-${book.slug}`} />
                     <span class="text-moon-silver text-xs">{book.data.rating}</span>
                     {book.data.ratingCount && (
                       <span class="text-fog-gray text-xs">({book.data.ratingCount.toLocaleString()})</span>

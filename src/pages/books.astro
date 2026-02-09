@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import { SITE_TITLE } from '../consts';
 import { getCollection } from 'astro:content';
+import StarRating from '../components/StarRating.astro';
 
 // Get all books and series for display
 const books = (await getCollection('books')).map(book => ({
@@ -146,8 +147,8 @@ function getSeriesDisplay(seriesSlug: string | undefined): string {
 									<!-- Rating and price -->
 									<div class="flex items-center justify-between mt-auto pt-4 border-t border-mystic-violet/20">
 										{book.data.rating && (
-											<div class="flex items-center space-x-1">
-												<span class="text-ember-orange">★</span>
+											<div class="flex items-center space-x-1.5">
+												<StarRating rating={book.data.rating} size="w-3.5 h-3.5" id={`feat-${book.slug}`} />
 												<span class="text-moon-silver text-sm">{book.data.rating}</span>
 											</div>
 										)}
@@ -210,8 +211,8 @@ function getSeriesDisplay(seriesSlug: string | undefined): string {
 							<!-- Footer with rating and KU badge -->
 							<div class="flex items-center justify-between mt-auto pt-3 border-t border-mystic-violet/20">
 								{book.data.rating && (
-									<div class="flex items-center space-x-1">
-										<span class="text-ember-orange text-sm">★</span>
+									<div class="flex items-center space-x-1.5">
+										<StarRating rating={book.data.rating} size="w-3 h-3" id={`all-${book.slug}`} />
 										<span class="text-moon-silver text-xs">{book.data.rating}</span>
 									</div>
 								)}

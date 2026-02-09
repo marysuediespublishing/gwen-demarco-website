@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import { SITE_TITLE } from '../../consts';
 import { type CollectionEntry, getCollection, render } from 'astro:content';
+import StarRating from '../../components/StarRating.astro';
 
 export async function getStaticPaths() {
   const books = await getCollection('books');
@@ -338,11 +339,13 @@ const heatLevelDisplay: Record<string, { label: string; color: string }> = {
                       </span>
                     </div>
                     {book.data.rating > 0 && (
-                      <div class="flex justify-between">
+                      <div class="flex justify-between items-center">
                         <span class="text-fog-gray">Rating:</span>
-                        <span class="text-moon-silver font-medium">
-                          {book.data.rating.toFixed(1)} <span class="text-ember-orange">★</span> ({book.data.ratingCount?.toLocaleString() || 0})
-                        </span>
+                        <div class="flex items-center space-x-1.5">
+                          <StarRating rating={book.data.rating} size="w-3.5 h-3.5" id={`detail-${book.id}`} />
+                          <span class="text-moon-silver font-medium text-sm">{book.data.rating.toFixed(1)}</span>
+                          <span class="text-fog-gray text-xs">({book.data.ratingCount?.toLocaleString() || 0})</span>
+                        </div>
                       </div>
                     )}
                   </div>
@@ -549,8 +552,8 @@ const heatLevelDisplay: Record<string, { label: string; color: string }> = {
                 </h3>
 
                 {seriesBook.data.rating && (
-                  <div class="flex items-center space-x-1">
-                    <span class="text-ember-orange text-sm">★</span>
+                  <div class="flex items-center space-x-1.5">
+                    <StarRating rating={seriesBook.data.rating} size="w-3 h-3" id={`series-${seriesBook.slug}`} />
                     <span class="text-moon-silver text-xs">{seriesBook.data.rating}</span>
                   </div>
                 )}
@@ -666,8 +669,8 @@ const heatLevelDisplay: Record<string, { label: string; color: string }> = {
                 </h3>
 
                 {similarBook.data.rating && (
-                  <div class="flex items-center space-x-1">
-                    <span class="text-ember-orange text-sm">★</span>
+                  <div class="flex items-center space-x-1.5">
+                    <StarRating rating={similarBook.data.rating} size="w-3 h-3" id={`similar-${similarBook.slug}`} />
                     <span class="text-moon-silver text-xs">{similarBook.data.rating}</span>
                   </div>
                 )}
