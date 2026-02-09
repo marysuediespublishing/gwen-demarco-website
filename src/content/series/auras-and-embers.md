@@ -1,129 +1,190 @@
 ---
 title: Auras & Embers Series
-description: In a world where some can see the auras of others, auramancer Gideon Bean navigates a dangerous supernatural underground where bennu shifters, spirits, and ancient powers collide. A new urban fantasy series featuring snarky heroines and grumpy love interests in a world of aura magic and phoenix fire.
+description: In a world where some can perceive the magic hidden in plain sight,
+  reluctant auramancer Gideon Bean is pulled into a dangerous supernatural
+  underground where Mythicals, ancient powers, and deadly secrets collide. A new
+  urban fantasy series featuring an unlikely hero, a fearless bennu shifter, and
+  a hidden world of magic and phoenix fire.
+cover: /images/gideon-bean-ebook.jpg
 bookCount: 2
 completionStatus: ongoing
 startDate: 2024-02-01T00:00:00.000Z
 species:
   - auramancers
   - shifters
+  - bennu
+  - fae
+  - humans
+  - witches
+  - numerai
+  - truth-seeker
+  - wizard
+  - vampires
 overallRating: 4.5
-totalRatings: 200
-worldBuilding: The Auras & Embers world exists alongside our own, hidden in plain sight. Auramancers are rare individuals who can see and read the auras of others—their emotions, intentions, and supernatural nature laid bare. Bennu shifters are phoenix-like beings whose fire burns eternal, and spirits walk among the living with their own agendas. This supernatural underground has its own rules, factions, and dangers for those who can see beyond the veil.
+totalRatings: 804
+worldBuilding: The Auras & Embers world exists alongside our own, hidden in
+  plain sight. Mythicals—supernatural beings of every kind—live among us,
+  governed by the secretive Conclave. Auramancers are rare individuals who can
+  perceive magic itself, seeing through glamors and enchantments to reveal the
+  true nature of creatures others can only imagine. Bennu shifters are
+  phoenix-like beings rooted in ancient Egyptian mythology, reborn from the
+  ashes with fire that burns eternal. This supernatural world has its own rules,
+  factions, and dangers—and for those who can see beyond the veil, there's no
+  going back.
 readingOrder:
   - gideon-bean
   - spirit-marked
 featured: true
 ---
-
 # Auras & Embers Series
 
-*Some people see colors. Gideon Bean sees souls.*
+*Some people see colors. Gideon Bean sees magic.*
 
 ## Series Overview
 
-Welcome to a world where the supernatural hides in plain sight, visible only to those with the gift—or curse—of seeing auras. Auramancers are rare, valuable, and often in danger. They see what others cannot: the true nature of every being around them, from mundane humans to ancient supernatural creatures.
+Welcome to a world where the supernatural hides in plain sight, visible only to those with the rare gift — or curse — of perceiving magic. Auramancers are among the rarest of Mythicals, able to sense the subtle vibrations of the supernatural, see through glamors and enchantments, and perceive the true nature of every being around them. They're invaluable. They're also hunted.
 
-Gideon Bean didn't ask for this ability. She definitely didn't ask to be drawn into a world of bennu shifters with phoenix fire in their veins, restless spirits with unfinished business, and supernatural factions that would kill to control an auramancer's gifts.
+Gideon Bean didn't ask for this ability. He definitely didn't ask to be pulled into a world of bennu shifters with phoenix fire in their veins, body-snatching demons, and supernatural factions that would kill to control an auramancer's gifts. He was perfectly content working the graveyard shift at a crematorium and minding his own business — until a dead woman crawled out of his oven with wings of fire and a dangerous case that needed his help.
 
-But the weird and wonderful have found her, and Gideon is about to discover that seeing the truth is only the beginning.
+Now the weird, the wonderful, and the deadly have found him, and Gideon is about to discover that seeing the truth is only the beginning.
 
 ## The World of Auras & Embers
 
-The supernatural world exists parallel to our own, invisible to most humans but thriving in the shadows. Those with the ability to see auras can perceive the truth that others miss—the shimmer of a shifter's animal nature, the cold void of a vampire, the flickering flame of a bennu.
+The supernatural world exists alongside our own, invisible to most humans but thriving in the shadows. Mythicals — shifters, fae, witches, gargoyles, and creatures far older — live hidden among us, governed by the secretive Conclave. Auramancers can perceive what others miss: the vibration of a shifter's animal nature, the pull of fae magic bending your will, the searing heat of a bennu's eternal flame.
 
-Auramancers are highly sought after. Their ability to see through deception makes them valuable allies and dangerous enemies. Many don't survive long once they're discovered.
+Auramancers are highly sought after. Their ability to see through deception and their near-immunity to most magic makes them valuable allies and dangerous enemies. Many don't survive long once they're discovered.
 
-Gideon Bean is about to learn just how dangerous being special can be.
+Gideon Bean — an unlikely hero with a crappy hatchback and a habit of stepping up when every instinct tells him to run — is about to learn just how dangerous being rare can be.
 
----
+- - -
 
 ## The Series
 
 ### Book 1: Gideon Bean (2024)
+
 **The Awakening**
 
-*She sees auras. They see prey.*
+#### ***All Gideon Bean wants is to be left alone to burn corpses in peace. Is that too much to ask?***
 
-Gideon Bean has always known she was different. Seeing colors around people, sensing their emotions, knowing when someone is lying—she's learned to hide her abilities and stay under the radar. But when she witnesses something she can't explain and attracts the attention of the supernatural underground, her carefully built anonymity crumbles.
+Nothing exciting happens at Peterson Cremation Services – exactly how Gideon prefers it. All his life, he has seen *things* – scary and bizarre visions that weren’t really there. Working the night shift at the crematorium and days at Sheryl's Shell Shack lets him keep his head down and ignore the strange world around him. The last time Gideon reacted to one of his hallucinations, he ended up in a psychiatric hold. He can’t let anything like that happen again – it would break his mother’s heart.
 
-Now she's caught between bennu shifters whose phoenix fire could burn her to ash and shadowy organizations that want to use her gift for their own purposes. Gideon must learn the rules of a world she never knew existed—fast—if she wants to survive.
+Then suddenly, a woman with flaming wings and fiery eyes crawls out of a crematorium oven one night.
 
-And then there's the grumpy bennu shifter who seems determined to protect her whether she likes it or not.
+Dacey Menet is a Mythical who is reborn in fire. She’s investigating a series of local murders and disappearances, and she is enraged to have become one of the victims. Now Dacey needs Gideon’s help to catch her murderer.
 
-**Featuring**: Urban fantasy, auramancer abilities, phoenix shifters, snarky heroine
+Because it turns out his ‘hallucinations’ are real – Gideon Bean can see magic.
 
----
+**Featuring**: Urban fantasy, auramancer abilities, bennu phoenix shifters, reluctant hero, murder mystery
+
+- - -
 
 ### Book 2: Spirit Marked (2025)
+
 **The Deepening**
 
-*The dead have unfinished business. Gideon Bean is about to become part of it.*
+Since discovering his ability to see magical auras, Gideon has embraced his new role as an auramancer working for the Conclave. When five people in Millhaven mysteriously die without a cause, Dacey Menet – the bennu shifter who burst into his life in a blaze of fire – needs his unique talents.
 
-Gideon thought learning about bennu shifters was complicated enough. But when spirits start seeking her out, drawn to her auramancer abilities, she discovers that seeing auras was only the beginning of her gifts.
+As they investigate the deaths, Gideon discovers void-like magical signatures where life force once existed. Something is draining people's souls, and the victims seem unconnected – a tattoo artist, a nurse, a homeless man, and members of the town's elite.
 
-Spirit marked and increasingly powerful, Gideon attracts the attention of beings who have been watching from the shadows—ancient supernatural entities who have their own plans for an auramancer who can see and speak to the dead.
+When Dacey becomes the next target, Gideon must solve the mystery before the woman he's falling for becomes nothing but an empty shell. As Fourth of July celebrations light up the town, Gideon must uncover who – or what – is stealing souls before Dacey's eternal flame is extinguished forever.
 
-With her grumpy bennu shifter by her side and new allies who may have their own agendas, Gideon must navigate the dangerous waters between the living and the dead.
+**Featuring**: Expanded powers, spirit encounters, relationship development, supernatural politics, murder mystery
 
-**Featuring**: Expanded powers, spirit encounters, relationship development, supernatural politics
-
----
+- - -
 
 ## What Makes This Series Special
 
 ### Unique Magic System
-Auramancers see the world differently—literally. Gideon's ability to read auras provides a fresh perspective on urban fantasy, where truth and deception are visible to those who know how to look.
 
-### Snarky Heroine
-True to Gwen DeMarco's signature style, Gideon Bean faces supernatural threats with wit, sarcasm, and determination. She's not looking for trouble—trouble just keeps finding her.
+Auramancers perceive the world differently — literally. Gideon's rare ability to sense magic, see through glamors and enchantments, and detect the true nature of every Mythical around him provides a fresh perspective on urban fantasy, where deception crumbles in the presence of someone who can feel the truth beneath the surface.
 
-### Grumpy Love Interest
-The slow-burn romance features a protective bennu shifter whose gruff exterior hides depths that Gideon's auramancer abilities are perfectly suited to uncover.
+### Unlikely Hero
+
+Gideon Bean is no chosen one. He's a working-class guy with two jobs and a crappy hatchback who keeps trying to bow out of the supernatural world — until someone's in danger and he's the only one who can help. True to Gwen DeMarco's signature style, Gideon faces world-altering revelations with quiet determination, a strong moral backbone, and the kind of everyday bravery that makes him impossible not to root for. He's not looking for trouble — trouble just keeps finding him.
+
+### Fearless Love Interest
+
+The slow-burn romance features a bold, fiery bennu shifter who drags Gideon headfirst into danger with a grin on her face. She's reckless, mischievous, and unstoppable — and Gideon's auramancer abilities let him see the blazing inferno of power beneath her charm.
 
 ### Found Family
-As Gideon is drawn deeper into the supernatural world, she builds connections with unlikely allies—shifters, spirits, and other beings who become the family she chooses.
+
+As Gideon is drawn deeper into the world of Mythicals, he builds connections with unlikely allies — a telekinetic Fae FBI agent, a gargoyle with a smug streak, a tech-savvy Numerai, and other beings who become the family he chooses.
 
 ### Bennu Shifters
-A unique take on phoenix mythology, bennu shifters bring fire and rebirth to the urban fantasy landscape. Their ancient nature and burning power add danger and intrigue to Gideon's world.
+
+Rooted in ancient Egyptian mythology, bennu shifters are the living source of the phoenix legend — reborn from ash, immune to fire, with blazing wings and the spirit of a sun god in their blood. Their fierce nature and burning power add danger and heart to Gideon's world.
 
 ## The Setting: Hidden Supernatural World
 
-**Location**: Modern city setting with hidden supernatural underground
-**Atmosphere**: Urban fantasy with mystery and romance elements
-**Auramancers**: Rare individuals who can see and read auras
-**Bennu Shifters**: Phoenix-like beings with fire in their blood
-**Spirits**: The restless dead with unfinished business
-**The Underground**: A hidden world of supernatural factions, alliances, and conflicts
+**Location**: Small-town Florida — sleepy beach towns and sun-baked coastal cities with a supernatural underground hiding beneath the surface
+**Atmosphere**: Urban fantasy blending mystery, action, and slow-burn romance
+**Auramancers**: Rare individuals who can perceive magic, see through glamors, and are nearly immune to most spells
+**Bennu Shifters**: Phoenix-like beings born of ancient Egyptian fire, reborn from the ashes with their wounds healed and their strength restored
+**The Conclave**: The secretive governing body that oversees the Mythical world, employing fixers, investigators, and auramancers to maintain order
+**Mythicals**: Supernatural beings of every kind — shifters, fae, witches, gargoyles, and creatures far older — living hidden among humans
 
 ## Recurring Themes
 
-- **Hidden Gifts**: Learning to embrace abilities you've hidden your whole life
-- **Seeing Truth**: What it means to see beyond appearances
-- **Found Family**: Building connections across supernatural boundaries
-- **Fire and Rebirth**: The bennu nature—destruction and renewal
-- **The Dead Among Us**: Spirits who haven't moved on
+* * **Hidden Gifts:**
+
+     Learning to embrace abilities you've spent your whole life thinking made you crazy
+
+  * **Seeing Truth:**
+
+     What it means to perceive what everyone else is hiding
+
+  * **Found Family:**
+
+     Building connections across supernatural boundaries
+
+  * **Fire and Rebirth:**
+
+     The bennu nature — destruction and renewal, death and return
+
+  * **Reluctant Courage:**
+
+     The ordinary person who keeps stepping up when every instinct says run
 
 ## Reading Experience
 
 The Auras & Embers series offers:
-- **Fresh Urban Fantasy**: Auramancer abilities provide a unique lens on the supernatural
-- **Character Growth**: Watch Gideon evolve from hiding her gifts to embracing them
-- **Slow-Burn Romance**: A romance that builds through trust and shared danger
-- **Supernatural Action**: Bennu fire, spirit encounters, and faction conflicts
-- **Signature Snark**: Gwen DeMarco's trademark witty dialogue
+
+* * **Fresh Urban Fantasy:**
+
+     Auramancer abilities provide a unique lens on the supernatural — sensing magic rather than wielding it
+
+  * **Character Growth:**
+
+     Watch Gideon evolve from a reluctant everyman to someone who runs toward danger to protect the people he cares about
+
+  * **Slow-Burn Romance:**
+
+     A romance built through shared danger, trust earned the hard way, and the spark between an unlikely hero and a fearless woman made of fire
+
+  * **Supernatural Action:**
+
+     Bennu fire, body-snatching demons, soul-stealing magic, and faction conflicts
+
+  * **Signature Voice:**
+
+     Gwen DeMarco's trademark blend of heart, humor, and high stakes
 
 ## Perfect for Readers Who Love
 
-- Urban fantasy with unique magic systems
-- Snarky heroines who grow into their power
-- Slow-burn romance with grumpy love interests
-- Phoenix/fire mythology
-- Found family dynamics
-- Supernatural worlds hidden within modern cities
+* * Urban fantasy with unique magic systems
+
+  * Reluctant heroes who rise to the occasion
+
+  * Slow-burn romance with fearless, fiery love interests
+
+  * Phoenix and Egyptian mythology
+
+  * Found family dynamics
+
+  * Supernatural worlds hidden within small-town America
 
 ## Ongoing Series
 
 The Auras & Embers series is currently ongoing! Gideon Bean's story is just beginning, with more supernatural adventures, spirit encounters, and bennu fire to come. Join the journey now and discover what it means to see the world through auramancer eyes.
 
-*In a world where everyone hides their true nature, Gideon Bean sees it all. And what she sees is about to change everything.*
+*In a world where every Mythical hides their true nature, Gideon Bean senses it all. And what he discovers is about to change everything.*

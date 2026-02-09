@@ -1,7 +1,12 @@
 ---
 name: San Francisco City Morgue
 slug: san-francisco-morgue
-description: The heart of the Sophie Feegle series, the San Francisco City Morgue serves as both workplace and supernatural crossroads. Here, medical examiner Sophie Feegle encounters the hidden world of shifters, ogres, vampires, and other supernatural beings while navigating the line between the mundane and the magical.
+description: The heart of the Sophie Feegle series, the San Francisco City
+  Morgue serves as both workplace and supernatural crossroads. Here, medical
+  examiner Sophie Feegle encounters the hidden world of shifters, ogres,
+  vampires, and other supernatural beings while navigating the line between the
+  mundane and the magical.
+image: /images/morgue.png
 environmentType: urban-interior
 ---
 

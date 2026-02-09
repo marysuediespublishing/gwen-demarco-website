@@ -31,13 +31,20 @@ genres:
   - urban fantasy
   - paranormal romance
 isKU: true
-amazonUrl: https://www.amazon.com/dp/B0CB1VMP6C
+amazonUrl: https://amzn.to/4ajjA3C
 goodreadsUrl: https://www.goodreads.com/book/show/183023366-odds-and-ends
 price: $4.99
 wordCount: 98621
 pageCount: 318
 status: published
 featured: false
+languages:
+  - language: French
+    url: https://www.amazon.fr/dp/B0G76HFCDX
+  - language: German
+    url: https://www.amazon.de/dp/B0FHT6YTRC
+  - language: Spanish
+    url: https://www.amazon.es/dp/B0DYPJCFZD
 ---
 # Odds and Ends
 

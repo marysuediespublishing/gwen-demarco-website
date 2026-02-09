@@ -1,7 +1,12 @@
 ---
 name: San Francisco
 slug: san-francisco
-description: The foggy streets of San Francisco provide the perfect urban backdrop for supernatural intrigue. From the bustling Chinatown to the misty waterfront, the city's neighborhoods each harbor their own secrets and supernatural residents, creating a rich tapestry of paranormal romance and urban fantasy adventure.
+description: The foggy streets of San Francisco provide the perfect urban
+  backdrop for supernatural intrigue. From the bustling Chinatown to the misty
+  waterfront, the city's neighborhoods each harbor their own secrets and
+  supernatural residents, creating a rich tapestry of paranormal romance and
+  urban fantasy adventure.
+image: /images/san-francisco.png
 environmentType: urban-city
 ---
 

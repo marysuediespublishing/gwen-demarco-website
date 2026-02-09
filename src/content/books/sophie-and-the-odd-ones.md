@@ -25,13 +25,23 @@ genres:
   - urban fantasy
   - paranormal romance
 isKU: true
-amazonUrl: https://www.amazon.com/dp/B08CHKH9SY
+amazonUrl: https://amzn.to/49Zq0G4
 goodreadsUrl: https://www.goodreads.com/book/show/56194589-sophie-and-the-odd-ones
 price: $4.99
 wordCount: 80261
 pageCount: 258
 status: published
 featured: true
+featured_homepage: false
+featured_text: Featured
+languages:
+  - language: French
+    url: https://www.amazon.fr/dp/B0G3Z8WT4Q/
+  - language: German
+    url: https://www.amazon.de/dp/B0FF5Q8QJL/
+  - language: Spanish
+    url: https://www.amazon.es/dp/B0CNTP7PVL/
+hero_image: /images/sophie-brown-betty-on-her-right-hero-image.jpeg
 ---
 # Sophie and The Odd Ones
 

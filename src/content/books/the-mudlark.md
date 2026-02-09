@@ -1,47 +1,76 @@
 ---
 title: The Mudlark
 author: Gwen DeMarco
-cover: ../../assets/covers/the-mudlark.svg
-description: In a world where magic flows through ancient blood and kingdoms rise from
-  the ashes, one unlikely hero must discover the truth hidden in the mud. A sweeping
-  fantasy adventure of survival, secrets, and finding your place in a brutal world.
+description: The Kingdom of Erishum keeps its citizens safe behind towering
+  walls — or so Nyssa has always believed. A mudlark scraping by in the Shadow
+  District, she's this close to trading the riverbanks for a baker's
+  apprenticeship. But when she unearths a mysterious object from the mud, she's
+  pulled into a world of political intrigue, menacing priests, and dangerous
+  secrets. Now her survival instincts as a gutter rat are all that stand between
+  her and forces she never knew existed. A gritty fantasy adventure about
+  survival, sacrifice, and what happens when everything you've ever been taught
+  turns out to be a lie.
+cover: /images/mudlark_ebook.jpg
 series: Kingdom of Erishum
 seriesOrder: 1
 pubDate: 2023-10-01T00:00:00.000Z
-rating: 4.5
+rating: 4.3
 ratingCount: 187
 species:
   - hyvas
   - humans
-heatLevel: medium
+heatLevel: mild
 setting:
   - kingdom-of-erishum
 genres:
   - fantasy
   - epic fantasy
 isKU: true
-amazonUrl: https://www.amazon.com/Mudlark-Kingdom-Erishum-Trilogy-Book-ebook/dp/B0CKZHXBB2
-price: $4.99
+amazonUrl: https://amzn.to/4qh3r4r
+goodreadsUrl: https://www.goodreads.com/book/show/208845415-the-mudlark
+price: $3.99
+wordCount: 61240
+pageCount: 228
 status: published
 featured: true
+languages:
+  - language: German
+    url: https://www.amazon.de/dp/B0FB6DJ7G3
+  - language: Spanish
+    url: https://www.amazon.es/dp/B0F7GY26Y7/
 ---
-
 # The Mudlark
 
 The first book in the **Kingdom of Erishum Trilogy** marks Gwen DeMarco's foray into epic fantasy, delivering her signature character-driven storytelling in a richly imagined world.
 
 ## Synopsis
 
-In the dying kingdom of Erishum, survival means knowing your place. For those at the bottom—the mudlarks who scavenge the riverbanks for scraps of value—that place is in the muck.
+The Kingdom of Erishum is corrupt. Nyssa just doesn't know it yet.
 
-But when an unexpected discovery changes everything, one mudlark must navigate a world of political intrigue, ancient magic, and monsters called Hyvas that lurk in the wilds beyond civilization's reach.
+Towering border walls protect Erishum's citizens from the Dying Wilds and its monsters. Within those walls lies a kingdom of bustling marketplaces, powerful priests, and opulent festivals — and beneath it all, the Shadow District, where Nyssa scrapes by as a mudlark on the banks of the River Assur. She's close to leaving that life behind for the warm ovens of a baker's apprenticeship. All she needs is a little more money.
 
-With danger at every turn and allies who may be enemies in disguise, the journey from the gutters to something greater has never been more treacherous—or more thrilling.
+When she unearths a mysterious object that could buy her way out, she accidentally sets foot on a path filled with unseen threats, deceit, and political intrigue. Evading the menacing Enumerii priests and the king's shrikes, Nyssa is pulled deeper into a world of danger, betrayal, and sacrifice — and forced to confront a terrible choice: save her future or save an old friend.
+
+What do you do when everything you've ever been taught is a lie?
 
 ## What Makes This Book Special
 
-- **Underdog Hero**: A protagonist who rises from the lowest rungs of society
-- **Rich World-Building**: The Kingdom of Erishum comes alive with history, politics, and magic
-- **Dangerous Creatures**: The Hyvas are monsters unlike any you've encountered before
-- **Found Family**: Even in the darkest places, unexpected bonds can form
-- **Epic Scope**: The first chapter in a trilogy that will sweep you away
+* * **Underdog Hero:**
+
+     A resourceful mudlark who must outwit priests, spies, and a corrupt kingdom
+
+  * **Rich World-Building:**
+
+     From the Shadow District to opulent festivals, the Kingdom of Erishum comes alive with history, politics, and secrets
+
+  * **Political Intrigue:**
+
+     A layered web of deception where allies may be enemies in disguise
+
+  * **An Impossible Choice:**
+
+     When your future and your loyalty collide, what do you sacrifice?
+
+  * **Epic Scope:**
+
+     The first chapter in a trilogy that will sweep you away

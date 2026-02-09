@@ -1,17 +1,21 @@
 ---
 title: The Dying Wilds
 author: Gwen DeMarco
-cover: ../../assets/covers/the-dying-wilds.svg
-description: The epic conclusion to the Kingdom of Erishum Trilogy. As the wilds themselves begin to fade and ancient forces collide, everything our hero has fought for hangs in the balance. The final battle for the kingdom's soul begins.
+description: The epic conclusion to the Kingdom of Erishum Trilogy. Vallen and
+  Nyssa plunge back into the lethal Dying Wilds to rescue five Tributes from a
+  sacrificial ritual—but freeing the captives is only the beginning. With
+  Erishum in ruins and a tyrant king tightening his grip, two former gutter rats
+  must find the courage to fight for an entire kingdom's survival.
+cover: /images/the-dying-wilds-ebook.jpg
 series: Kingdom of Erishum
 seriesOrder: 3
 pubDate: 2024-03-01T00:00:00.000Z
-rating: 4.7
+rating: 4.4
 ratingCount: 98
 species:
   - hyvas
   - humans
-heatLevel: medium
+heatLevel: mild
 setting:
   - kingdom-of-erishum
   - the-dying-wilds
@@ -19,30 +23,50 @@ genres:
   - fantasy
   - epic fantasy
 isKU: true
-amazonUrl: https://www.amazon.com/Dying-Wilds-Kingdom-Erishum-Trilogy-ebook/dp/B0CY38RQ5G
+amazonUrl: https://amzn.to/3MoMO98
+goodreadsUrl: https://www.goodreads.com/book/show/209953564-the-dying-wilds
 price: $4.99
+pageCount: 306
 status: published
 featured: false
+languages:
+  - language: German
+    url: https://www.amazon.de/dp/B0FCJRJWSH
+  - language: Spanish
+    url: https://www.amazon.es/dp/B0F8D65Z8Z
 ---
-
 # The Dying Wilds
 
-The thrilling conclusion to the **Kingdom of Erishum Trilogy** brings our hero's journey to its epic end.
+The thrilling conclusion to the **Kingdom of Erishum Trilogy** brings Nyssa and Vallen's journey to its epic end.
 
 ## Synopsis
 
-The wilds are dying. What once was untamed and powerful is now fading, and with it goes the last hope for those who refuse to bow to tyranny.
+The Dying Wilds are as lethal as ever—and Vallen and Nyssa are heading straight back in.
 
-From mudlark to gutter shrike, our hero has risen through blood and betrayal. Now, as the kingdom tears itself apart and the ancient powers that once protected the realm draw their final breaths, there's nowhere left to rise—only the choice between fighting for a dying world or watching it burn.
+Five Tributes face a sacrificial ritual, and no one else is coming to save them. Armed with magical wellspring water and the hard-won survival instincts of former gutter rats, Vallen and Nyssa fortify their campsite against the deadly hyvas and launch a desperate rescue mission into the wilds that nearly killed them before.
 
-The forces arrayed against our hero have never been more dangerous. Old enemies return with new weapons, while allies reveal secrets that change everything. In a land where the magic itself is failing, victory will require sacrifices that no one is prepared to make.
+But freeing the captives is only the beginning. When they emerge from the wilds ready to return to Puzur, they discover that the kingdom of Erishum has fallen to ruin in their absence. King Jorek's tyranny has tightened its grip, and there is no safe haven left to retreat to—only the choice between standing against a king or watching their people suffer.
 
-But perhaps that's what it means to fight for something bigger than survival. Perhaps the dying wilds can be reborn—if someone is willing to pay the price.
+Two gutter rats against a kingdom's worth of enemies. The odds have never been worse. But courage, sacrifice, and sheer stubborn determination have carried them this far, and Vallen and Nyssa aren't done fighting yet.
 
 ## What Makes This Book Special
 
-- **Epic Conclusion**: All the threads of the trilogy come together in a satisfying finale
-- **High Stakes**: The fate of the entire kingdom hangs in the balance
-- **Emotional Payoffs**: Character arcs reach their powerful conclusions
-- **World-Changing Events**: The kingdom will never be the same
-- **Bittersweet Victory**: A finale that earns its ending
+* * **Epic Conclusion:**
+
+     All the threads of the trilogy come together in a gripping, high-stakes finale
+
+  * **Unlikely Heroes:**
+
+     Former gutter rats rise to challenge a tyrant king
+
+  * **Relentless Action:**
+
+     From battling hyvas in the wilds to confronting the forces of Erishum, the tension never lets up
+
+  * **Emotional Payoffs:**
+
+     Vallen and Nyssa's bond and bravery are tested like never before
+
+  * **A Kingdom's Fate:**
+
+     Erishum will never be the same—and neither will the readers

@@ -1,7 +1,12 @@
 ---
 name: The Dying Wilds
 slug: the-dying-wilds
-description: The untamed frontier beyond the Kingdom of Erishum's borders, where civilization ends and primal danger begins. The Dying Wilds are home to the fearsome Hyvas and other creatures that prey on those foolish enough to venture into their domain. Yet for some, these dangerous lands hold the key to freedom.
+description: The untamed frontier beyond the Kingdom of Erishum's borders, where
+  civilization ends and primal danger begins. The Dying Wilds are home to the
+  fearsome Hyvas and other creatures that prey on those foolish enough to
+  venture into their domain. Yet for some, these dangerous lands hold the key to
+  freedom.
+image: /images/the-mudlark-1.jpg
 environmentType: fantasy-wilderness
 ---
 

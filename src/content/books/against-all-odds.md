@@ -32,13 +32,20 @@ genres:
   - urban fantasy
   - paranormal romance
 isKU: true
-amazonUrl: https://www.amazon.com/dp/B0BQJWLHPS
+amazonUrl: https://amzn.to/4cduQRq
 goodreadsUrl: https://www.goodreads.com/book/show/74954470-against-all-odds
 price: $4.99
 wordCount: 99016
 pageCount: 332
 status: published
 featured: false
+languages:
+  - language: French
+    url: https://www.amazon.fr/dp/B0G6M64X4L
+  - language: German
+    url: https://www.amazon.de/dp/B0FHF1YX63
+  - language: Spanish
+    url: https://www.amazon.es/dp/B0DPSZR92V
 ---
 # Against All Odds
 

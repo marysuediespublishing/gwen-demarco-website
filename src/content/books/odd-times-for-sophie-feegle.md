@@ -27,13 +27,20 @@ genres:
   - urban fantasy
   - paranormal romance
 isKU: true
-amazonUrl: https://www.amazon.com/dp/B0B94JNDKZ
+amazonUrl: https://amzn.to/4azHMzP
 goodreadsUrl: https://www.goodreads.com/book/show/62104925-odd-times-for-sophie-feegle
 price: $4.99
 wordCount: 79805
 pageCount: 274
 status: published
 featured: false
+languages:
+  - language: French
+    url: https://www.amazon.fr/dp/B0G5J1BG5M
+  - language: German
+    url: https://www.amazon.de/dp/B0FH7D7J98
+  - language: Spanish
+    url: https://www.amazon.es/dp/B0DB67Q3JH
 ---
 # Odd Times for Sophie Feegle
 

@@ -1,7 +1,12 @@
 ---
 name: Kingdom of Erishum
 slug: kingdom-of-erishum
-description: A sprawling fantasy realm where political intrigue meets raw survival. The Kingdom of Erishum is a land of stark contrasts—gleaming noble courts standing above squalid city streets, ancient forests hiding deadly Hyvas, and a society where your birth determines everything, unless you have the courage to seize your own destiny.
+description: A sprawling fantasy realm where political intrigue meets raw
+  survival. The Kingdom of Erishum is a land of stark contrasts—gleaming noble
+  courts standing above squalid city streets, ancient forests hiding deadly
+  Hyvas, and a society where your birth determines everything, unless you have
+  the courage to seize your own destiny.
+image: /images/erishum.jpg
 environmentType: fantasy-kingdom
 ---
 

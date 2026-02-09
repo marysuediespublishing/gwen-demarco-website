@@ -92,9 +92,11 @@ while true; do
   
   # Run Claude Code with prompt to work on current todo
   # Use text output for simpler processing
-  claude -p "Read claude.md and follow the startup procedure. Work on the first unchecked todo in todos.md." \
+  claude -p "Read CLAUDE.md and follow the startup procedure. Work on the first unchecked todo in todos.md." \
     --dangerously-skip-permissions \
-    --output-format text
+    --verbose \
+    --output-format stream-json \
+    2>&1 | tee /dev/stderr | jq --unbuffered -j '.event.delta.text? // empty'
   
   log "Claude exited. Syncing filesystem..."
   sync  # Force flush writes to disk before re-reading files

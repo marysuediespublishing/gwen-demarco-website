@@ -263,3 +263,23 @@ rating: 5
 - Alternate section backgrounds for visual interest
 - Use consistent spacing between sections
 - Each section should have clear heading and description
+
+---
+
+## D015 - Static Output for GitHub Pages Deployment
+
+**Decision:** Switch from Node.js SSR adapter to Astro's static output for GitHub Pages deployment.
+
+**Rationale:** GitHub Pages only serves static files. The site has no dynamic server-side requirements — all content is pre-rendered from markdown. Decap CMS runs entirely client-side and works fine as a static page (local editing only, per D009).
+
+**Changes required:**
+- Remove `@astrojs/node` adapter from astro.config.mjs and dependencies
+- Set `output: 'static'` in astro.config.mjs (or remove `output` entirely, as static is the default)
+- Add GitHub Actions workflow for automated build and deploy
+- Ensure `site` is set in astro.config.mjs for sitemap/RSS generation
+
+**Constraints:**
+- No server-side rendering or API routes
+- All pages must be pre-renderable at build time
+- /admin route remains functional as a static client-side SPA (Decap CMS JS bundle)
+- Contact form will need a third-party service (Formspree, Netlify Forms, etc.) or can be replaced with a mailto link
