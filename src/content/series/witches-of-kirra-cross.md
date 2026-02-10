@@ -15,7 +15,7 @@ species:
   - humans
   - witches
 overallRating: 4.2
-totalRatings: 38
+totalRatings: 40
 worldBuilding: "The world of Asphalt Coven pulses beneath the cracked streets
   and smokestacks of Medeon, a rust-belt city where magic has survived not in
   ancient forests or sacred groves, but in concrete, rebar, and root systems

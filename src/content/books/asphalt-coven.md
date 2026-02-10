@@ -23,7 +23,7 @@ series: Witches of Kirra Cross
 seriesOrder: 1
 pubDate: 2025-11-28T11:40:00.000-05:00
 rating: 4.2
-ratingCount: 38
+ratingCount: 40
 species:
   - humans
   - witches
