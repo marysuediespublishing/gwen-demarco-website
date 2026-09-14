@@ -21,7 +21,8 @@ description: "Wiz is a wizard and member of the Conclave's investigative team â€
 books:
   - gideon-bean
   - spirit-marked
+  - ward-breaker
 cameos: []
 image: /images/wiz-with-a-staff.png
-species: wizard
+species: wizards
 ---

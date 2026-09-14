@@ -22,6 +22,7 @@ description: "MacGuire is a gargoyle shifter — not the carved cathedral statue
 books:
   - gideon-bean
   - spirit-marked
+  - ward-breaker
 cameos: []
 image: /images/macguire-with-wings.png
 species: shifters

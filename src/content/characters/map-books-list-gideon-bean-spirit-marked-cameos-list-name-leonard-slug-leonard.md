@@ -1,6 +1,6 @@
 ---
-name: Leonard
-slug: leonard
+name: Leonhard
+slug: leonhard
 description: Leonhard is a mystery to Gideon. They've talked on the phone and
   exchanged emails, but he's never met the man face-to-face. For all Gideon
   knows, Leonhard could be a seven-foot-tall bodybuilder or a ninety-year-old
@@ -11,6 +11,7 @@ description: Leonhard is a mystery to Gideon. They've talked on the phone and
 books:
   - gideon-bean
   - spirit-marked
+  - ward-breaker
 cameos: []
 image: /images/leonard.jpg
 species: numerai

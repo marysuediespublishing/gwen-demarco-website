@@ -22,6 +22,7 @@ description: "Stella Bean is Gideon's mother — a warm, hardworking woman who
 books:
   - gideon-bean
   - spirit-marked
+  - ward-breaker
 cameos: []
 image: /images/stella-bean.png
 species: humans

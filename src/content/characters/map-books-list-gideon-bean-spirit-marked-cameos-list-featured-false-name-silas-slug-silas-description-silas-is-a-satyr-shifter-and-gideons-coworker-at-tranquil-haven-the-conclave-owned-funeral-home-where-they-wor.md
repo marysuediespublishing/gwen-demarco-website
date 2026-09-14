@@ -16,6 +16,7 @@ description: Silas is a satyr shifter and Gideon's coworker at Tranquil Haven,
 books:
   - gideon-bean
   - spirit-marked
+  - ward-breaker
 cameos: []
 image: /images/silas-semi-realistic.jpeg
 species: satyr

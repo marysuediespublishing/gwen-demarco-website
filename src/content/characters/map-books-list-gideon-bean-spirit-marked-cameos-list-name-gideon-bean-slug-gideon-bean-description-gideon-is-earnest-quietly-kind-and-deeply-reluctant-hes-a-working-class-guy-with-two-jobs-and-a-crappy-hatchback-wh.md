@@ -13,6 +13,7 @@ description: Gideon is earnest, quietly kind, and deeply reluctant. He's a
 books:
   - gideon-bean
   - spirit-marked
+  - ward-breaker
 cameos: []
 image: /images/toddsampson_a_wary_twenty_seven_year_old_man_with_dark_hair_and_ddef86ff-356e-4c20-ae80-f2847a48e0f1.png
 species: auramancers

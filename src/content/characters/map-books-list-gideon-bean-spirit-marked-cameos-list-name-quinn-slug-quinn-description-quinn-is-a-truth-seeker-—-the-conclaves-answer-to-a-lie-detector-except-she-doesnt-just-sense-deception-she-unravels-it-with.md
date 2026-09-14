@@ -24,7 +24,8 @@ description: Quinn is a truth seeker — the Conclave's answer to a lie detector
 books:
   - gideon-bean
   - spirit-marked
+  - ward-breaker
 cameos: []
 image: /images/quinn-with-magic.png
-species: truth-seeker
+species: truth-seekers
 ---

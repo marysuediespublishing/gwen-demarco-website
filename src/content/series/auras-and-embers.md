@@ -6,7 +6,7 @@ description: In a world where some can perceive the magic hidden in plain sight,
   urban fantasy series featuring an unlikely hero, a fearless bennu shifter, and
   a hidden world of magic and phoenix fire.
 cover: /images/gideon-bean-ebook.jpg
-bookCount: 2
+bookCount: 3
 completionStatus: ongoing
 startDate: 2024-02-01T00:00:00.000Z
 species:
@@ -17,9 +17,15 @@ species:
   - humans
   - witches
   - numerai
-  - truth-seeker
-  - wizard
   - vampires
+  - satyr
+  - dryad
+  - minotaur
+  - pyromancer
+  - truth-seekers
+  - volvas
+  - wizards
+  - warlocks
 overallRating: 4.5
 totalRatings: 804
 worldBuilding: The Auras & Embers world exists alongside our own, hidden in
@@ -92,6 +98,26 @@ When Dacey becomes the next target, Gideon must solve the mystery before the wom
 
 - - -
 
+### Book 3: Ward Breaker (2026)
+
+**The Unveiling**
+
+Three Mythical children have been taken in Savannah. Gideon Bean is theonly one who can see how it was done.
+
+They were stolen from some of the best-protected homes in the city. Nodoor forced, no ward broken, and not a single alarm sounded. The Conclave's owninvestigators found nothing.
+
+Weeks before his agent training is even due to begin, Gideon is calledin early. Dacey Menet – the bennu shifter who burst into his life in a blaze offire – is already on the case, and the dinner date they've been promising eachother since Millhaven is going to have to wait. Again.
+
+Then Gideon finds what no one else can – a hair-thin seam in the wardacross a child's window, unpicked thread by thread and sealed shut again. Hehas never felt magic like it. Neither has Vena Merker, and she has been readingauras since before he was born.
+
+How do you track someone who leaves no trail?
+
+Rosalind Brenner has given the Conclave one week to bring her grandsonhome, or she'll burn the city to its foundations. Every Mythical bloodline inSavannah is calling for blood. And someone is after Dacey. Gideon doesn't knowif it has anything to do with the case. He only knows he can't lose her.
+
+Gideon came to Savannah to find three missing children. What he finds isa war that has been brewing for generations.
+
+**Featuring**: Expanded powers, unknown magic, relationship development, supernatural politics, kidnapped children
+
 ## What Makes This Series Special
 
 ### Unique Magic System
@@ -128,19 +154,15 @@ Rooted in ancient Egyptian mythology, bennu shifters are the living source of th
 * * **Hidden Gifts:**
 
      Learning to embrace abilities you've spent your whole life thinking made you crazy
-
   * **Seeing Truth:**
 
      What it means to perceive what everyone else is hiding
-
   * **Found Family:**
 
      Building connections across supernatural boundaries
-
   * **Fire and Rebirth:**
 
      The bennu nature — destruction and renewal, death and return
-
   * **Reluctant Courage:**
 
      The ordinary person who keeps stepping up when every instinct says run
@@ -152,19 +174,15 @@ The Auras & Embers series offers:
 * * **Fresh Urban Fantasy:**
 
      Auramancer abilities provide a unique lens on the supernatural — sensing magic rather than wielding it
-
   * **Character Growth:**
 
      Watch Gideon evolve from a reluctant everyman to someone who runs toward danger to protect the people he cares about
-
   * **Slow-Burn Romance:**
 
      A romance built through shared danger, trust earned the hard way, and the spark between an unlikely hero and a fearless woman made of fire
-
   * **Supernatural Action:**
 
      Bennu fire, body-snatching demons, soul-stealing magic, and faction conflicts
-
   * **Signature Voice:**
 
      Gwen DeMarco's trademark blend of heart, humor, and high stakes
@@ -172,15 +190,10 @@ The Auras & Embers series offers:
 ## Perfect for Readers Who Love
 
 * * Urban fantasy with unique magic systems
-
   * Reluctant heroes who rise to the occasion
-
   * Slow-burn romance with fearless, fiery love interests
-
   * Phoenix and Egyptian mythology
-
   * Found family dynamics
-
   * Supernatural worlds hidden within small-town America
 
 ## Ongoing Series

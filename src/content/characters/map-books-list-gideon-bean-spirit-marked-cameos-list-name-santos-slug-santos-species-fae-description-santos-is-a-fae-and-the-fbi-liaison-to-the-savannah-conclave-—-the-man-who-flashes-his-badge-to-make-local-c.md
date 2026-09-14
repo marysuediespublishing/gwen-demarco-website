@@ -24,6 +24,7 @@ description: Santos is a Fae and the FBI liaison to the Savannah Conclave — th
 books:
   - gideon-bean
   - spirit-marked
+  - ward-breaker
 cameos: []
 image: /images/santos.png
 species: fae

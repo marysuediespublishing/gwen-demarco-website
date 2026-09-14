@@ -18,6 +18,7 @@ description: Dacey Menet is a bennu shifter and fixer for the Conclave — the
 books:
   - gideon-bean
   - spirit-marked
+  - ward-breaker
 cameos: []
 image: /images/toddsampson_a_young_woman_with_dark_hair_with_flames_swirling_a_0071f7d0-e22f-4ac4-8ea3-2d6449b20b9d.png
 species: bennu
