@@ -59,7 +59,7 @@ npm run typecheck
 
 Decap CMS provides a user-friendly admin interface for editing content.
 
-### Running CMS Locally
+### Running Admin CMS Locally
 
 1. Start the Astro dev server:
    ```bash
