@@ -176,6 +176,8 @@ const settings = defineCollection({
   }),
 });
 
+const CROP_FOCAL_POINTS = { top: '50,0', center: '50,50', bottom: '50,100' } as const;
+
 // Artwork collection - artwork and illustrations
 const artwork = defineCollection({
   loader: glob({ base: './src/content/artwork', pattern: '**/*.{md,mdx}' }),
@@ -190,7 +192,9 @@ const artwork = defineCollection({
     // Keep backwards compatibility with old fields
     focal_x: z.number().min(0).max(100).optional(),
     focal_y: z.number().min(0).max(100).optional(),
-  }),
+    // Simple crop preset from the CMS; when set it overrides focal_point
+    crop: z.enum(['top', 'center', 'bottom']).optional(),
+  }).transform((data) => (data.crop ? { ...data, focal_point: CROP_FOCAL_POINTS[data.crop] } : data)),
 });
 
 // Pages collection - CMS-editable page content

@@ -1,9 +1,14 @@
+# Sveltia CMS configuration (Decap CMS compatible)
+# Online:  /admin → "Sign In Using Access Token" (GitHub fine-grained token, Contents read/write on this repo)
+# Locally: npm run dev → http://localhost:4321/admin → "Work with Local Repository" (Chrome/Edge)
 backend:
-  name: git-gateway
+  name: github
+  repo: marysuediespublishing/gwen-demarco-website
   branch: main
 
-# Enable local development mode
-local_backend: true
+# Leave blank optional fields out of saved files instead of writing '' (which breaks date/number schemas)
+output:
+  omit_empty_optional_fields: true
 
 # Media storage configuration
 media_folder: "public/images"
@@ -397,12 +402,21 @@ collections:
         display_fields: ["title"]
         required: false
       - { label: "Featured", name: "featured", widget: "boolean", default: false, required: false }
-      - label: "Thumbnail Focal Point"
+      - label: "Thumbnail Crop"
+        name: "crop"
+        widget: "select"
+        options:
+          - { label: "Top", value: "top" }
+          - { label: "Center", value: "center" }
+          - { label: "Bottom", value: "bottom" }
+        required: false
+        hint: "Which part of the image to keep when it's cropped into a thumbnail. Leave blank to use the custom focal point below."
+      - label: "Custom Focal Point (advanced)"
         name: "focal_point"
-        widget: "focal-point"
+        widget: "string"
         default: "50,50"
         required: false
-        hint: "Click on the image to set the thumbnail crop center"
+        hint: "Only used when Thumbnail Crop is blank. Format is X,Y in percent: 50,30 means centered left-to-right, 30% down from the top."
       - { label: "Content", name: "body", widget: "markdown", required: false }
 
   # Pages collection
@@ -463,7 +477,8 @@ collections:
 # Site configuration (placeholder - update when domain is configured)
 site_url: https://gwendemarco.com
 display_url: https://gwendemarco.com
-logo_url: https://gwendemarco.com/images/logo.png
+logo:
+  src: https://gwendemarco.com/images/logo.png
 
 # Editor configuration
 editor:

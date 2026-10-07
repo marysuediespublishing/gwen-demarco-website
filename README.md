@@ -9,7 +9,7 @@ An urban fantasy author website built with Astro 5, featuring Gwen DeMarco's par
 - **Tailwind CSS** - Utility-first styling with custom urban fantasy theme
 - **React** - Interactive components
 - **MDX** - Rich content authoring
-- **Decap CMS** - Git-based content management (local backend)
+- **Sveltia CMS** - Git-based content management (Decap-compatible, online at /admin)
 - **Node.js adapter** - Server-side rendering support
 
 ## Getting Started
@@ -55,25 +55,26 @@ npm run preview
 npm run typecheck
 ```
 
-## Using Decap CMS
+## Editing Content
 
-Decap CMS provides a user-friendly admin interface for editing content.
+The admin is [Sveltia CMS](https://github.com/sveltia/sveltia-cms), which uses Decap-compatible config in `public/admin/config.yml`.
 
-### Running Admin CMS Locally
+- **Online (normal way):** go to `https://gwendemarco.com/admin`, click **Sign In Using Access Token**, and paste a GitHub fine-grained token. Each save commits to `main`, and GitHub Actions redeploys in about 1–2 minutes. If a save doesn't show up, check the repo's Actions tab.
+- **Locally:** run `npm run dev`, open `http://localhost:4321/admin`, click **Work with Local Repository** (Chrome or Edge) and pick this folder. Changes are written to disk, so commit and push them yourself. Pull first if anything was edited online.
 
-1. Start the Astro dev server:
-   ```bash
-   npm run dev
-   ```
+**Token:** create it at https://github.com/settings/personal-access-tokens/new:
+- **Resource owner:** `marysuediespublishing`
+- **Repository access:** this repo only. One token can also cover several of the org's sites.
+- **Permissions:** Contents → **Read and write**
+- **Expiration:** set one, then regenerate the token when it expires.
 
-2. In a separate terminal, start the Decap CMS proxy server:
-   ```bash
-   npx decap-server
-   ```
+If the org requires approval, approve the token under org Settings → Personal access tokens. "Sign in with GitHub" isn't configured; it would need an OAuth server.
 
-3. Navigate to `http://localhost:4321/admin`
+**Notes:**
+- The CMS version is pinned in `public/admin/index.html`. Bump it deliberately.
+- Don't add a `src/pages/admin` route: its build output overwrites the CMS page. In dev, `/admin/` is served by a small rewrite in `astro.config.mjs`.
 
-The CMS uses `local_backend: true`, so no authentication is required for local development. Changes are saved directly to your local files.
+**Artwork thumbnails:** the **Thumbnail Crop** dropdown (Top / Center / Bottom) picks which part of the image the thumbnail keeps. Leave it blank to use **Custom Focal Point**, an `X,Y` percent value such as `50,30`.
 
 ### Content Collections
 
@@ -167,7 +168,7 @@ src/
 ├── styles/           # Global styles
 └── utils/            # Utility functions
 public/
-├── admin/            # Decap CMS
+├── admin/            # Sveltia CMS
 │   ├── index.html
 │   └── config.yml
 └── images/           # Static images

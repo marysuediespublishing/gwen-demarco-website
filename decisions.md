@@ -283,3 +283,16 @@ rating: 5
 - All pages must be pre-renderable at build time
 - /admin route remains functional as a static client-side SPA (Decap CMS JS bundle)
 - Contact form will need a third-party service (Formspree, Netlify Forms, etc.) or can be replaced with a mailto link
+
+## D016 - Switch Admin to Sveltia CMS with Online Editing
+
+**Decision:** Replace Decap CMS (local backend only, D009) with Sveltia CMS using the `github` backend, so content can be edited online at /admin with a GitHub fine-grained token.
+
+**Rationale:** Local-only editing required running the dev server and decap-server. Sveltia reads the same config format and supports token sign-in without an OAuth server, which works on GitHub Pages.
+
+**Changes:**
+- `public/admin/index.html` loads a pinned Sveltia version. The custom preview templates are dropped, since Sveltia has its own preview.
+- `config.yml` uses `backend: github` and `output.omit_empty_optional_fields: true`. Otherwise Sveltia writes `''` for blank optional fields, which breaks date and number schemas.
+- Removed `src/pages/admin/index.astro`. Its build output overwrote `public/admin/index.html` with a redirect loop. A Vite rewrite in `astro.config.mjs` serves /admin/ in dev.
+- Removed the custom focal-point widget, because Sveltia doesn't support custom widgets. Artwork now has a **Thumbnail Crop** select (top/center/bottom) that overrides `focal_point` in the content schema. `focal_point` stays as an editable `X,Y` text field, so existing values are preserved.
+

@@ -7,7 +7,7 @@ You are working in a loop-based development system. Each invocation is a fresh c
 - Astro 5 with TypeScript
 - Tailwind CSS (custom urban fantasy theme)
 - React components for interactivity
-- Decap CMS for content management (local backend only, no auth needed)
+- Sveltia CMS (Decap-compatible) for content management, online at /admin via GitHub token (see D016)
 - Node.js adapter for server-side rendering
 - MDX for rich content
 
@@ -52,7 +52,7 @@ Before marking a todo complete:
 src/
 ├── components/        # Astro and React components
 │   └── ui/           # Reusable UI components
-├── content/          # Decap CMS content collections
+├── content/          # CMS content collections
 │   ├── books/        # Book entries
 │   ├── series/       # Series entries
 │   ├── blog/         # Blog posts
@@ -66,7 +66,7 @@ src/
 ├── styles/           # Global styles
 └── utils/            # Utility functions
 public/
-├── admin/            # Decap CMS admin
+├── admin/            # Sveltia CMS admin
 │   ├── index.html    # CMS entry point
 │   └── config.yml    # CMS configuration
 └── images/           # Static images
