@@ -236,7 +236,8 @@ Typography uses Cinzel for mystical headers and Inter for readable body text.
 | `boxSetPrice` | `src/content/series/sophie-feegle.md` | The Buy button reads "Buy the Kindle box set" with no price. When set (e.g. `9.99`) it reads "Buy the Kindle box set — $9.99" |
 | `boxSetSeparatePrice` | `src/content/series/sophie-feegle.md` | No value line. With `boxSetPrice` also set, "5 books for $X — $Y bought separately" shows under the Buy button |
 | `amazonBadge` | `src/content/settings/site-config.md` | No badge. Set it to Amazon's official "Available at Amazon" badge file, unaltered (Amazon brand-usage terms) |
-| `landingAttributionTag` | `src/content/settings/site-config.md` | No Amazon Attribution tag. When set (a query string such as `maas=...&ref_=aa_maas&tag=maas`), it's added to both box-set buttons (not the paperback link) only for `?from=ad` or `utm_source=meta` visitors |
+| `landingAttributionTag` | `src/content/settings/site-config.md` | No Amazon Attribution tag on the box-set buttons. When set (the Attribution URL, or just its query string `maas=...&ref_=aa_maas&tag=maas`), its query string is added to the Kindle Unlimited and Buy buttons for every visitor: the page is unlinked from the site, so everyone on it came from the ad |
+| `paperbackAttributionTag` | `src/content/settings/site-config.md` | No Amazon Attribution tag on the paperback link. When set, likewise added to the "Book 1 in paperback" link for every visitor |
 | `metaPixelId` | `src/content/settings/site-config.md` | No pixel loads. When set, it loads without a consent click if the browser's time zone is a US zone. Anyone else, including visitors whose zone can't be read, sees an in-page Allow/No thanks bar first |
 | `pressCtrEndpoint` | `src/content/settings/site-config.md` | Clicks are counted only as the custom pixel events `LandingClickKU` / `LandingClickBuy` / `LandingClickPaperback`. When set, each click also POSTs a keepalive `press.landing.ctr` beacon |
 

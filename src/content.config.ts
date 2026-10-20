@@ -178,9 +178,10 @@ const settings = defineCollection({
       leadMagnetDescription: z.string().optional(),
       benefits: z.array(z.string()).optional(),
     }).optional(),
-    // Ad landing pages: Meta pixel, Amazon Attribution tag (ad visitors only), Press CTR beacon
+    // Ad landing pages: Meta pixel, Amazon Attribution tags (box set, paperback), Press CTR beacon
     metaPixelId: z.string().optional(),
     landingAttributionTag: z.string().optional(),
+    paperbackAttributionTag: z.string().optional(),
     pressCtrEndpoint: z.string().optional(),
     amazonBadge: z.string().optional(),
   }),

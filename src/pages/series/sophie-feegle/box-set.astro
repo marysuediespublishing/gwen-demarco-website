@@ -2,7 +2,8 @@
 // Sophie Feegle box-set landing page: where readers land from the Meta ad.
 // CMS inputs (all optional, see README "Box-set landing page"):
 //   series boxSetAsin / boxSetBlurb / boxSetPrice / boxSetSeparatePrice, and
-//   site-config metaPixelId / landingAttributionTag / pressCtrEndpoint / amazonBadge
+//   site-config metaPixelId / landingAttributionTag / paperbackAttributionTag /
+//   pressCtrEndpoint / amazonBadge
 import Layout from '../../../layouts/Layout.astro';
 import StarRating from '../../../components/StarRating.astro';
 import { getCollection, getEntry } from 'astro:content';
@@ -76,10 +77,23 @@ const showRating = rating > 0 && ratingCount > 0;
 const siteConfig = await getEntry('settings', 'site-config');
 const amazonBadge = siteConfig?.data.amazonBadge?.trim();
 
+// Amazon Attribution: every visitor gets the tags (the page is unlinked from the
+// site, so everyone on it came from the ad). A tag may be the whole Attribution
+// URL; only its query string is used.
+const withTag = (href: string, tag?: string) => {
+  const query = tag?.trim().replace(/^[^?]*\?/, '');
+  if (!query) return href;
+  const url = new URL(href);
+  new URLSearchParams(query).forEach((value, key) => url.searchParams.set(key, value));
+  return url.toString();
+};
+
 const asin = series.data.boxSetAsin?.trim();
-const amazonUrl = asin
-  ? `https://www.amazon.com/dp/${asin}`
-  : 'https://www.amazon.com/s?k=Sophie+Feegle+Box+Set+Gwen+DeMarco&i=digital-text';
+const amazonUrl = withTag(
+  asin ? `https://www.amazon.com/dp/${asin}` : 'https://www.amazon.com/s?k=Sophie+Feegle+Box+Set+Gwen+DeMarco&i=digital-text',
+  siteConfig?.data.landingAttributionTag,
+);
+const paperbackUrl = withTag(PAPERBACK_URL, siteConfig?.data.paperbackAttributionTag);
 
 const money = (value?: string) => {
   const amount = value?.trim().replace(/^\$/, '');
@@ -91,7 +105,6 @@ const buyLabel = price ? `Buy the Kindle box set — ${price}` : 'Buy the Kindle
 const valueLine = price && separatePrice ? `${books.length} books for ${price} — ${separatePrice} bought separately` : '';
 
 const landingConfig = {
-  attributionTag: siteConfig?.data.landingAttributionTag?.trim() || '',
   pixelId: siteConfig?.data.metaPixelId?.trim() || '',
   ctrEndpoint: siteConfig?.data.pressCtrEndpoint?.trim() || '',
 };
@@ -231,7 +244,7 @@ const pitch = (series.data.boxSetBlurb?.trim() || series.data.description)
             </a>
             {valueLine && <p class="text-sm text-fog-gray text-center mt-1">{valueLine}</p>}
             <p class="text-center mt-4">
-              <a href={PAPERBACK_URL} data-landing-cta="paperback" class="text-sm text-fog-gray underline underline-offset-2 hover:text-moon-silver">Prefer paper? Book 1 in paperback →</a>
+              <a href={paperbackUrl} data-landing-cta="paperback" class="text-sm text-fog-gray underline underline-offset-2 hover:text-moon-silver">Prefer paper? Book 1 in paperback →</a>
             </p>
           </div>
         </section>
@@ -258,7 +271,7 @@ const pitch = (series.data.boxSetBlurb?.trim() || series.data.description)
           </a>
           {valueLine && <p class="text-sm text-fog-gray text-center mt-1">{valueLine}</p>}
           <p class="text-center mt-4">
-            <a href={PAPERBACK_URL} data-landing-cta="paperback" class="text-sm text-fog-gray underline underline-offset-2 hover:text-moon-silver">Prefer paper? Book 1 in paperback →</a>
+            <a href={paperbackUrl} data-landing-cta="paperback" class="text-sm text-fog-gray underline underline-offset-2 hover:text-moon-silver">Prefer paper? Book 1 in paperback →</a>
           </p>
           {amazonBadge && (
             <img src={amazonBadge} alt="Available at Amazon" class="h-10 w-auto mx-auto mt-5" loading="lazy" />
@@ -291,7 +304,8 @@ const pitch = (series.data.boxSetBlurb?.trim() || series.data.description)
       // time zone is our region signal.
       var US_ZONE = /^(America\/(New_York|Detroit|Kentucky\/.+|Indiana\/.+|Chicago|Menominee|North_Dakota\/.+|Denver|Boise|Phoenix|Los_Angeles|Anchorage|Juneau|Sitka|Metlakatla|Yakutat|Nome|Adak)|Pacific\/Honolulu|US\/.+)$/;
 
-      // Ad visitor: ?from=ad or utm_source=meta, remembered for the tab session.
+      // Ad visitor: ?from=ad or utm_source=meta, remembered for the tab session. Only
+      // labels the click events' source; the Attribution tags are on every link.
       var params = new URLSearchParams(location.search);
       var fromAd = params.get('from') === 'ad' || (params.get('utm_source') || '').toLowerCase() === 'meta';
       try {
@@ -300,15 +314,6 @@ const pitch = (series.data.boxSetBlurb?.trim() || series.data.description)
       } catch (e) {}
 
       var ctas = document.querySelectorAll('[data-landing-cta]');
-      // Every CTA carries the Attribution tag: Amazon credits any purchase after a tagged click.
-      if (fromAd && landingConfig.attributionTag) {
-        var tag = new URLSearchParams(landingConfig.attributionTag.replace(/^[^?]*\?/, ''));
-        ctas.forEach(function (a) {
-          var url = new URL(a.href);
-          tag.forEach(function (value, key) { url.searchParams.set(key, value); });
-          a.href = url.toString();
-        });
-      }
 
       // Meta pixel: US visitors without a click, everyone else after "Allow".
       var pixelLoaded = false;
