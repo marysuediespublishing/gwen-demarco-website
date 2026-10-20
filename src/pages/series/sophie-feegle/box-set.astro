@@ -35,7 +35,7 @@ const BOOK_HOOKS: Record<string, string> = {
   'odds-and-ends': 'The finale: who Sophie truly is.',
 };
 // Book 1 in paperback: a quiet link that measures interest in print.
-const PAPERBACK_URL = 'https://www.amazon.com/dp/B08CHKH9SY';
+const PAPERBACK_URL = 'https://www.amazon.com/dp/B08CWM839H';
 const BLURB_PARAGRAPHS = 3;
 
 const series = await getEntry('series', SERIES_SLUG);
@@ -222,16 +222,16 @@ const pitch = (series.data.boxSetBlurb?.trim() || series.data.description)
             Snarky heroines. Grumpy heroes. Found family. All five books, one click.
           </p>
           <div class="lg:hidden max-w-md mx-auto">
-            <a href={amazonUrl} data-landing-cta="ku" class="btn btn-primary btn-lg w-full" target="_blank" rel="noopener noreferrer">
+            <a href={amazonUrl} data-landing-cta="ku" class="btn btn-primary btn-lg w-full">
               Read free with Kindle Unlimited
             </a>
             <p class="text-sm text-fog-gray text-center mt-1 mb-3">Free for Kindle Unlimited members</p>
-            <a href={amazonUrl} data-landing-cta="buy" class="btn btn-secondary btn-lg w-full" target="_blank" rel="noopener noreferrer">
+            <a href={amazonUrl} data-landing-cta="buy" class="btn btn-secondary btn-lg w-full">
               {buyLabel}
             </a>
             {valueLine && <p class="text-sm text-fog-gray text-center mt-1">{valueLine}</p>}
             <p class="text-center mt-4">
-              <a href={PAPERBACK_URL} data-landing-cta="paperback" class="text-sm text-fog-gray underline underline-offset-2 hover:text-moon-silver" target="_blank" rel="noopener noreferrer">Prefer paper? Book 1 in paperback →</a>
+              <a href={PAPERBACK_URL} data-landing-cta="paperback" class="text-sm text-fog-gray underline underline-offset-2 hover:text-moon-silver">Prefer paper? Book 1 in paperback →</a>
             </p>
           </div>
         </section>
@@ -249,16 +249,16 @@ const pitch = (series.data.boxSetBlurb?.trim() || series.data.description)
               <p class="text-xs text-fog-gray mt-1">{ratingCount.toLocaleString('en-US')} ratings across all {books.length} books</p>
             </div>
           )}
-          <a href={amazonUrl} data-landing-cta="ku" class="btn btn-primary btn-lg w-full !text-base !px-4" target="_blank" rel="noopener noreferrer">
+          <a href={amazonUrl} data-landing-cta="ku" class="btn btn-primary btn-lg w-full !text-base !px-4">
             Read free with Kindle Unlimited
           </a>
           <p class="text-sm text-fog-gray text-center mt-1 mb-4">Free for Kindle Unlimited members</p>
-          <a href={amazonUrl} data-landing-cta="buy" class="btn btn-secondary btn-lg w-full !text-base !px-4" target="_blank" rel="noopener noreferrer">
+          <a href={amazonUrl} data-landing-cta="buy" class="btn btn-secondary btn-lg w-full !text-base !px-4">
             {buyLabel}
           </a>
           {valueLine && <p class="text-sm text-fog-gray text-center mt-1">{valueLine}</p>}
           <p class="text-center mt-4">
-            <a href={PAPERBACK_URL} data-landing-cta="paperback" class="text-sm text-fog-gray underline underline-offset-2 hover:text-moon-silver" target="_blank" rel="noopener noreferrer">Prefer paper? Book 1 in paperback →</a>
+            <a href={PAPERBACK_URL} data-landing-cta="paperback" class="text-sm text-fog-gray underline underline-offset-2 hover:text-moon-silver">Prefer paper? Book 1 in paperback →</a>
           </p>
           {amazonBadge && (
             <img src={amazonBadge} alt="Available at Amazon" class="h-10 w-auto mx-auto mt-5" loading="lazy" />
@@ -270,11 +270,11 @@ const pitch = (series.data.boxSetBlurb?.trim() || series.data.description)
     <!-- Phone: the buttons in a bar fixed to the screen bottom; it slides away while the closing pair is in view -->
     <div id="cta-bar" class="lg:hidden fixed inset-x-0 bottom-0 z-40 border-t border-mystic-violet/30 bg-shadow-black/95 backdrop-blur px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] transition-transform duration-200">
       <div class="max-w-md mx-auto">
-        <a href={amazonUrl} data-landing-cta="ku" class="btn btn-primary btn-lg w-full" target="_blank" rel="noopener noreferrer">
+        <a href={amazonUrl} data-landing-cta="ku" class="btn btn-primary btn-lg w-full">
           Read free with Kindle Unlimited
         </a>
         <p class="text-xs text-fog-gray text-center mt-1 mb-2">Free for Kindle Unlimited members</p>
-        <a href={amazonUrl} data-landing-cta="buy" class="btn btn-secondary btn-lg w-full" target="_blank" rel="noopener noreferrer">
+        <a href={amazonUrl} data-landing-cta="buy" class="btn btn-secondary btn-lg w-full">
           {buyLabel}
         </a>
         {valueLine && <p class="text-xs text-fog-gray text-center mt-1">{valueLine}</p>}
@@ -300,10 +300,10 @@ const pitch = (series.data.boxSetBlurb?.trim() || series.data.description)
       } catch (e) {}
 
       var ctas = document.querySelectorAll('[data-landing-cta]');
-      // The Attribution tag is the box set's; the paperback link stays plain.
+      // Every CTA carries the Attribution tag: Amazon credits any purchase after a tagged click.
       if (fromAd && landingConfig.attributionTag) {
         var tag = new URLSearchParams(landingConfig.attributionTag.replace(/^[^?]*\?/, ''));
-        document.querySelectorAll('[data-landing-cta="ku"], [data-landing-cta="buy"]').forEach(function (a) {
+        ctas.forEach(function (a) {
           var url = new URL(a.href);
           tag.forEach(function (value, key) { url.searchParams.set(key, value); });
           a.href = url.toString();
@@ -332,7 +332,7 @@ const pitch = (series.data.boxSetBlurb?.trim() || series.data.description)
       var stored = null;
       try { stored = localStorage.getItem(CONSENT_KEY); } catch (e) {}
 
-      if (US_ZONE.test(zone) || stored === 'granted') {
+      if (stored !== 'denied' && (US_ZONE.test(zone) || stored === 'granted')) {
         loadPixel();
       } else if (stored !== 'denied' && landingConfig.pixelId) {
         var bar = document.getElementById('consent-bar');

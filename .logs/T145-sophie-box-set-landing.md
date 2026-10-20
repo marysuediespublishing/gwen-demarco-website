@@ -36,3 +36,11 @@ With every field empty (the committed state), the buttons go to an Amazon Kindle
 **Result:** Success
 
 **Details:** `npm run build` prints Complete!. In the built dist/series/sophie-feegle/box-set/index.html, "Series Info" and "Books:" no longer appear. The five attributions now read Odd Times for Sophie Feegle (the pull-quote), Odds and Ends (BGlanton, twists), Sophie and The Odd Ones (Anne, San Francisco), the Sophie Feegle Box Set (Rhonda Jones, coroner's assistant / corpse), and Portents and Oddities (Lastenia S., romance and sci-fi). Gotcha: Astro's testimonial id drops the curly apostrophe ("nits-an", not "nit’s-an"). Playwright (system Chrome) on astro preview at 1280: the aside text is just the rating lines, both buttons, the KU note and the paperback link. Screenshots: ~/.oftomorrow/signals/runners/ccd/shots/2635/r4-1280.png, r4-390.png.
+
+## Attempt 5
+
+**Approach:** Reviewer messages #10929, #10957, #10959 (signals #2635). CTAs open in the same tab (drop target/rel); a stored 'denied' blocks the pixel even in US zones; the paperback link gets the Attribution tag too; PAPERBACK_URL becomes https://www.amazon.com/dp/B08CWM839H.
+
+**Result:** Success
+
+**Details:** Removed target=_blank/rel from all KU, Buy and paperback links, so they open in the same tab. The pixel now loads only when stored !== 'denied' && (US zone || stored === 'granted'). The Attribution tag is applied to every [data-landing-cta] link, and the "stays plain" comment is gone. PAPERBACK_URL is now https://www.amazon.com/dp/B08CWM839H. Verification: `npm run build` printed Complete!. Playwright (system Chrome) on astro preview, with temporary pixel and tag values that have since been reverted: Chicago ?from=ad gave all three links with ?maas=maas_adg_TEST&ref_=aa_maas&tag=maas and no target, and the paperback click queued trackCustom LandingClickPaperback with source ad. New York with no query gave plain links. London ?utm_source=meta showed the consent bar, no fbq, and tagged links. A stored 'denied' gave no fbq and no bar in both Chicago and London. A stored 'granted' loaded fbq in both. The final build has no _blank and has 2x dp/B08CWM839H.
