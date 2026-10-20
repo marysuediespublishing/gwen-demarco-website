@@ -230,11 +230,13 @@ Typography uses Cinzel for mystical headers and Inter for readable body text.
 | --- | --- | --- |
 | `boxSetAsin` | `src/content/series/sophie-feegle.md` | The buttons go to an Amazon Kindle search for the box set |
 | `boxSetBlurb` | `src/content/series/sophie-feegle.md` | The pitch uses the series `description`. Either way the page shows only the first three paragraphs |
-| `boxSetPrice` | `src/content/series/sophie-feegle.md` | The Buy button reads "Buy on Amazon" with no price. When set (e.g. `9.99`) it reads "Buy on Amazon — $9.99" |
+| `boxSetPrice` | `src/content/series/sophie-feegle.md` | The Buy button reads "Buy the Kindle box set" with no price. When set (e.g. `9.99`) it reads "Buy the Kindle box set — $9.99" |
 | `boxSetSeparatePrice` | `src/content/series/sophie-feegle.md` | No value line. With `boxSetPrice` also set, "5 books for $X — $Y bought separately" shows under the Buy button |
 | `amazonBadge` | `src/content/settings/site-config.md` | No badge. Set it to Amazon's official "Available at Amazon" badge file, unaltered (Amazon brand-usage terms) |
-| `landingAttributionTag` | `src/content/settings/site-config.md` | No Amazon Attribution tag. When set (a query string such as `maas=...&ref_=aa_maas&tag=maas`), it's added to both buttons only for `?from=ad` or `utm_source=meta` visitors |
+| `landingAttributionTag` | `src/content/settings/site-config.md` | No Amazon Attribution tag. When set (a query string such as `maas=...&ref_=aa_maas&tag=maas`), it's added to both box-set buttons (not the paperback link) only for `?from=ad` or `utm_source=meta` visitors |
 | `metaPixelId` | `src/content/settings/site-config.md` | No pixel loads. When set, it loads without a consent click if the browser's time zone is a US zone. Anyone else, including visitors whose zone can't be read, sees an in-page Allow/No thanks bar first |
-| `pressCtrEndpoint` | `src/content/settings/site-config.md` | Clicks are counted only as the custom pixel events `LandingClickKU` / `LandingClickBuy`. When set, each click also POSTs a keepalive `press.landing.ctr` beacon |
+| `pressCtrEndpoint` | `src/content/settings/site-config.md` | Clicks are counted only as the custom pixel events `LandingClickKU` / `LandingClickBuy` / `LandingClickPaperback`. When set, each click also POSTs a keepalive `press.landing.ctr` beacon |
+
+The "Prefer paper? Book 1 in paperback →" link (`PAPERBACK_URL`), the one-line book hooks (`BOOK_HOOKS`) and the review picks are constants at the top of the page file.
 
 The page uses the slim landing chrome (`<Layout landing>`): the name mark linking home, and a footer with only the legal links. The three review quotes are picked by testimonial id at the top of the page file. Resized covers and the 1200x630 `og:image` are in `public/images/landing/`.

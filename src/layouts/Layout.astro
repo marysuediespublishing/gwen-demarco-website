@@ -95,11 +95,13 @@ const socialImageURL = image ? new URL(image, Astro.url) : undefined;
 
     {landing ? (
       <footer class="relative z-10 border-t border-mystic-violet/20 py-6 text-sm text-moon-silver/60">
-        <div class="container mx-auto px-4 flex flex-wrap justify-center gap-4">
-          <span>&copy; {new Date().getFullYear()} Gwen DeMarco</span>
-          <a href="/privacy-policy" class="hover:text-ember-orange transition-colors">Privacy Policy</a>
-          <a href="/cookie-policy" class="hover:text-ember-orange transition-colors">Cookie Policy</a>
-        </div>
+        <p class="container mx-auto px-4 text-center">
+          <a href="/privacy-policy" class="hover:text-ember-orange transition-colors">Privacy</a>
+          <span aria-hidden="true" class="mx-2">·</span>
+          <a href="/cookie-policy" class="hover:text-ember-orange transition-colors">Cookies</a>
+          <span aria-hidden="true" class="mx-2">·</span>
+          <a href="/contact" class="hover:text-ember-orange transition-colors">Contact</a>
+        </p>
       </footer>
     ) : (
       <>

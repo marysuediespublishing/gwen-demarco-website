@@ -43,8 +43,8 @@ readingOrder:
   - against-all-odds
   - odds-and-ends
 featured: true
-boxSetAsin: ""
-boxSetPrice: ""
+boxSetAsin: B0CK55M553
+boxSetPrice: "9.99"
 boxSetSeparatePrice: ""
 ---
 # Sophie Feegle Series

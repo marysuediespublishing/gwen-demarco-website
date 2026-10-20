@@ -8,13 +8,26 @@ import StarRating from '../../../components/StarRating.astro';
 import { getCollection, getEntry } from 'astro:content';
 
 const SERIES_SLUG = 'sophie-feegle';
-// Short, whole Amazon reviews: the pull-quote under the hero, then two lower down.
+// Short, whole Amazon reviews: the pull-quote under the hero, then four lower down.
 // Placeholders until the box-set review quotes land on signals #2684.
 const PULL_QUOTE_ID = '2024-04-11-map-verified-false-featured-false-date-2024-04-11-booktitle-odd-times-for-sophie-feegle-reviewername-mrs-dustbunny-reviewerplatform-amazon-quote-holy-wow-nan-amazing-storyline-with-enough-twist-to-make-your-head-spin';
 const REVIEW_IDS = [
   '2024-04-09-map-verified-false-featured-false-date-2024-04-09-booktitle-portents-and-oddities-reviewername-kay-reviewerplatform-amazon-quote-oh-so-good-ni-was-convinced-i-knew-who-was-who-in-the-group-of-sophies-friends-who-was',
   '2024-12-28-map-verified-false-featured-false-date-2024-12-28-booktitle-sophie-and-the-odd-ones-reviewername-anne-reviewerplatform-amazon-quote-thoroughly-enjoyable-ngreat-plot-great-pacing-well-developed-and-believable-charact',
+  '2024-05-01-map-verified-false-featured-false-date-2024-05-01-booktitle-against-all-odds-reviewername-blair-reviewerplatform-amazon-quote-a-great-series-na-unique-storyline-with-lovable-characters-i-highly-recommend-you-read-th',
+  '2021-12-28-map-verified-false-featured-false-date-2021-12-28-booktitle-portents-and-oddities-reviewername-lastenia-s-reviewerplatform-amazon-quote-excellent-series-nthis-author-is-new-to-me-and-quickly-becoming-a-favorite-the',
 ];
+// One line under each cover, lifted from each book's page. Keep them short enough
+// not to wrap at phone width.
+const BOOK_HOOKS: Record<string, string> = {
+  'sophie-and-the-odd-ones': 'Her calling: the morgue’s graveyard shift.',
+  'portents-and-oddities': 'She dreams the victims before they die.',
+  'odd-times-for-sophie-feegle': 'Murders, a wolf pack, a serial-killer twin.',
+  'against-all-odds': 'Undercover at a Vegas shifter fight club.',
+  'odds-and-ends': 'The finale: who Sophie truly is.',
+};
+// Book 1 in paperback: a quiet link that measures interest in print.
+const PAPERBACK_URL = 'https://www.amazon.com/dp/B08CHKH9SY';
 const BLURB_PARAGRAPHS = 3;
 
 const series = await getEntry('series', SERIES_SLUG);
@@ -47,8 +60,10 @@ const toReview = (id: string) => {
 const pullQuote = toReview(PULL_QUOTE_ID);
 const reviews = REVIEW_IDS.map(toReview).filter((r): r is NonNullable<typeof r> => Boolean(r));
 
+// Series-wide numbers, labelled as such: the box set has its own (smaller) Amazon rating.
 const rating = series.data.overallRating;
 const ratingCount = series.data.totalRatings;
+const showRating = rating > 0 && ratingCount > 0;
 
 const siteConfig = await getEntry('settings', 'site-config');
 const amazonBadge = siteConfig?.data.amazonBadge?.trim();
@@ -64,7 +79,7 @@ const money = (value?: string) => {
 };
 const price = money(series.data.boxSetPrice);
 const separatePrice = money(series.data.boxSetSeparatePrice);
-const buyLabel = price ? `Buy on Amazon — ${price}` : 'Buy on Amazon';
+const buyLabel = price ? `Buy the Kindle box set — ${price}` : 'Buy the Kindle box set';
 const valueLine = price && separatePrice ? `${books.length} books for ${price} — ${separatePrice} bought separately` : '';
 
 const landingConfig = {
@@ -87,7 +102,7 @@ const pitch = (series.data.boxSetBlurb?.trim() || series.data.description)
   image="/images/landing/sophie-feegle-box-set-og.jpg"
   landing
 >
-  <main id="main-content" class="relative z-10 pt-8 lg:pt-12 lg:pb-16">
+  <main id="main-content" class="relative z-10 pt-8 pb-12 lg:pt-12 lg:pb-16">
     <div id="consent-bar" hidden class="max-w-6xl mx-auto px-4 mb-6">
       <div class="flex flex-col sm:flex-row sm:items-center gap-3 rounded-lg border border-mystic-violet/30 bg-dark-surface/90 px-4 py-3 text-sm text-fog-gray">
         <p class="flex-1">
@@ -100,16 +115,16 @@ const pitch = (series.data.boxSetBlurb?.trim() || series.data.description)
       </div>
     </div>
 
-    <div class="max-w-6xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
-      <div class="lg:col-span-2">
+    <div class="max-w-6xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_23rem] gap-10 items-start">
+      <div>
         <!-- Hero: box set, hook, tropes, rating, pull-quote -->
         <section class="grid sm:grid-cols-[minmax(0,14rem)_1fr] gap-6 sm:gap-8 items-center">
           <img
-            src="/images/landing/sophie-feegle-box-set-640.jpg"
+            src="/images/landing/sophie-feegle-box-set-640.webp"
             alt="Sophie Feegle Box Set, Books 1–5 by Gwen DeMarco"
             width="640"
-            height="859"
-            class="w-full max-w-[11rem] sm:max-w-none mx-auto rounded-lg shadow-2xl shadow-mystic-violet/30"
+            height="658"
+            class="w-full max-w-[13rem] sm:max-w-none mx-auto drop-shadow-[0_20px_35px_rgba(107,70,193,0.35)]"
             fetchpriority="high"
           />
           <div class="text-center sm:text-left">
@@ -119,10 +134,13 @@ const pitch = (series.data.boxSetBlurb?.trim() || series.data.description)
               The dead keep their secrets at the San Francisco City Morgue. Until Sophie touches them.
             </p>
             <p class="text-ember-orange font-medium mb-4">Snarky heroines. Grumpy heroes. Found family.</p>
-            {rating > 0 && ratingCount > 0 && (
-              <div class="flex items-center justify-center sm:justify-start gap-2 text-moon-silver">
-                <StarRating rating={rating} id="box-set-hero" />
-                <span>{rating.toFixed(1)} · {ratingCount.toLocaleString('en-US')} ratings</span>
+            {showRating && (
+              <div class="text-moon-silver">
+                <div class="flex items-center justify-center sm:justify-start gap-2">
+                  <StarRating rating={rating} id="box-set-hero" />
+                  <span>{rating.toFixed(1)} average across the series</span>
+                </div>
+                <p class="text-sm text-fog-gray mt-1">{ratingCount.toLocaleString('en-US')} ratings across all {books.length} books</p>
               </div>
             )}
           </div>
@@ -138,12 +156,12 @@ const pitch = (series.data.boxSetBlurb?.trim() || series.data.description)
           </figure>
         )}
 
-        <!-- Covers in series order -->
+        <!-- Covers in series order, one hook line each -->
         <section class="mt-12">
           <h2 class="text-2xl md:text-3xl font-primary font-bold text-bone-white mb-6">All five books inside</h2>
-          <ol class="grid grid-cols-3 sm:grid-cols-5 gap-3 sm:gap-4">
+          <ol class="space-y-4">
             {books.map((book) => (
-              <li class="text-center">
+              <li class="flex items-center gap-3 sm:gap-4">
                 {book.data.cover && (
                   <img
                     src={landingImage(book.data.cover, 400)}
@@ -152,11 +170,16 @@ const pitch = (series.data.boxSetBlurb?.trim() || series.data.description)
                     height="600"
                     loading="lazy"
                     decoding="async"
-                    class="w-full rounded-md shadow-lg shadow-mystic-violet/20 mb-2 aspect-[2/3] object-cover"
+                    class="w-14 sm:w-20 shrink-0 rounded-md shadow-lg shadow-mystic-violet/20 aspect-[2/3] object-cover"
                   />
                 )}
-                <p class="text-xs text-mystic-teal">Book {book.data.seriesOrder}</p>
-                <p class="text-sm font-medium text-bone-white leading-tight">{book.data.title}</p>
+                <div class="min-w-0">
+                  <p class="text-xs text-mystic-teal">Book {book.data.seriesOrder}</p>
+                  <p class="font-medium text-bone-white leading-tight">{book.data.title}</p>
+                  {BOOK_HOOKS[book.id] && (
+                    <p class="text-sm text-moon-silver mt-1 whitespace-nowrap">{BOOK_HOOKS[book.id]}</p>
+                  )}
+                </div>
               </li>
             ))}
           </ol>
@@ -167,7 +190,7 @@ const pitch = (series.data.boxSetBlurb?.trim() || series.data.description)
           {pitch.map((paragraph) => <p>{paragraph}</p>)}
         </section>
 
-        <!-- Reviews (text only, attributed) -->
+        <!-- Reviews (text only, attributed), two by two -->
         {reviews.length > 0 && (
           <section class="mt-12">
             <h2 class="text-2xl md:text-3xl font-primary font-bold text-bone-white mb-6">What readers say on Amazon</h2>
@@ -185,16 +208,24 @@ const pitch = (series.data.boxSetBlurb?.trim() || series.data.description)
           </section>
         )}
 
-        <!-- The buttons once more, after the reviews (on phones the bar below comes to rest here) -->
-        <section class="hidden lg:block mt-12 max-w-sm">
-          <a href={amazonUrl} data-landing-cta="ku" class="btn btn-primary btn-lg w-full" target="_blank" rel="noopener noreferrer">
-            Read free with Kindle Unlimited
-          </a>
-          <p class="text-sm text-fog-gray text-center mt-1 mb-3">Free for Kindle Unlimited members</p>
-          <a href={amazonUrl} data-landing-cta="buy" class="btn btn-secondary btn-lg w-full" target="_blank" rel="noopener noreferrer">
-            {buyLabel}
-          </a>
-          {valueLine && <p class="text-sm text-fog-gray text-center mt-1">{valueLine}</p>}
+        <!-- Closing line; on phones the last pair of buttons follows it (at desktop the sidebar is the pair) -->
+        <section id="closing-ctas" class="mt-12 text-center lg:text-left">
+          <p class="font-primary text-xl md:text-2xl text-bone-white mb-6">
+            Snarky heroines. Grumpy heroes. Found family. All five books, one click.
+          </p>
+          <div class="lg:hidden max-w-md mx-auto">
+            <a href={amazonUrl} data-landing-cta="ku" class="btn btn-primary btn-lg w-full" target="_blank" rel="noopener noreferrer">
+              Read free with Kindle Unlimited
+            </a>
+            <p class="text-sm text-fog-gray text-center mt-1 mb-3">Free for Kindle Unlimited members</p>
+            <a href={amazonUrl} data-landing-cta="buy" class="btn btn-secondary btn-lg w-full" target="_blank" rel="noopener noreferrer">
+              {buyLabel}
+            </a>
+            {valueLine && <p class="text-sm text-fog-gray text-center mt-1">{valueLine}</p>}
+            <p class="text-center mt-4">
+              <a href={PAPERBACK_URL} data-landing-cta="paperback" class="text-sm text-fog-gray underline underline-offset-2 hover:text-moon-silver" target="_blank" rel="noopener noreferrer">Prefer paper? Book 1 in paperback →</a>
+            </p>
+          </div>
         </section>
       </div>
 
@@ -207,24 +238,28 @@ const pitch = (series.data.boxSetBlurb?.trim() || series.data.description)
               <dt class="text-fog-gray">Books:</dt>
               <dd class="text-moon-silver font-medium">{books.length}, complete</dd>
             </div>
-            {rating > 0 && ratingCount > 0 && (
-              <div class="flex justify-between items-center">
-                <dt class="text-fog-gray">Rating:</dt>
+            {showRating && (
+              <div>
+                <dt class="sr-only">Rating</dt>
                 <dd class="flex items-center gap-1.5 text-moon-silver font-medium">
                   <StarRating rating={rating} size="w-3.5 h-3.5" id="box-set-sidebar" />
-                  {rating.toFixed(1)} · {ratingCount.toLocaleString('en-US')}
+                  {rating.toFixed(1)} average across the series
                 </dd>
+                <dd class="text-xs text-fog-gray mt-1">{ratingCount.toLocaleString('en-US')} ratings across all {books.length} books</dd>
               </div>
             )}
           </dl>
-          <a href={amazonUrl} data-landing-cta="ku" class="btn btn-primary btn-lg w-full" target="_blank" rel="noopener noreferrer">
+          <a href={amazonUrl} data-landing-cta="ku" class="btn btn-primary btn-lg w-full !text-base !px-4" target="_blank" rel="noopener noreferrer">
             Read free with Kindle Unlimited
           </a>
           <p class="text-sm text-fog-gray text-center mt-1 mb-4">Free for Kindle Unlimited members</p>
-          <a href={amazonUrl} data-landing-cta="buy" class="btn btn-secondary btn-lg w-full" target="_blank" rel="noopener noreferrer">
+          <a href={amazonUrl} data-landing-cta="buy" class="btn btn-secondary btn-lg w-full !text-base !px-4" target="_blank" rel="noopener noreferrer">
             {buyLabel}
           </a>
           {valueLine && <p class="text-sm text-fog-gray text-center mt-1">{valueLine}</p>}
+          <p class="text-center mt-4">
+            <a href={PAPERBACK_URL} data-landing-cta="paperback" class="text-sm text-fog-gray underline underline-offset-2 hover:text-moon-silver" target="_blank" rel="noopener noreferrer">Prefer paper? Book 1 in paperback →</a>
+          </p>
           {amazonBadge && (
             <img src={amazonBadge} alt="Available at Amazon" class="h-10 w-auto mx-auto mt-5" loading="lazy" />
           )}
@@ -232,8 +267,8 @@ const pitch = (series.data.boxSetBlurb?.trim() || series.data.description)
       </aside>
     </div>
 
-    <!-- Phone: the buttons in a bar that stays on screen, then rests above the footer -->
-    <div class="lg:hidden sticky bottom-0 z-40 mt-12 border-t border-mystic-violet/30 bg-shadow-black/95 backdrop-blur px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+    <!-- Phone: the buttons in a bar fixed to the screen bottom; it slides away while the closing pair is in view -->
+    <div id="cta-bar" class="lg:hidden fixed inset-x-0 bottom-0 z-40 border-t border-mystic-violet/30 bg-shadow-black/95 backdrop-blur px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] transition-transform duration-200">
       <div class="max-w-md mx-auto">
         <a href={amazonUrl} data-landing-cta="ku" class="btn btn-primary btn-lg w-full" target="_blank" rel="noopener noreferrer">
           Read free with Kindle Unlimited
@@ -249,7 +284,7 @@ const pitch = (series.data.boxSetBlurb?.trim() || series.data.description)
 
   <script is:inline define:vars={{ landingConfig }}>
     (function () {
-      var EVENTS = { ku: 'LandingClickKU', buy: 'LandingClickBuy' };
+      var EVENTS = { ku: 'LandingClickKU', buy: 'LandingClickBuy', paperback: 'LandingClickPaperback' };
       var CONSENT_KEY = 'gd_marketing_consent';
       var AD_KEY = 'gd_landing_from_ad';
       // IANA zones for the 50 states and DC; the site is static, so the browser's
@@ -265,9 +300,10 @@ const pitch = (series.data.boxSetBlurb?.trim() || series.data.description)
       } catch (e) {}
 
       var ctas = document.querySelectorAll('[data-landing-cta]');
+      // The Attribution tag is the box set's; the paperback link stays plain.
       if (fromAd && landingConfig.attributionTag) {
         var tag = new URLSearchParams(landingConfig.attributionTag.replace(/^[^?]*\?/, ''));
-        ctas.forEach(function (a) {
+        document.querySelectorAll('[data-landing-cta="ku"], [data-landing-cta="buy"]').forEach(function (a) {
           var url = new URL(a.href);
           tag.forEach(function (value, key) { url.searchParams.set(key, value); });
           a.href = url.toString();
@@ -330,6 +366,15 @@ const pitch = (series.data.boxSetBlurb?.trim() || series.data.description)
           }
         });
       });
+
+      // Phone: slide the sticky bar away while the closing pair is on screen.
+      var bar = document.getElementById('cta-bar');
+      var closing = document.getElementById('closing-ctas');
+      if (bar && closing && 'IntersectionObserver' in window) {
+        new IntersectionObserver(function (entries) {
+          bar.classList.toggle('translate-y-full', entries[0].isIntersecting);
+        }).observe(closing);
+      }
     })();
   </script>
 </Layout>
