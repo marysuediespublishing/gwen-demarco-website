@@ -63,12 +63,15 @@ The admin is [Sveltia CMS](https://github.com/sveltia/sveltia-cms), which uses D
 - **Locally:** run `npm run dev`, open `http://localhost:4321/admin`, click **Work with Local Repository** (Chrome or Edge) and pick this folder. Changes are written to disk, so commit and push them yourself. Pull first if anything was edited online.
 
 **Token:** create it at https://github.com/settings/personal-access-tokens/new:
-- **Resource owner:** `marysuediespublishing`
+- **Resource owner:** `marysuediespublishing` (the organisation, not your own account)
 - **Repository access:** this repo only. One token can also cover several of the org's sites.
 - **Permissions:** Contents → **Read and write**
 - **Expiration:** set one, then regenerate the token when it expires.
 
-If the org requires approval, approve the token under org Settings → Personal access tokens. "Sign in with GitHub" isn't configured; it would need an OAuth server.
+**Approval:** an org owner must then approve the token under the org's Settings → Third-party access → Personal access tokens → Pending requests.
+Until it is approved the CMS can read content but every save fails with "Resource not accessible by personal access token".
+
+"Sign in with GitHub" isn't configured; it would need an OAuth server.
 
 **Notes:**
 - The CMS version is pinned in `public/admin/index.html`. Bump it deliberately.

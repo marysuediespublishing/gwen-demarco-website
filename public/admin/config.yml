@@ -1,5 +1,6 @@
 # Sveltia CMS configuration (Decap CMS compatible)
 # Online:  /admin → "Sign In Using Access Token" (GitHub fine-grained token, Contents read/write on this repo)
+#          Token: resource owner = marysuediespublishing (the org), this repo only, Contents read/write; an org owner approves it under org Settings → Third-party access → Personal access tokens → Pending requests (until then the CMS reads but cannot save)
 # Locally: npm run dev → http://localhost:4321/admin → "Work with Local Repository" (Chrome/Edge)
 backend:
   name: github
