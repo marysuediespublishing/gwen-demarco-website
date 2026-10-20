@@ -11,11 +11,19 @@ const SERIES_SLUG = 'sophie-feegle';
 // Short, whole Amazon reviews: the pull-quote under the hero, then four lower down.
 // Placeholders until the box-set review quotes land on signals #2684.
 const PULL_QUOTE_ID = '2024-04-11-map-verified-false-featured-false-date-2024-04-11-booktitle-odd-times-for-sophie-feegle-reviewername-mrs-dustbunny-reviewerplatform-amazon-quote-holy-wow-nan-amazing-storyline-with-enough-twist-to-make-your-head-spin';
-const REVIEW_IDS = [
-  '2024-04-09-map-verified-false-featured-false-date-2024-04-09-booktitle-portents-and-oddities-reviewername-kay-reviewerplatform-amazon-quote-oh-so-good-ni-was-convinced-i-knew-who-was-who-in-the-group-of-sophies-friends-who-was',
-  '2024-12-28-map-verified-false-featured-false-date-2024-12-28-booktitle-sophie-and-the-odd-ones-reviewername-anne-reviewerplatform-amazon-quote-thoroughly-enjoyable-ngreat-plot-great-pacing-well-developed-and-believable-charact',
-  '2024-05-01-map-verified-false-featured-false-date-2024-05-01-booktitle-against-all-odds-reviewername-blair-reviewerplatform-amazon-quote-a-great-series-na-unique-storyline-with-lovable-characters-i-highly-recommend-you-read-th',
-  '2021-12-28-map-verified-false-featured-false-date-2021-12-28-booktitle-portents-and-oddities-reviewername-lastenia-s-reviewerplatform-amazon-quote-excellent-series-nthis-author-is-new-to-me-and-quickly-becoming-a-favorite-the',
+// Each names something specific; four different books. `excerpt` replaces a long
+// review's body, with an ellipsis wherever text is cut.
+const REVIEWS: { id: string; excerpt?: string }[] = [
+  {
+    id: '2023-10-07-map-verified-false-featured-false-date-2023-10-07-booktitle-odds-and-ends-reviewername-bglanton-reviewerplatform-amazon-quote-absolutely-love-this-series-nits-an-absolute-joy-to-read-these-books-they-have-twists',
+    excerpt: 'It’s an absolute joy to read these books. They have twists, revelations, the whole nine yards. … The familiar tropes are dusted off and spun in new and interesting directions. Highly recommended.',
+  },
+  { id: '2024-12-28-map-verified-false-featured-false-date-2024-12-28-booktitle-sophie-and-the-odd-ones-reviewername-anne-reviewerplatform-amazon-quote-thoroughly-enjoyable-ngreat-plot-great-pacing-well-developed-and-believable-charact' },
+  {
+    id: '2024-04-17-map-verified-false-featured-false-date-2024-04-17-booktitle-sophie-feegle-box-set-reviewername-rhonda-jones-reviewerplatform-amazon-quote-awesome-nthis-series-has-a-great-cast-of-characters-each-book-takes-up-after-t',
+    excerpt: '… It starts with a human woman (Sophie) who is down on her luck, but due to an act of kindness, gets a job as a coroner’s assistant. There she learns she has an unusual gift. When she touches a corpse she can see how that person died. … Book 5 had an absolutely awesome ending!!!',
+  },
+  { id: '2021-12-28-map-verified-false-featured-false-date-2021-12-28-booktitle-portents-and-oddities-reviewername-lastenia-s-reviewerplatform-amazon-quote-excellent-series-nthis-author-is-new-to-me-and-quickly-becoming-a-favorite-the' },
 ];
 // One line under each cover, lifted from each book's page. Keep them short enough
 // not to wrap at phone width.
@@ -44,7 +52,7 @@ const landingImage = (src: string, width: number) =>
   src.replace(/^\/images\/(.+)\.(jpe?g|png)$/, `/images/landing/$1-${width}.jpg`);
 
 const testimonials = await getCollection('testimonials');
-const toReview = (id: string) => {
+const toReview = (id: string, excerpt?: string) => {
   const t = testimonials.find((entry) => entry.id === id);
   if (!t) return undefined;
   // Testimonial quotes are "Review title\n\nReview body".
@@ -52,13 +60,13 @@ const toReview = (id: string) => {
   const book = books.find((b) => b.id === t.data.bookTitle);
   return {
     title: rest.length ? title.trim() : '',
-    body: (rest.length ? rest.join(' ') : title).replace(/\s+/g, ' ').trim(),
+    body: excerpt ?? (rest.length ? rest.join(' ') : title).replace(/\s+/g, ' ').trim(),
     reviewer: t.data.reviewerName,
     about: book ? book.data.title : 'the Sophie Feegle Box Set',
   };
 };
 const pullQuote = toReview(PULL_QUOTE_ID);
-const reviews = REVIEW_IDS.map(toReview).filter((r): r is NonNullable<typeof r> => Boolean(r));
+const reviews = REVIEWS.map((r) => toReview(r.id, r.excerpt)).filter((r): r is NonNullable<typeof r> => Boolean(r));
 
 // Series-wide numbers, labelled as such: the box set has its own (smaller) Amazon rating.
 const rating = series.data.overallRating;
@@ -229,26 +237,18 @@ const pitch = (series.data.boxSetBlurb?.trim() || series.data.description)
         </section>
       </div>
 
-      <!-- Series Info sidebar: the buttons, always on screen at desktop widths -->
+      <!-- Box-set sidebar: rating and the buttons, always on screen at desktop widths -->
       <aside class="hidden lg:block lg:sticky lg:top-8">
         <div class="card p-6">
-          <h2 class="text-lg font-primary font-bold text-bone-white mb-4">Series Info</h2>
-          <dl class="space-y-3 text-sm mb-6">
-            <div class="flex justify-between">
-              <dt class="text-fog-gray">Books:</dt>
-              <dd class="text-moon-silver font-medium">{books.length}, complete</dd>
+          {showRating && (
+            <div class="mb-6 text-sm">
+              <p class="flex items-center gap-1.5 text-moon-silver font-medium">
+                <StarRating rating={rating} size="w-3.5 h-3.5" id="box-set-sidebar" />
+                {rating.toFixed(1)} average across the series
+              </p>
+              <p class="text-xs text-fog-gray mt-1">{ratingCount.toLocaleString('en-US')} ratings across all {books.length} books</p>
             </div>
-            {showRating && (
-              <div>
-                <dt class="sr-only">Rating</dt>
-                <dd class="flex items-center gap-1.5 text-moon-silver font-medium">
-                  <StarRating rating={rating} size="w-3.5 h-3.5" id="box-set-sidebar" />
-                  {rating.toFixed(1)} average across the series
-                </dd>
-                <dd class="text-xs text-fog-gray mt-1">{ratingCount.toLocaleString('en-US')} ratings across all {books.length} books</dd>
-              </div>
-            )}
-          </dl>
+          )}
           <a href={amazonUrl} data-landing-cta="ku" class="btn btn-primary btn-lg w-full !text-base !px-4" target="_blank" rel="noopener noreferrer">
             Read free with Kindle Unlimited
           </a>
