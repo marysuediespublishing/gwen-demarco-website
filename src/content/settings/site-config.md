@@ -29,7 +29,7 @@ newsletter:
     - Behind-the-scenes writing updates
     - Sneak peeks at upcoming books
     - No spam, ever - unsubscribe anytime
-metaPixelId: ""
+metaPixelId: "225692997192754"
 landingAttributionTag: ""
 pressCtrEndpoint: ""
 amazonBadge: ""
