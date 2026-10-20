@@ -1990,3 +1990,9 @@
   - Test on /blog that category filters work correctly
   - Test on individual blog posts that category displays and links correctly
   - Test that posts with no category assigned display gracefully
+- [x] **T145** - FEATURE: Sophie Feegle box-set ad landing page (signals #2635 / #2500)
+  - refs: D001
+  - Route /series/sophie-feegle/box-set: covers in series order, pitch, Amazon review text, KU + Buy buttons
+  - Amazon Attribution tag appended only for ?from=ad or utm_source=meta visitors
+  - Meta pixel loads for US visitors without a consent click; everyone else gets an in-flow consent bar
+  - Custom events LandingClickKU / LandingClickBuy; optional keepalive beacon to PUBLIC_PRESS_CTR_ENDPOINT

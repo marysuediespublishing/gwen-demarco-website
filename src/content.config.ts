@@ -53,6 +53,9 @@ const series = defineCollection({
     worldBuilding: z.string().optional(),
     readingOrder: z.array(z.string()).default([]),
     featured: z.boolean().default(false),
+    // Box-set landing page (/series/<slug>/box-set)
+    boxSetAsin: z.string().optional(),
+    boxSetBlurb: z.string().optional(),
   }),
 });
 
@@ -173,6 +176,10 @@ const settings = defineCollection({
       leadMagnetDescription: z.string().optional(),
       benefits: z.array(z.string()).optional(),
     }).optional(),
+    // Ad landing pages: Meta pixel, Amazon Attribution tag (ad visitors only), Press CTR beacon
+    metaPixelId: z.string().optional(),
+    landingAttributionTag: z.string().optional(),
+    pressCtrEndpoint: z.string().optional(),
   }),
 });
 

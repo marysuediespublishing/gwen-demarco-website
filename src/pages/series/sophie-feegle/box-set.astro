@@ -1,0 +1,264 @@
+---
+// Sophie Feegle box-set landing page: where readers land from the Meta ad.
+// CMS inputs (all optional, see README "Box-set landing page"):
+//   series boxSetAsin / boxSetBlurb, and site-config metaPixelId / landingAttributionTag / pressCtrEndpoint
+import Layout from '../../../layouts/Layout.astro';
+import { getCollection, getEntry } from 'astro:content';
+
+const SERIES_SLUG = 'sophie-feegle';
+const BOX_SET_REVIEW_SLUG = 'sophie-feegle-box-set';
+const MAX_REVIEWS = 6;
+const MAX_REVIEW_LENGTH = 420;
+
+const series = await getEntry('series', SERIES_SLUG);
+if (!series) throw new Error(`Missing series entry: ${SERIES_SLUG}`);
+
+const readingOrder = series.data.readingOrder ?? [];
+const allBooks = await getCollection('books');
+const books = readingOrder
+  .map((slug) => allBooks.find((book) => book.id === slug))
+  .filter((book): book is NonNullable<typeof book> => Boolean(book));
+
+// Amazon reviews only: the box set's own first, then one per book in series order.
+const reviewSlugs = [BOX_SET_REVIEW_SLUG, ...readingOrder];
+const amazonReviews = (await getCollection('testimonials'))
+  .filter((t) => t.data.reviewerPlatform === 'amazon' && reviewSlugs.includes(t.data.bookTitle ?? ''))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const reviews = [
+  ...amazonReviews.filter((t) => t.data.bookTitle === BOX_SET_REVIEW_SLUG),
+  ...readingOrder.flatMap((slug) => amazonReviews.find((t) => t.data.bookTitle === slug) ?? []),
+]
+  .slice(0, MAX_REVIEWS)
+  .map((t) => {
+    // Testimonial quotes are "Review title\n\nReview body".
+    const [first, ...rest] = t.data.quote.trim().split('\n');
+    const hasTitle = rest.length > 0;
+    let body = (hasTitle ? rest.join(' ') : first).replace(/\s+/g, ' ').trim();
+    if (body.length > MAX_REVIEW_LENGTH) {
+      body = body.slice(0, body.lastIndexOf(' ', MAX_REVIEW_LENGTH)) + '…';
+    }
+    const book = books.find((b) => b.id === t.data.bookTitle);
+    return {
+      title: hasTitle ? first.trim() : '',
+      body,
+      reviewer: t.data.reviewerName,
+      rating: t.data.rating,
+      about: book ? book.data.title : 'Sophie Feegle Box Set',
+    };
+  });
+
+const rating = series.data.overallRating;
+const ratingCount = series.data.totalRatings;
+
+const siteConfig = await getEntry('settings', 'site-config');
+
+const asin = series.data.boxSetAsin?.trim();
+const amazonUrl = asin
+  ? `https://www.amazon.com/dp/${asin}`
+  : 'https://www.amazon.com/s?k=Sophie+Feegle+Box+Set+Gwen+DeMarco&i=digital-text';
+
+const landingConfig = {
+  attributionTag: siteConfig?.data.landingAttributionTag?.trim() || '',
+  pixelId: siteConfig?.data.metaPixelId?.trim() || '',
+  ctrEndpoint: siteConfig?.data.pressCtrEndpoint?.trim() || '',
+};
+
+const pitch = (series.data.boxSetBlurb?.trim() || series.data.description).split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean);
+---
+
+<Layout
+  title="The Sophie Feegle Box Set: All Five Books | Gwen DeMarco"
+  description="All five Sophie Feegle urban fantasy novels in one box set. Read free with Kindle Unlimited."
+  image={series.data.cover}
+>
+  <main id="main-content" class="relative z-10 pt-24 pb-16">
+    <div id="consent-bar" hidden class="max-w-4xl mx-auto px-4 mb-6">
+      <div class="flex flex-col sm:flex-row sm:items-center gap-3 rounded-lg border border-mystic-violet/30 bg-dark-surface/90 px-4 py-3 text-sm text-fog-gray">
+        <p class="flex-1">
+          We use a Meta pixel to measure our ads. <a href="/cookie-policy" class="text-mystic-teal underline">Cookie policy</a>
+        </p>
+        <div class="flex gap-2">
+          <button type="button" data-consent="granted" class="btn btn-sm btn-secondary">Allow</button>
+          <button type="button" data-consent="denied" class="btn btn-sm btn-outline">No thanks</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hero: box set, headline, buttons -->
+    <section class="max-w-6xl mx-auto px-4">
+      <div class="grid md:grid-cols-2 gap-6 md:gap-10 items-center">
+        <img
+          src={series.data.cover}
+          alt="Sophie Feegle Box Set, Books 1–5 by Gwen DeMarco"
+          width="2012"
+          height="2700"
+          class="w-full max-w-[13rem] md:max-w-sm mx-auto rounded-lg shadow-2xl shadow-mystic-violet/30"
+          fetchpriority="high"
+        />
+        <div class="text-center md:text-left">
+          <p class="text-mystic-teal font-medium uppercase tracking-widest text-sm mb-3">The complete series · 5 books</p>
+          <h1 class="text-4xl md:text-5xl font-primary font-bold text-bone-white mb-4">The Sophie Feegle Box Set</h1>
+          <p class="text-xl text-moon-silver mb-6">
+            The dead keep their secrets at the San Francisco City Morgue. Until Sophie touches them.
+          </p>
+          {rating && ratingCount && (
+            <p class="text-fog-gray mb-8">
+              Rated <strong class="text-bone-white">{rating} out of 5</strong> by readers across {ratingCount.toLocaleString('en-US')} ratings
+            </p>
+          )}
+          <div class="flex flex-col gap-3 max-w-sm mx-auto md:mx-0">
+            <a href={amazonUrl} data-landing-cta="ku" class="btn btn-primary btn-lg w-full" target="_blank" rel="noopener noreferrer">
+              Read free with Kindle Unlimited
+            </a>
+            <a href={amazonUrl} data-landing-cta="buy" class="btn btn-secondary btn-lg w-full" target="_blank" rel="noopener noreferrer">
+              Buy
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Covers in series order -->
+    <section class="max-w-6xl mx-auto px-4 mt-20">
+      <h2 class="text-3xl md:text-4xl font-primary font-bold text-bone-white mb-8 text-center">All five books inside</h2>
+      <ol class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6">
+        {books.map((book) => (
+          <li class="text-center">
+            {book.data.cover && (
+              <img
+                src={book.data.cover}
+                alt={`${book.data.title} cover`}
+                loading="lazy"
+                class="w-full rounded-md shadow-lg shadow-mystic-violet/20 mb-3 aspect-[2/3] object-cover"
+              />
+            )}
+            <p class="text-sm text-mystic-teal">Book {book.data.seriesOrder}</p>
+            <p class="font-medium text-bone-white">{book.data.title}</p>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <!-- Pitch -->
+    <section class="max-w-3xl mx-auto px-4 mt-20">
+      <div class="prose prose-lg mx-auto">
+        {pitch.map((paragraph) => <p>{paragraph}</p>)}
+      </div>
+    </section>
+
+    <!-- Reviews (text only, attributed) -->
+    {reviews.length > 0 && (
+      <section class="max-w-6xl mx-auto px-4 mt-20">
+        <h2 class="text-3xl md:text-4xl font-primary font-bold text-bone-white mb-8 text-center">What readers say on Amazon</h2>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {reviews.map((review) => (
+            <figure class="rounded-lg border border-mystic-violet/20 bg-dark-surface/60 p-6 flex flex-col">
+              <p class="text-sm text-ember-orange font-medium mb-2">{review.rating} out of 5</p>
+              {review.title && <p class="font-primary text-lg text-bone-white mb-2">“{review.title}”</p>}
+              <blockquote class="text-moon-silver flex-1">{review.body}</blockquote>
+              <figcaption class="mt-4 text-sm text-fog-gray">
+                {review.reviewer}, Amazon review of {review.about}
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- Closing buttons -->
+    <section class="max-w-sm mx-auto px-4 mt-20 flex flex-col gap-3">
+      <a href={amazonUrl} data-landing-cta="ku" class="btn btn-primary btn-lg w-full" target="_blank" rel="noopener noreferrer">
+        Read free with Kindle Unlimited
+      </a>
+      <a href={amazonUrl} data-landing-cta="buy" class="btn btn-secondary btn-lg w-full" target="_blank" rel="noopener noreferrer">
+        Buy
+      </a>
+    </section>
+  </main>
+
+  <script is:inline define:vars={{ landingConfig }}>
+    (function () {
+      var EVENTS = { ku: 'LandingClickKU', buy: 'LandingClickBuy' };
+      var CONSENT_KEY = 'gd_marketing_consent';
+      var AD_KEY = 'gd_landing_from_ad';
+      // IANA zones for the 50 states and DC; the site is static, so the browser's
+      // time zone is our region signal.
+      var US_ZONE = /^(America\/(New_York|Detroit|Kentucky\/.+|Indiana\/.+|Chicago|Menominee|North_Dakota\/.+|Denver|Boise|Phoenix|Los_Angeles|Anchorage|Juneau|Sitka|Metlakatla|Yakutat|Nome|Adak)|Pacific\/Honolulu|US\/.+)$/;
+
+      // Ad visitor: ?from=ad or utm_source=meta, remembered for the tab session.
+      var params = new URLSearchParams(location.search);
+      var fromAd = params.get('from') === 'ad' || (params.get('utm_source') || '').toLowerCase() === 'meta';
+      try {
+        if (fromAd) sessionStorage.setItem(AD_KEY, '1');
+        else fromAd = sessionStorage.getItem(AD_KEY) === '1';
+      } catch (e) {}
+
+      var ctas = document.querySelectorAll('[data-landing-cta]');
+      if (fromAd && landingConfig.attributionTag) {
+        var tag = new URLSearchParams(landingConfig.attributionTag.replace(/^[^?]*\?/, ''));
+        ctas.forEach(function (a) {
+          var url = new URL(a.href);
+          tag.forEach(function (value, key) { url.searchParams.set(key, value); });
+          a.href = url.toString();
+        });
+      }
+
+      // Meta pixel: US visitors without a click, everyone else after "Allow".
+      var pixelLoaded = false;
+      function loadPixel() {
+        if (pixelLoaded || !landingConfig.pixelId) return;
+        pixelLoaded = true;
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window,document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', landingConfig.pixelId);
+        fbq('track', 'PageView');
+      }
+
+      var zone = '';
+      try { zone = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (e) {}
+      var stored = null;
+      try { stored = localStorage.getItem(CONSENT_KEY); } catch (e) {}
+
+      if (US_ZONE.test(zone) || stored === 'granted') {
+        loadPixel();
+      } else if (stored !== 'denied' && landingConfig.pixelId) {
+        var bar = document.getElementById('consent-bar');
+        bar.hidden = false;
+        bar.addEventListener('click', function (e) {
+          var choice = e.target.closest('[data-consent]');
+          if (!choice) return;
+          try { localStorage.setItem(CONSENT_KEY, choice.dataset.consent); } catch (err) {}
+          bar.hidden = true;
+          if (choice.dataset.consent === 'granted') loadPixel();
+        });
+      }
+
+      // press.landing.ctr: custom pixel event per button, plus a keepalive beacon
+      // once the Press endpoint exists.
+      ctas.forEach(function (a) {
+        a.addEventListener('click', function () {
+          var cta = a.dataset.landingCta;
+          var detail = { page: 'sophie-feegle-box-set', cta: cta, source: fromAd ? 'ad' : 'organic' };
+          if (pixelLoaded && window.fbq) fbq('trackCustom', EVENTS[cta], detail);
+          if (landingConfig.ctrEndpoint) {
+            try {
+              fetch(landingConfig.ctrEndpoint, {
+                method: 'POST',
+                keepalive: true,
+                // text/plain keeps this a simple request (no CORS preflight).
+                headers: { 'Content-Type': 'text/plain' },
+                body: JSON.stringify(Object.assign({ metric: 'press.landing.ctr' }, detail)),
+              }).catch(function () {});
+            } catch (e) {}
+          }
+        });
+      });
+    })();
+  </script>
+</Layout>

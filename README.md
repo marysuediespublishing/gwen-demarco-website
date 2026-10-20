@@ -221,3 +221,15 @@ The site uses a dark, mysterious urban fantasy aesthetic:
 - **Moon Silver** (#e2e8f0) - Body text
 
 Typography uses Cinzel for mystical headers and Inter for readable body text.
+
+## Box-set landing page
+
+`/series/sophie-feegle/box-set` is the Meta-ad landing page for the Sophie Feegle box set. Its inputs are CMS fields (all optional):
+
+| Field | Where | Effect when empty |
+| --- | --- | --- |
+| `boxSetAsin` | `src/content/series/sophie-feegle.md` | The buttons go to an Amazon Kindle search for the box set |
+| `boxSetBlurb` | `src/content/series/sophie-feegle.md` | The pitch uses the series `description` |
+| `landingAttributionTag` | `src/content/settings/site-config.md` | No Amazon Attribution tag. When set (a query string such as `maas=...&ref_=aa_maas&tag=maas`), it's added to both buttons only for `?from=ad` or `utm_source=meta` visitors |
+| `metaPixelId` | `src/content/settings/site-config.md` | No pixel loads. When set, it loads without a consent click if the browser's time zone is a US zone. Anyone else, including visitors whose zone can't be read, sees an in-page Allow/No thanks bar first |
+| `pressCtrEndpoint` | `src/content/settings/site-config.md` | Clicks are counted only as the custom pixel events `LandingClickKU` / `LandingClickBuy`. When set, each click also POSTs a keepalive `press.landing.ctr` beacon |

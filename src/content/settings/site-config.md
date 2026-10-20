@@ -29,6 +29,9 @@ newsletter:
     - Behind-the-scenes writing updates
     - Sneak peeks at upcoming books
     - No spam, ever - unsubscribe anytime
+metaPixelId: ""
+landingAttributionTag: ""
+pressCtrEndpoint: ""
 ---
 
 # Site Configuration
