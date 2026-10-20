@@ -32,6 +32,7 @@ newsletter:
 metaPixelId: ""
 landingAttributionTag: ""
 pressCtrEndpoint: ""
+amazonBadge: ""
 ---
 
 # Site Configuration

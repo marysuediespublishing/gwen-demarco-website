@@ -1,14 +1,21 @@
 ---
 // Sophie Feegle box-set landing page: where readers land from the Meta ad.
 // CMS inputs (all optional, see README "Box-set landing page"):
-//   series boxSetAsin / boxSetBlurb, and site-config metaPixelId / landingAttributionTag / pressCtrEndpoint
+//   series boxSetAsin / boxSetBlurb / boxSetPrice / boxSetSeparatePrice, and
+//   site-config metaPixelId / landingAttributionTag / pressCtrEndpoint / amazonBadge
 import Layout from '../../../layouts/Layout.astro';
+import StarRating from '../../../components/StarRating.astro';
 import { getCollection, getEntry } from 'astro:content';
 
 const SERIES_SLUG = 'sophie-feegle';
-const BOX_SET_REVIEW_SLUG = 'sophie-feegle-box-set';
-const MAX_REVIEWS = 6;
-const MAX_REVIEW_LENGTH = 420;
+// Short, whole Amazon reviews: the pull-quote under the hero, then two lower down.
+// Placeholders until the box-set review quotes land on signals #2684.
+const PULL_QUOTE_ID = '2024-04-11-map-verified-false-featured-false-date-2024-04-11-booktitle-odd-times-for-sophie-feegle-reviewername-mrs-dustbunny-reviewerplatform-amazon-quote-holy-wow-nan-amazing-storyline-with-enough-twist-to-make-your-head-spin';
+const REVIEW_IDS = [
+  '2024-04-09-map-verified-false-featured-false-date-2024-04-09-booktitle-portents-and-oddities-reviewername-kay-reviewerplatform-amazon-quote-oh-so-good-ni-was-convinced-i-knew-who-was-who-in-the-group-of-sophies-friends-who-was',
+  '2024-12-28-map-verified-false-featured-false-date-2024-12-28-booktitle-sophie-and-the-odd-ones-reviewername-anne-reviewerplatform-amazon-quote-thoroughly-enjoyable-ngreat-plot-great-pacing-well-developed-and-believable-charact',
+];
+const BLURB_PARAGRAPHS = 3;
 
 const series = await getEntry('series', SERIES_SLUG);
 if (!series) throw new Error(`Missing series entry: ${SERIES_SLUG}`);
@@ -19,43 +26,46 @@ const books = readingOrder
   .map((slug) => allBooks.find((book) => book.id === slug))
   .filter((book): book is NonNullable<typeof book> => Boolean(book));
 
-// Amazon reviews only: the box set's own first, then one per book in series order.
-const reviewSlugs = [BOX_SET_REVIEW_SLUG, ...readingOrder];
-const amazonReviews = (await getCollection('testimonials'))
-  .filter((t) => t.data.reviewerPlatform === 'amazon' && reviewSlugs.includes(t.data.bookTitle ?? ''))
-  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
-const reviews = [
-  ...amazonReviews.filter((t) => t.data.bookTitle === BOX_SET_REVIEW_SLUG),
-  ...readingOrder.flatMap((slug) => amazonReviews.find((t) => t.data.bookTitle === slug) ?? []),
-]
-  .slice(0, MAX_REVIEWS)
-  .map((t) => {
-    // Testimonial quotes are "Review title\n\nReview body".
-    const [first, ...rest] = t.data.quote.trim().split('\n');
-    const hasTitle = rest.length > 0;
-    let body = (hasTitle ? rest.join(' ') : first).replace(/\s+/g, ' ').trim();
-    if (body.length > MAX_REVIEW_LENGTH) {
-      body = body.slice(0, body.lastIndexOf(' ', MAX_REVIEW_LENGTH)) + '…';
-    }
-    const book = books.find((b) => b.id === t.data.bookTitle);
-    return {
-      title: hasTitle ? first.trim() : '',
-      body,
-      reviewer: t.data.reviewerName,
-      rating: t.data.rating,
-      about: book ? book.data.title : 'Sophie Feegle Box Set',
-    };
-  });
+// Small copies of the covers live in /images/landing so the page stays light on a phone.
+const landingImage = (src: string, width: number) =>
+  src.replace(/^\/images\/(.+)\.(jpe?g|png)$/, `/images/landing/$1-${width}.jpg`);
+
+const testimonials = await getCollection('testimonials');
+const toReview = (id: string) => {
+  const t = testimonials.find((entry) => entry.id === id);
+  if (!t) return undefined;
+  // Testimonial quotes are "Review title\n\nReview body".
+  const [title, ...rest] = t.data.quote.trim().split('\n');
+  const book = books.find((b) => b.id === t.data.bookTitle);
+  return {
+    title: rest.length ? title.trim() : '',
+    body: (rest.length ? rest.join(' ') : title).replace(/\s+/g, ' ').trim(),
+    reviewer: t.data.reviewerName,
+    about: book ? book.data.title : 'the Sophie Feegle Box Set',
+  };
+};
+const pullQuote = toReview(PULL_QUOTE_ID);
+const reviews = REVIEW_IDS.map(toReview).filter((r): r is NonNullable<typeof r> => Boolean(r));
 
 const rating = series.data.overallRating;
 const ratingCount = series.data.totalRatings;
 
 const siteConfig = await getEntry('settings', 'site-config');
+const amazonBadge = siteConfig?.data.amazonBadge?.trim();
 
 const asin = series.data.boxSetAsin?.trim();
 const amazonUrl = asin
   ? `https://www.amazon.com/dp/${asin}`
   : 'https://www.amazon.com/s?k=Sophie+Feegle+Box+Set+Gwen+DeMarco&i=digital-text';
+
+const money = (value?: string) => {
+  const amount = value?.trim().replace(/^\$/, '');
+  return amount ? `$${amount}` : '';
+};
+const price = money(series.data.boxSetPrice);
+const separatePrice = money(series.data.boxSetSeparatePrice);
+const buyLabel = price ? `Buy on Amazon — ${price}` : 'Buy on Amazon';
+const valueLine = price && separatePrice ? `${books.length} books for ${price} — ${separatePrice} bought separately` : '';
 
 const landingConfig = {
   attributionTag: siteConfig?.data.landingAttributionTag?.trim() || '',
@@ -63,16 +73,22 @@ const landingConfig = {
   ctrEndpoint: siteConfig?.data.pressCtrEndpoint?.trim() || '',
 };
 
-const pitch = (series.data.boxSetBlurb?.trim() || series.data.description).split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean);
+// The full blurb stays on Amazon; the page carries the first three paragraphs.
+const pitch = (series.data.boxSetBlurb?.trim() || series.data.description)
+  .split(/\n\s*\n/)
+  .map((p) => p.trim())
+  .filter(Boolean)
+  .slice(0, BLURB_PARAGRAPHS);
 ---
 
 <Layout
   title="The Sophie Feegle Box Set: All Five Books | Gwen DeMarco"
-  description="All five Sophie Feegle urban fantasy novels in one box set. Read free with Kindle Unlimited."
-  image={series.data.cover}
+  description="All five Sophie Feegle urban fantasy novels in one box set. Snarky heroines. Grumpy heroes. Found family. Free for Kindle Unlimited members."
+  image="/images/landing/sophie-feegle-box-set-og.jpg"
+  landing
 >
-  <main id="main-content" class="relative z-10 pt-24 pb-16">
-    <div id="consent-bar" hidden class="max-w-4xl mx-auto px-4 mb-6">
+  <main id="main-content" class="relative z-10 pt-8 lg:pt-12 lg:pb-16">
+    <div id="consent-bar" hidden class="max-w-6xl mx-auto px-4 mb-6">
       <div class="flex flex-col sm:flex-row sm:items-center gap-3 rounded-lg border border-mystic-violet/30 bg-dark-surface/90 px-4 py-3 text-sm text-fog-gray">
         <p class="flex-1">
           We use a Meta pixel to measure our ads. <a href="/cookie-policy" class="text-mystic-teal underline">Cookie policy</a>
@@ -84,96 +100,151 @@ const pitch = (series.data.boxSetBlurb?.trim() || series.data.description).split
       </div>
     </div>
 
-    <!-- Hero: box set, headline, buttons -->
-    <section class="max-w-6xl mx-auto px-4">
-      <div class="grid md:grid-cols-2 gap-6 md:gap-10 items-center">
-        <img
-          src={series.data.cover}
-          alt="Sophie Feegle Box Set, Books 1–5 by Gwen DeMarco"
-          width="2012"
-          height="2700"
-          class="w-full max-w-[13rem] md:max-w-sm mx-auto rounded-lg shadow-2xl shadow-mystic-violet/30"
-          fetchpriority="high"
-        />
-        <div class="text-center md:text-left">
-          <p class="text-mystic-teal font-medium uppercase tracking-widest text-sm mb-3">The complete series · 5 books</p>
-          <h1 class="text-4xl md:text-5xl font-primary font-bold text-bone-white mb-4">The Sophie Feegle Box Set</h1>
-          <p class="text-xl text-moon-silver mb-6">
-            The dead keep their secrets at the San Francisco City Morgue. Until Sophie touches them.
-          </p>
-          {rating && ratingCount && (
-            <p class="text-fog-gray mb-8">
-              Rated <strong class="text-bone-white">{rating} out of 5</strong> by readers across {ratingCount.toLocaleString('en-US')} ratings
+    <div class="max-w-6xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
+      <div class="lg:col-span-2">
+        <!-- Hero: box set, hook, tropes, rating, pull-quote -->
+        <section class="grid sm:grid-cols-[minmax(0,14rem)_1fr] gap-6 sm:gap-8 items-center">
+          <img
+            src="/images/landing/sophie-feegle-box-set-640.jpg"
+            alt="Sophie Feegle Box Set, Books 1–5 by Gwen DeMarco"
+            width="640"
+            height="859"
+            class="w-full max-w-[11rem] sm:max-w-none mx-auto rounded-lg shadow-2xl shadow-mystic-violet/30"
+            fetchpriority="high"
+          />
+          <div class="text-center sm:text-left">
+            <p class="text-mystic-teal font-medium uppercase tracking-widest text-sm mb-2">The complete series · {books.length} books</p>
+            <h1 class="text-3xl md:text-5xl font-primary font-bold text-bone-white mb-3">The Sophie Feegle Box Set</h1>
+            <p class="text-lg md:text-xl text-moon-silver mb-2">
+              The dead keep their secrets at the San Francisco City Morgue. Until Sophie touches them.
             </p>
-          )}
-          <div class="flex flex-col gap-3 max-w-sm mx-auto md:mx-0">
-            <a href={amazonUrl} data-landing-cta="ku" class="btn btn-primary btn-lg w-full" target="_blank" rel="noopener noreferrer">
-              Read free with Kindle Unlimited
-            </a>
-            <a href={amazonUrl} data-landing-cta="buy" class="btn btn-secondary btn-lg w-full" target="_blank" rel="noopener noreferrer">
-              Buy
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Covers in series order -->
-    <section class="max-w-6xl mx-auto px-4 mt-20">
-      <h2 class="text-3xl md:text-4xl font-primary font-bold text-bone-white mb-8 text-center">All five books inside</h2>
-      <ol class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6">
-        {books.map((book) => (
-          <li class="text-center">
-            {book.data.cover && (
-              <img
-                src={book.data.cover}
-                alt={`${book.data.title} cover`}
-                loading="lazy"
-                class="w-full rounded-md shadow-lg shadow-mystic-violet/20 mb-3 aspect-[2/3] object-cover"
-              />
+            <p class="text-ember-orange font-medium mb-4">Snarky heroines. Grumpy heroes. Found family.</p>
+            {rating > 0 && ratingCount > 0 && (
+              <div class="flex items-center justify-center sm:justify-start gap-2 text-moon-silver">
+                <StarRating rating={rating} id="box-set-hero" />
+                <span>{rating.toFixed(1)} · {ratingCount.toLocaleString('en-US')} ratings</span>
+              </div>
             )}
-            <p class="text-sm text-mystic-teal">Book {book.data.seriesOrder}</p>
-            <p class="font-medium text-bone-white">{book.data.title}</p>
-          </li>
-        ))}
-      </ol>
-    </section>
+          </div>
+        </section>
 
-    <!-- Pitch -->
-    <section class="max-w-3xl mx-auto px-4 mt-20">
-      <div class="prose prose-lg mx-auto">
-        {pitch.map((paragraph) => <p>{paragraph}</p>)}
+        {pullQuote && (
+          <figure class="mt-8 border-l-4 border-ember-orange pl-5">
+            <blockquote>
+              <p class="font-primary text-2xl text-bone-white mb-2">“{pullQuote.title}”</p>
+              <p class="text-moon-silver">{pullQuote.body}</p>
+            </blockquote>
+            <figcaption class="mt-2 text-sm text-fog-gray">{pullQuote.reviewer}, Amazon review of {pullQuote.about}</figcaption>
+          </figure>
+        )}
+
+        <!-- Covers in series order -->
+        <section class="mt-12">
+          <h2 class="text-2xl md:text-3xl font-primary font-bold text-bone-white mb-6">All five books inside</h2>
+          <ol class="grid grid-cols-3 sm:grid-cols-5 gap-3 sm:gap-4">
+            {books.map((book) => (
+              <li class="text-center">
+                {book.data.cover && (
+                  <img
+                    src={landingImage(book.data.cover, 400)}
+                    alt={`${book.data.title} cover`}
+                    width="400"
+                    height="600"
+                    loading="lazy"
+                    decoding="async"
+                    class="w-full rounded-md shadow-lg shadow-mystic-violet/20 mb-2 aspect-[2/3] object-cover"
+                  />
+                )}
+                <p class="text-xs text-mystic-teal">Book {book.data.seriesOrder}</p>
+                <p class="text-sm font-medium text-bone-white leading-tight">{book.data.title}</p>
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        <!-- Pitch -->
+        <section class="mt-12 prose prose-lg max-w-none">
+          {pitch.map((paragraph) => <p>{paragraph}</p>)}
+        </section>
+
+        <!-- Reviews (text only, attributed) -->
+        {reviews.length > 0 && (
+          <section class="mt-12">
+            <h2 class="text-2xl md:text-3xl font-primary font-bold text-bone-white mb-6">What readers say on Amazon</h2>
+            <div class="grid md:grid-cols-2 gap-6">
+              {reviews.map((review) => (
+                <figure class="rounded-lg border border-mystic-violet/20 bg-dark-surface/60 p-6 flex flex-col">
+                  <blockquote class="flex-1">
+                    {review.title && <p class="font-primary text-lg text-bone-white mb-2">“{review.title}”</p>}
+                    <p class="text-moon-silver">{review.body}</p>
+                  </blockquote>
+                  <figcaption class="mt-4 text-sm text-fog-gray">{review.reviewer}, Amazon review of {review.about}</figcaption>
+                </figure>
+              ))}
+            </div>
+          </section>
+        )}
+
+        <!-- The buttons once more, after the reviews (on phones the bar below comes to rest here) -->
+        <section class="hidden lg:block mt-12 max-w-sm">
+          <a href={amazonUrl} data-landing-cta="ku" class="btn btn-primary btn-lg w-full" target="_blank" rel="noopener noreferrer">
+            Read free with Kindle Unlimited
+          </a>
+          <p class="text-sm text-fog-gray text-center mt-1 mb-3">Free for Kindle Unlimited members</p>
+          <a href={amazonUrl} data-landing-cta="buy" class="btn btn-secondary btn-lg w-full" target="_blank" rel="noopener noreferrer">
+            {buyLabel}
+          </a>
+          {valueLine && <p class="text-sm text-fog-gray text-center mt-1">{valueLine}</p>}
+        </section>
       </div>
-    </section>
 
-    <!-- Reviews (text only, attributed) -->
-    {reviews.length > 0 && (
-      <section class="max-w-6xl mx-auto px-4 mt-20">
-        <h2 class="text-3xl md:text-4xl font-primary font-bold text-bone-white mb-8 text-center">What readers say on Amazon</h2>
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {reviews.map((review) => (
-            <figure class="rounded-lg border border-mystic-violet/20 bg-dark-surface/60 p-6 flex flex-col">
-              <p class="text-sm text-ember-orange font-medium mb-2">{review.rating} out of 5</p>
-              {review.title && <p class="font-primary text-lg text-bone-white mb-2">“{review.title}”</p>}
-              <blockquote class="text-moon-silver flex-1">{review.body}</blockquote>
-              <figcaption class="mt-4 text-sm text-fog-gray">
-                {review.reviewer}, Amazon review of {review.about}
-              </figcaption>
-            </figure>
-          ))}
+      <!-- Series Info sidebar: the buttons, always on screen at desktop widths -->
+      <aside class="hidden lg:block lg:sticky lg:top-8">
+        <div class="card p-6">
+          <h2 class="text-lg font-primary font-bold text-bone-white mb-4">Series Info</h2>
+          <dl class="space-y-3 text-sm mb-6">
+            <div class="flex justify-between">
+              <dt class="text-fog-gray">Books:</dt>
+              <dd class="text-moon-silver font-medium">{books.length}, complete</dd>
+            </div>
+            {rating > 0 && ratingCount > 0 && (
+              <div class="flex justify-between items-center">
+                <dt class="text-fog-gray">Rating:</dt>
+                <dd class="flex items-center gap-1.5 text-moon-silver font-medium">
+                  <StarRating rating={rating} size="w-3.5 h-3.5" id="box-set-sidebar" />
+                  {rating.toFixed(1)} · {ratingCount.toLocaleString('en-US')}
+                </dd>
+              </div>
+            )}
+          </dl>
+          <a href={amazonUrl} data-landing-cta="ku" class="btn btn-primary btn-lg w-full" target="_blank" rel="noopener noreferrer">
+            Read free with Kindle Unlimited
+          </a>
+          <p class="text-sm text-fog-gray text-center mt-1 mb-4">Free for Kindle Unlimited members</p>
+          <a href={amazonUrl} data-landing-cta="buy" class="btn btn-secondary btn-lg w-full" target="_blank" rel="noopener noreferrer">
+            {buyLabel}
+          </a>
+          {valueLine && <p class="text-sm text-fog-gray text-center mt-1">{valueLine}</p>}
+          {amazonBadge && (
+            <img src={amazonBadge} alt="Available at Amazon" class="h-10 w-auto mx-auto mt-5" loading="lazy" />
+          )}
         </div>
-      </section>
-    )}
+      </aside>
+    </div>
 
-    <!-- Closing buttons -->
-    <section class="max-w-sm mx-auto px-4 mt-20 flex flex-col gap-3">
-      <a href={amazonUrl} data-landing-cta="ku" class="btn btn-primary btn-lg w-full" target="_blank" rel="noopener noreferrer">
-        Read free with Kindle Unlimited
-      </a>
-      <a href={amazonUrl} data-landing-cta="buy" class="btn btn-secondary btn-lg w-full" target="_blank" rel="noopener noreferrer">
-        Buy
-      </a>
-    </section>
+    <!-- Phone: the buttons in a bar that stays on screen, then rests above the footer -->
+    <div class="lg:hidden sticky bottom-0 z-40 mt-12 border-t border-mystic-violet/30 bg-shadow-black/95 backdrop-blur px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+      <div class="max-w-md mx-auto">
+        <a href={amazonUrl} data-landing-cta="ku" class="btn btn-primary btn-lg w-full" target="_blank" rel="noopener noreferrer">
+          Read free with Kindle Unlimited
+        </a>
+        <p class="text-xs text-fog-gray text-center mt-1 mb-2">Free for Kindle Unlimited members</p>
+        <a href={amazonUrl} data-landing-cta="buy" class="btn btn-secondary btn-lg w-full" target="_blank" rel="noopener noreferrer">
+          {buyLabel}
+        </a>
+        {valueLine && <p class="text-xs text-fog-gray text-center mt-1">{valueLine}</p>}
+      </div>
+    </div>
   </main>
 
   <script is:inline define:vars={{ landingConfig }}>

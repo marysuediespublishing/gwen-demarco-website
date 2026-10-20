@@ -10,13 +10,16 @@ export interface Props {
   description?: string;
   image?: string;
   type?: string;
+  /** Ad landing pages: name mark and legal links only, so the page has one exit. */
+  landing?: boolean;
 }
 
 const {
   title,
   description = "Gwen DeMarco writes paranormal romance with a focus on the weird and wonderful. Snarky heroines, grumpy heroes, and found family.",
   image,
-  type = "website"
+  type = "website",
+  landing = false
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -73,14 +76,39 @@ const socialImageURL = image ? new URL(image, Astro.url) : undefined;
       Skip to main content
     </a>
 
-    <Header />
+    {landing ? (
+      <header class="bg-gradient-to-r from-shadow-black to-midnight-purple border-b border-mystic-violet/20">
+        <div class="container mx-auto px-4 py-3">
+          <a href="/" class="inline-flex items-center space-x-2 min-h-[44px]">
+            <span class="w-8 h-8 bg-gradient-to-br from-mystic-violet to-ember-orange rounded-full flex items-center justify-center shadow-mystic">
+              <span class="text-bone-white font-bold font-accent text-sm">GD</span>
+            </span>
+            <span class="text-xl font-bold font-primary text-bone-white">Gwen DeMarco</span>
+          </a>
+        </div>
+      </header>
+    ) : (
+      <Header />
+    )}
 
     <slot />
 
-    <Footer />
+    {landing ? (
+      <footer class="relative z-10 border-t border-mystic-violet/20 py-6 text-sm text-moon-silver/60">
+        <div class="container mx-auto px-4 flex flex-wrap justify-center gap-4">
+          <span>&copy; {new Date().getFullYear()} Gwen DeMarco</span>
+          <a href="/privacy-policy" class="hover:text-ember-orange transition-colors">Privacy Policy</a>
+          <a href="/cookie-policy" class="hover:text-ember-orange transition-colors">Cookie Policy</a>
+        </div>
+      </footer>
+    ) : (
+      <>
+        <Footer />
 
-    <!-- Global newsletter signup modal (triggered via custom event) -->
-    <NewsletterCTA client:load />
+        <!-- Global newsletter signup modal (triggered via custom event) -->
+        <NewsletterCTA client:load />
+      </>
+    )}
 
     <!-- Global scripts -->
     <script is:inline>

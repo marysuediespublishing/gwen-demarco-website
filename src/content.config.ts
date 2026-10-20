@@ -56,6 +56,8 @@ const series = defineCollection({
     // Box-set landing page (/series/<slug>/box-set)
     boxSetAsin: z.string().optional(),
     boxSetBlurb: z.string().optional(),
+    boxSetPrice: z.string().optional(),
+    boxSetSeparatePrice: z.string().optional(),
   }),
 });
 
@@ -180,6 +182,7 @@ const settings = defineCollection({
     metaPixelId: z.string().optional(),
     landingAttributionTag: z.string().optional(),
     pressCtrEndpoint: z.string().optional(),
+    amazonBadge: z.string().optional(),
   }),
 });
 

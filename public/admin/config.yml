@@ -166,7 +166,9 @@ collections:
       - { label: "Reading Order", name: "readingOrder", widget: "list", default: [] }
       - { label: "Featured Series", name: "featured", widget: "boolean", default: false }
       - { label: "Box Set Kindle ASIN", name: "boxSetAsin", widget: "string", required: false, hint: "Used by the box-set landing page buttons" }
-      - { label: "Box Set Blurb", name: "boxSetBlurb", widget: "text", required: false, hint: "Box-set description from KDP; the landing page falls back to the series description" }
+      - { label: "Box Set Blurb", name: "boxSetBlurb", widget: "text", required: false, hint: "Box-set description from KDP; the landing page shows its first three paragraphs and falls back to the series description" }
+      - { label: "Box Set Kindle Price", name: "boxSetPrice", widget: "string", required: false, hint: "e.g. 9.99. Shown on the landing page Buy button; leave empty to show no price" }
+      - { label: "Box Set Books Bought Separately", name: "boxSetSeparatePrice", widget: "string", required: false, hint: "Total of the five books' Kindle prices, e.g. 24.95. With the price, shows '5 books for $X — $Y bought separately'; leave empty to hide that line" }
       - { label: "Content", name: "body", widget: "markdown" }
 
   # Blog Categories collection
@@ -338,6 +340,7 @@ collections:
       - { label: "Meta Pixel ID", name: "metaPixelId", widget: "string", required: false, hint: "Loaded on ad landing pages only" }
       - { label: "Landing Attribution Tag", name: "landingAttributionTag", widget: "string", required: false, hint: "Amazon Attribution query string (maas=...&ref_=aa_maas&tag=maas); added to landing buttons for ?from=ad / utm_source=meta visitors only" }
       - { label: "Press CTR Endpoint", name: "pressCtrEndpoint", widget: "string", required: false, hint: "Leave empty to count landing clicks as Meta pixel events only" }
+      - { label: "Amazon Badge", name: "amazonBadge", widget: "image", required: false, hint: "Amazon's official 'Available at Amazon' badge file, unaltered, used under Amazon's brand-usage terms. Shown under the landing page buttons; leave empty to show none" }
       - { label: "Content", name: "body", widget: "markdown", required: false }
 
   # Species collection

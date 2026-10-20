@@ -44,6 +44,8 @@ readingOrder:
   - odds-and-ends
 featured: true
 boxSetAsin: ""
+boxSetPrice: ""
+boxSetSeparatePrice: ""
 ---
 # Sophie Feegle Series
 
