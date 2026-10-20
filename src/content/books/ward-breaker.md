@@ -1,33 +1,26 @@
 ---
 title: Ward Breaker
 author: Gwen DeMarco
-description: >
-  Three Mythical children have been taken in Savannah. Gideon Bean is the only
-  one who can see how it was done.
-
+description: |-
+  Three Mythical children have been taken in Savannah. Gideon Bean is the only one who can see how it was done.
 
   They were stolen from some of the best-protected homes in the city. No door forced, no ward broken, and not a single alarm sounded. The Conclave's own investigators found nothing.
 
-
   Weeks before his agent training is even due to begin, Gideon is called in early. Dacey Menet – the bennu shifter who burst into his life in a blaze of fire – is already on the case, and the dinner date they've been promising each other since Millhaven is going to have to wait. Again.
-
 
   Then Gideon finds what no one else can – a hair-thin seam in the ward across a child's window, unpicked thread by thread and sealed shut again. He has never felt magic like it. Neither has Vena Merker, and she has been reading auras since before he was born.
 
-
   How do you track someone who leaves no trail?
 
-
   Rosalind Brenner has given the Conclave one week to bring her grandson home, or she'll burn the city to its foundations. Every Mythical bloodline in Savannah is calling for blood. And someone is after Dacey. Gideon doesn't know if it has anything to do with the case. He only knows he can't lose her.
-
 
   Gideon came to Savannah to find three missing children. What he finds is a war that has been brewing for generations.
 cover: /images/ward-breaker_ebook.jpg
 series: Auras & Embers
 seriesOrder: 3
 pubDate: 2026-10-02T14:01:00.000-04:00
-rating: 0
-ratingCount: 0
+rating: 4.8
+ratingCount: 71
 species:
   - auramancers
   - humans
@@ -51,7 +44,8 @@ genres:
   - urban-fantasy
 isKU: true
 amazonUrl: https://link.amazon/B03K051vV
-price: "3.99"
+goodreadsUrl: https://www.goodreads.com/book/show/258751147
+price: '3.99'
 wordCount: 73028
 pageCount: 260
 status: published
@@ -62,6 +56,7 @@ languages:
   - language: French
   - language: Spanish
 ---
+
 # Ward Breaker
 
 The third book in the **Auras & Embers** series, where an auramancer who can see the magic no one else can is about to find the one kind of magic that shouldn't exist.
