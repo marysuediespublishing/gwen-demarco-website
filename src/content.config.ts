@@ -182,6 +182,12 @@ const settings = defineCollection({
     metaPixelId: z.string().optional(),
     landingAttributionTag: z.string().optional(),
     paperbackAttributionTag: z.string().optional(),
+    // Per-campaign tags, picked by the visitor's utm_campaign; empty → the defaults above
+    landingAttributionTags: z.array(z.object({
+      campaign: z.string(),
+      tag: z.string().optional(),
+      paperbackTag: z.string().optional(),
+    })).optional(),
     pressCtrEndpoint: z.string().optional(),
     amazonBadge: z.string().optional(),
   }),

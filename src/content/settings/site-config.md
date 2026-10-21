@@ -32,6 +32,13 @@ newsletter:
 metaPixelId: "225692997192754"
 landingAttributionTag: "https://www.amazon.com/dp/B0CK55M553?maas=maas_adg_D5817D714E2827419DF4FB3D60036461_afap_abs&ref_=aa_maas&tag=maas"
 paperbackAttributionTag: "https://www.amazon.com/dp/B08CWM839H?maas=maas_adg_1E93BCBC747961A6E7FE8EBE1F6CF616_afap_abs&ref_=aa_maas&tag=maas"
+landingAttributionTags:
+  - campaign: "sophie-feegle-set-us-landing"
+    tag: "https://www.amazon.com/dp/B0CK55M553?maas=maas_adg_D5817D714E2827419DF4FB3D60036461_afap_abs&ref_=aa_maas&tag=maas"
+    paperbackTag: "https://www.amazon.com/dp/B08CWM839H?maas=maas_adg_1E93BCBC747961A6E7FE8EBE1F6CF616_afap_abs&ref_=aa_maas&tag=maas"
+  - campaign: "sophie-feegle-set-us-landing-conv"
+    tag: ""
+    paperbackTag: ""
 pressCtrEndpoint: ""
 amazonBadge: ""
 ---

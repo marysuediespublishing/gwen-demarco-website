@@ -341,6 +341,15 @@ collections:
       - { label: "Meta Pixel ID", name: "metaPixelId", widget: "string", required: false, hint: "Loaded on ad landing pages only" }
       - { label: "Landing Attribution Tag (box set)", name: "landingAttributionTag", widget: "string", required: false, hint: "Amazon Attribution URL or query string (maas=...&ref_=aa_maas&tag=maas) for the box set; added to the box-set landing page's Kindle Unlimited and Buy buttons for every visitor" }
       - { label: "Paperback Attribution Tag", name: "paperbackAttributionTag", widget: "string", required: false, hint: "Amazon Attribution URL or query string for Book 1 in paperback; added to the box-set landing page's paperback link for every visitor" }
+      - label: "Attribution Tags by Campaign"
+        name: "landingAttributionTags"
+        widget: "list"
+        required: false
+        hint: "The box-set landing page picks the row whose campaign matches the visitor's utm_campaign. An unknown campaign, or an empty tag, gets the default tags above"
+        fields:
+          - { label: "Campaign (utm_campaign)", name: "campaign", widget: "string" }
+          - { label: "Box Set Tag", name: "tag", widget: "string", required: false, hint: "Amazon Attribution URL or query string for the box set" }
+          - { label: "Paperback Tag", name: "paperbackTag", widget: "string", required: false, hint: "Amazon Attribution URL or query string for Book 1 in paperback" }
       - { label: "Press CTR Endpoint", name: "pressCtrEndpoint", widget: "string", required: false, hint: "Leave empty to count landing clicks as Meta pixel events only" }
       - { label: "Amazon Badge", name: "amazonBadge", widget: "image", required: false, hint: "Amazon's official 'Available at Amazon' badge file, unaltered, used under Amazon's brand-usage terms. Shown under the landing page buttons; leave empty to show none" }
       - { label: "Content", name: "body", widget: "markdown", required: false }

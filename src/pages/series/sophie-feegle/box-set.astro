@@ -3,7 +3,7 @@
 // CMS inputs (all optional, see README "Box-set landing page"):
 //   series boxSetAsin / boxSetBlurb / boxSetPrice / boxSetSeparatePrice, and
 //   site-config metaPixelId / landingAttributionTag / paperbackAttributionTag /
-//   pressCtrEndpoint / amazonBadge
+//   landingAttributionTags / pressCtrEndpoint / amazonBadge
 import Layout from '../../../layouts/Layout.astro';
 import StarRating from '../../../components/StarRating.astro';
 import { getCollection, getEntry } from 'astro:content';
@@ -79,7 +79,8 @@ const amazonBadge = siteConfig?.data.amazonBadge?.trim();
 
 // Amazon Attribution: every visitor gets the tags (the page is unlinked from the
 // site, so everyone on it came from the ad). A tag may be the whole Attribution
-// URL; only its query string is used.
+// URL; only its query string is used. The page is static, so it ships with the
+// default tags and the script below swaps in the utm_campaign's own tags.
 const withTag = (href: string, tag?: string) => {
   const query = tag?.trim().replace(/^[^?]*\?/, '');
   if (!query) return href;
@@ -89,11 +90,26 @@ const withTag = (href: string, tag?: string) => {
 };
 
 const asin = series.data.boxSetAsin?.trim();
-const amazonUrl = withTag(
-  asin ? `https://www.amazon.com/dp/${asin}` : 'https://www.amazon.com/s?k=Sophie+Feegle+Box+Set+Gwen+DeMarco&i=digital-text',
-  siteConfig?.data.landingAttributionTag,
-);
-const paperbackUrl = withTag(PAPERBACK_URL, siteConfig?.data.paperbackAttributionTag);
+const amazonBase = asin
+  ? `https://www.amazon.com/dp/${asin}`
+  : 'https://www.amazon.com/s?k=Sophie+Feegle+Box+Set+Gwen+DeMarco&i=digital-text';
+const defaultTag = siteConfig?.data.landingAttributionTag;
+const defaultPaperbackTag = siteConfig?.data.paperbackAttributionTag;
+const amazonUrl = withTag(amazonBase, defaultTag);
+const paperbackUrl = withTag(PAPERBACK_URL, defaultPaperbackTag);
+
+// Per-campaign links, keyed by utm_campaign. An empty tag falls back to the default.
+const campaignLinks: Record<string, { ku: string; buy: string; paperback: string }> = {};
+for (const entry of siteConfig?.data.landingAttributionTags ?? []) {
+  const campaign = entry.campaign?.trim();
+  if (!campaign) continue;
+  const boxSetUrl = withTag(amazonBase, entry.tag?.trim() || defaultTag);
+  campaignLinks[campaign] = {
+    ku: boxSetUrl,
+    buy: boxSetUrl,
+    paperback: withTag(PAPERBACK_URL, entry.paperbackTag?.trim() || defaultPaperbackTag),
+  };
+}
 
 const money = (value?: string) => {
   const amount = value?.trim().replace(/^\$/, '');
@@ -105,6 +121,7 @@ const buyLabel = price ? `Buy the Kindle box set — ${price}` : 'Buy the Kindle
 const valueLine = price && separatePrice ? `${books.length} books for ${price} — ${separatePrice} bought separately` : '';
 
 const landingConfig = {
+  campaignLinks,
   pixelId: siteConfig?.data.metaPixelId?.trim() || '',
   ctrEndpoint: siteConfig?.data.pressCtrEndpoint?.trim() || '',
 };
@@ -300,6 +317,7 @@ const pitch = (series.data.boxSetBlurb?.trim() || series.data.description)
       var EVENTS = { ku: 'LandingClickKU', buy: 'LandingClickBuy', paperback: 'LandingClickPaperback' };
       var CONSENT_KEY = 'gd_marketing_consent';
       var AD_KEY = 'gd_landing_from_ad';
+      var CAMPAIGN_KEY = 'gd_landing_campaign';
       // IANA zones for the 50 states and DC; the site is static, so the browser's
       // time zone is our region signal.
       var US_ZONE = /^(America\/(New_York|Detroit|Kentucky\/.+|Indiana\/.+|Chicago|Menominee|North_Dakota\/.+|Denver|Boise|Phoenix|Los_Angeles|Anchorage|Juneau|Sitka|Metlakatla|Yakutat|Nome|Adak)|Pacific\/Honolulu|US\/.+)$/;
@@ -313,7 +331,19 @@ const pitch = (series.data.boxSetBlurb?.trim() || series.data.description)
         else fromAd = sessionStorage.getItem(AD_KEY) === '1';
       } catch (e) {}
 
+      // utm_campaign, remembered for the tab session: picks the Attribution tags (unknown
+      // or none keeps the default ones) and rides on every pixel event as `campaign`.
+      var campaign = params.get('utm_campaign') || '';
+      try {
+        if (campaign) sessionStorage.setItem(CAMPAIGN_KEY, campaign);
+        else campaign = sessionStorage.getItem(CAMPAIGN_KEY) || '';
+      } catch (e) {}
+
       var ctas = document.querySelectorAll('[data-landing-cta]');
+      var links = Object.prototype.hasOwnProperty.call(landingConfig.campaignLinks, campaign) && landingConfig.campaignLinks[campaign];
+      if (links) {
+        ctas.forEach(function (a) { a.href = links[a.dataset.landingCta]; });
+      }
 
       // Meta pixel: US visitors without a click, everyone else after "Allow".
       var pixelLoaded = false;
@@ -329,7 +359,7 @@ const pitch = (series.data.boxSetBlurb?.trim() || series.data.description)
         s.parentNode.insertBefore(t,s)}(window,document,'script',
         'https://connect.facebook.net/en_US/fbevents.js');
         fbq('init', landingConfig.pixelId);
-        fbq('track', 'PageView');
+        fbq('track', 'PageView', campaign ? { campaign: campaign } : {});
       }
 
       var zone = '';
@@ -356,7 +386,7 @@ const pitch = (series.data.boxSetBlurb?.trim() || series.data.description)
       ctas.forEach(function (a) {
         a.addEventListener('click', function () {
           var cta = a.dataset.landingCta;
-          var detail = { page: 'sophie-feegle-box-set', cta: cta, source: fromAd ? 'ad' : 'organic' };
+          var detail = { page: 'sophie-feegle-box-set', cta: cta, source: fromAd ? 'ad' : 'organic', campaign: campaign };
           if (pixelLoaded && window.fbq) fbq('trackCustom', EVENTS[cta], detail);
           if (landingConfig.ctrEndpoint) {
             try {
