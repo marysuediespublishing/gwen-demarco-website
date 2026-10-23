@@ -1,0 +1,66 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Ward Breaker landing — lo-fi</title>
+<style>
+  body{font:14px/1.4 "Comic Sans MS","Chalkboard SE",sans-serif;margin:0;background:#fff;color:#222}
+  .page{max-width:1100px;margin:0 auto;padding:16px}
+  .box{border:2px solid #222;border-radius:6px;padding:10px;margin:8px 0}
+  .img{background:repeating-linear-gradient(45deg,#ddd 0 6px,#f4f4f4 6px 12px);border:2px solid #222;display:flex;align-items:center;justify-content:center;font-size:11px;color:#555}
+  .btn{border:2px solid #222;border-radius:6px;padding:8px;text-align:center;margin:6px 0;font-weight:bold}
+  .btn.ku{background:#bbb}.btn.kindle{background:#ddd}.btn.print{background:#fff;font-weight:normal;text-decoration:underline;border-style:dashed}
+  .note{color:#c00;font-size:12px}
+  .muted{color:#777;font-size:12px}
+  h1{margin:4px 0;font-size:26px}h2{margin:4px 0;font-size:18px}
+  .hero{display:grid;grid-template-columns:120px 1fr;gap:12px;align-items:center}
+  .doors{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .door .head{display:grid;grid-template-columns:60px 1fr;gap:8px;align-items:center}
+  .reviews{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .line{height:9px;background:#ccc;border-radius:3px;margin:5px 0}
+  @media (max-width:600px){.doors,.reviews{grid-template-columns:1fr}.hero{grid-template-columns:90px 1fr}}
+</style></head><body><div class="page">
+  <div class="box muted">[name mark → home] &nbsp;&nbsp; slim landing chrome, no nav <span class="note">(unlinked from the site)</span></div>
+  <div class="box muted">[consent bar — only outside US zones, until Allow / No thanks]</div>
+
+  <div class="hero">
+    <div class="img" style="height:180px">Ward Breaker cover</div>
+    <div>
+      <div class="muted">AURAS &amp; EMBERS · BOOK 3 · NEW</div>
+      <h1>Ward Breaker</h1>
+      <div>Three Mythical children have been taken in Savannah. Gideon Bean is the only one who can see how it was done.</div>
+      <div class="muted">★★★★★ 4.8 · 71 ratings</div>
+    </div>
+  </div>
+  <div class="box" style="border-left:6px solid #222;border-top:0;border-right:0;border-bottom:0">“Pull-quote title” — one short whole Amazon review of Ward Breaker<br><span class="muted">Reviewer, Amazon review of Ward Breaker</span></div>
+
+  <h2 id="doors">Three ways in</h2>
+  <div class="doors">
+    <div class="box door"><div class="muted">DOOR 1 · target=ward-breaker</div>
+      <div class="head"><div class="img" style="height:90px">WB</div><div><b>Read Ward Breaker now</b><br>A new case, a new city — it stands on its own.</div></div>
+      <div class="btn ku">Read free with Kindle Unlimited</div><div class="muted">Free for KU members</div>
+      <div class="btn kindle">Buy for Kindle — $3.99</div>
+      <div class="btn print">Paperback →</div></div>
+    <div class="box door"><div class="muted">DOOR 2 · target=series-start</div>
+      <div class="head"><div class="img" style="height:90px">GB</div><div><b>Start the series: Gideon Bean</b><br>Book 1 — where Gideon first sees magic. <span class="note">(the series' box set instead, if the series has one)</span></div></div>
+      <div class="btn ku">Read free with Kindle Unlimited</div><div class="muted">Free for KU members</div>
+      <div class="btn kindle">Buy for Kindle — $2.99</div>
+      <div class="btn print">Paperback →</div></div>
+    <div class="box door"><div class="muted">DOOR 3 · target=sophie</div>
+      <div class="head"><div class="img" style="height:90px">Box set</div><div><b>Sophie's books, same world</b><br>The Sophie Feegle Box Set: all five books. ★ 4.7 across the series</div></div>
+      <div class="btn ku">Read free with Kindle Unlimited</div><div class="muted">Free for KU members</div>
+      <div class="btn kindle">Buy the Kindle box set — $9.99</div>
+      <div class="btn print">Book 1 in paperback →</div></div>
+  </div>
+  <div class="note">9 buttons, each once. Click → LandingClickKU / LandingClickBuy / LandingClickPaperback {target, campaign, page, source} + Press CTR beacon. Each door's links: its own Attribution tags for the visitor's utm_campaign (site-config).</div>
+
+  <h2>About Ward Breaker</h2>
+  <div class="line" style="width:95%"></div><div class="line" style="width:88%"></div><div class="line" style="width:92%"></div>
+  <div class="line" style="width:90%"></div><div class="line" style="width:70%"></div>
+  <div class="muted">first three paragraphs of the blurb</div>
+
+  <h2>What readers say</h2>
+  <div class="reviews">
+    <div class="box">“Review” — Ward Breaker<br><span class="muted">reader, platform</span></div>
+    <div class="box">“Same universe as Sophie” — Ward Breaker <span class="note">(bridges door 3)</span><br><span class="muted">reader, platform</span></div>
+  </div>
+  <div style="margin:10px 0">↑ <u>Pick a door</u> <span class="muted">(anchor to #doors — not a 10th button)</span></div>
+  <div class="box muted">Privacy · Cookies · Contact</div>
+</div></body></html>

@@ -42,6 +42,7 @@ languages:
   - language: Spanish
     url: https://www.amazon.es/dp/B0CNTP7PVL/
 hero_image: /images/sophie-brown-betty-on-her-right-hero-image.jpeg
+paperbackAsin: B08CWM839H
 ---
 # Sophie and The Odd Ones
 

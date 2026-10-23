@@ -43,6 +43,8 @@ languages:
     url: https://www.amazon.de/dp/B0FJ333G96
   - language: Spanish
     url: https://www.amazon.es/dp/B0CWC4R83K
+asin: B0CT9ZX865
+paperbackAsin: '1963906004'
 ---
 # Gideon Bean
 

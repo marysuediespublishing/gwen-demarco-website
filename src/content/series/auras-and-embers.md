@@ -40,6 +40,7 @@ worldBuilding: The Auras & Embers world exists alongside our own, hidden in
 readingOrder:
   - gideon-bean
   - spirit-marked
+  - ward-breaker
 featured: true
 ---
 # Auras & Embers Series

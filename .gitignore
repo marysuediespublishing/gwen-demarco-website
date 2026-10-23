@@ -24,3 +24,7 @@ Thumbs.db
 
 # Logs (optional - keeping for loop system)
 # .logs/
+
+# Playwright
+test-results/
+playwright-report/

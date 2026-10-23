@@ -1,6 +1,15 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
+// Book landing pages: a testimonial picked by id (`excerpt` replaces a long body,
+// with an ellipsis wherever text is cut), and a door's copy
+const landingReview = z.object({ id: z.string(), excerpt: z.string().optional() });
+const landingDoor = z.object({
+  title: z.string().optional(),
+  line: z.string().optional(),
+  review: landingReview.optional(),
+});
+
 // Books collection - individual book entries
 const books = defineCollection({
   loader: glob({ base: './src/content/books', pattern: '**/*.{md,mdx}' }),
@@ -33,6 +42,25 @@ const books = defineCollection({
       url: z.string().optional(),
     })).optional(),
     hero_image: z.string().optional(),
+    // Amazon product IDs for the landing pages' buttons: the Kindle edition, and the
+    // paperback (its ASIN, or ISBN-10)
+    asin: z.string().optional(),
+    paperbackAsin: z.string().optional(),
+    // Ad landing page at /books/<slug>/landing, built for every book with this block.
+    // Three doors, each with KU / Kindle / Print: this book, the start of its series,
+    // and another series in the same world.
+    landing: z.object({
+      hook: z.string(),
+      pullQuote: landingReview.optional(),
+      reviews: z.array(landingReview).default([]),
+      book: landingDoor.optional(),
+      seriesStart: landingDoor.optional(),
+      sameWorld: landingDoor.extend({
+        series: z.string(),
+        // The `target` parameter on this door's pixel events and Attribution rows
+        target: z.string(),
+      }).optional(),
+    }).optional(),
   }),
 });
 
@@ -185,6 +213,8 @@ const settings = defineCollection({
     // Per-campaign tags, picked by the visitor's utm_campaign; empty → the defaults above
     landingAttributionTags: z.array(z.object({
       campaign: z.string(),
+      // A book landing page's door (e.g. ward-breaker, series-start, sophie); empty → the box-set page
+      target: z.string().optional(),
       tag: z.string().optional(),
       paperbackTag: z.string().optional(),
     })).optional(),

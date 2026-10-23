@@ -55,6 +55,36 @@ languages:
   - language: German
   - language: French
   - language: Spanish
+asin: B0HJGDMMLM
+landing:
+  hook: Three Mythical children have been taken in Savannah. Gideon Bean is the only one who can see how it was done.
+  pullQuote:
+    id: 2026-10-20-9794225707a0
+  reviews:
+    - id: 2026-10-20-f95ac7abafaa
+    - id: 1904-09-13-map-verified-false-featured-false-date-1904-09-12t19-01-00-000-05-00-booktitle-gideon-bean-reviewername-rick-boisclair-reviewerplatform-goodreads-quote-gideon-bean-is-a-name-to-remember-n-ni-really-enjoyed-ms-demarc
+      excerpt: I really enjoyed Ms. DeMarco’s Sophie Feegle series and this new book is in the same world so it has lots of promise. … Great opening to what I hope is a short wait to a second book in the series.
+    - id: 2025-04-01-map-verified-false-featured-false-date-2025-04-01-booktitle-spirit-marked-reviewername-deepbrassmom-reviewerplatform-amazon-quote-lots-of-action-n-ni-thought-that-i-had-solved-the-mystery-but-no-complex-story-with-m
+  book:
+    title: Read Ward Breaker now
+    line: A new case in a new city. Gideon's third case stands on its own.
+    review:
+      id: 2026-10-20-2622a90cc10d
+      excerpt: Damnnnnnn. That was an amazing book! I hated having to put it down to work 😂. … Well done Gwen, you know how to write an amazing, multifaceted page turner!
+  seriesStart:
+    title: Start the series with Gideon Bean
+    line: Book 1. A woman with flaming wings crawls out of a crematorium oven, and Gideon learns he can see magic.
+    review:
+      id: 2026-02-05-map-verified-false-featured-false-date-2026-02-04t19-03-00-000-05-00-booktitle-gideon-bean-reviewername-melody-d-reviewerplatform-amazon-quote-delightful-n-ngiddy-and-candy-are-delightful-characters-the-magic-is-bot
+      excerpt: The magic is both new and familiar … It's humorous, lighthearted with some serious overtones.
+  sameWorld:
+    series: sophie-feegle
+    target: sophie
+    title: Sophie's books, same world
+    line: Same world, same time, a morgue in San Francisco. All five books in one box set.
+    review:
+      id: 2026-10-20-3ce439e2af8d
+      excerpt: … For those of you new to Gwen DeMarco, you are absolutely in luck because all five books of that series are already out in the universe. … the Aura and Embers series is in that same universe, in the same time frame.
 ---
 
 # Ward Breaker

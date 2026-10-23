@@ -1,0 +1,123 @@
+---
+// The ad landing pages' one script: Meta pixel (with the consent bar), Attribution tags
+// picked by utm_campaign, and a pixel event + Press CTR beacon per button click.
+// Buttons are links with data-landing-cta="ku|buy|paperback" and, on a page with
+// doors, data-landing-target="<door>" (sent with every event as `target`).
+import type { CampaignLinks } from '../../utils/landing';
+
+interface Props {
+  /** The `page` parameter on every event, e.g. sophie-feegle-box-set */
+  page: string;
+  campaignLinks: CampaignLinks;
+  pixelId?: string;
+  ctrEndpoint?: string;
+}
+
+const { page, campaignLinks, pixelId, ctrEndpoint } = Astro.props;
+const landingConfig = { page, campaignLinks, pixelId: pixelId?.trim() || '', ctrEndpoint: ctrEndpoint?.trim() || '' };
+---
+
+<script is:inline define:vars={{ landingConfig }}>
+  (function () {
+    var EVENTS = { ku: 'LandingClickKU', buy: 'LandingClickBuy', paperback: 'LandingClickPaperback' };
+    var CONSENT_KEY = 'gd_marketing_consent';
+    var AD_KEY = 'gd_landing_from_ad';
+    var CAMPAIGN_KEY = 'gd_landing_campaign';
+    // IANA zones for the 50 states and DC; the site is static, so the browser's
+    // time zone is our region signal.
+    var US_ZONE = /^(America\/(New_York|Detroit|Kentucky\/.+|Indiana\/.+|Chicago|Menominee|North_Dakota\/.+|Denver|Boise|Phoenix|Los_Angeles|Anchorage|Juneau|Sitka|Metlakatla|Yakutat|Nome|Adak)|Pacific\/Honolulu|US\/.+)$/;
+
+    // Ad visitor: ?from=ad or utm_source=meta, remembered for the tab session. Only
+    // labels the click events' source; the Attribution tags are on every link.
+    var params = new URLSearchParams(location.search);
+    var fromAd = params.get('from') === 'ad' || (params.get('utm_source') || '').toLowerCase() === 'meta';
+    try {
+      if (fromAd) sessionStorage.setItem(AD_KEY, '1');
+      else fromAd = sessionStorage.getItem(AD_KEY) === '1';
+    } catch (e) {}
+
+    // utm_campaign, remembered for the tab session: picks the Attribution tags (unknown
+    // or none keeps the default ones) and rides on every pixel event as `campaign`.
+    var campaign = params.get('utm_campaign') || '';
+    try {
+      if (campaign) sessionStorage.setItem(CAMPAIGN_KEY, campaign);
+      else campaign = sessionStorage.getItem(CAMPAIGN_KEY) || '';
+    } catch (e) {}
+
+    var ctas = document.querySelectorAll('[data-landing-cta]');
+    var links = Object.prototype.hasOwnProperty.call(landingConfig.campaignLinks, campaign) && landingConfig.campaignLinks[campaign];
+    if (links) {
+      ctas.forEach(function (a) {
+        var door = links[a.dataset.landingTarget || ''];
+        if (door) a.href = door[a.dataset.landingCta];
+      });
+    }
+
+    // Meta pixel: US visitors without a click, everyone else after "Allow".
+    var pixelLoaded = false;
+    function loadPixel() {
+      if (pixelLoaded || !landingConfig.pixelId) return;
+      pixelLoaded = true;
+      !function(f,b,e,v,n,t,s)
+      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+      n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t,s)}(window,document,'script',
+      'https://connect.facebook.net/en_US/fbevents.js');
+      fbq('init', landingConfig.pixelId);
+      fbq('track', 'PageView', campaign ? { campaign: campaign } : {});
+    }
+
+    var zone = '';
+    try { zone = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (e) {}
+    var stored = null;
+    try { stored = localStorage.getItem(CONSENT_KEY); } catch (e) {}
+
+    if (stored !== 'denied' && (US_ZONE.test(zone) || stored === 'granted')) {
+      loadPixel();
+    } else if (stored !== 'denied' && landingConfig.pixelId) {
+      var consentBar = document.getElementById('consent-bar');
+      consentBar.hidden = false;
+      consentBar.addEventListener('click', function (e) {
+        var choice = e.target.closest('[data-consent]');
+        if (!choice) return;
+        try { localStorage.setItem(CONSENT_KEY, choice.dataset.consent); } catch (err) {}
+        consentBar.hidden = true;
+        if (choice.dataset.consent === 'granted') loadPixel();
+      });
+    }
+
+    // press.landing.ctr: custom pixel event per button, plus a keepalive beacon
+    // once the Press endpoint exists.
+    ctas.forEach(function (a) {
+      a.addEventListener('click', function () {
+        var cta = a.dataset.landingCta;
+        var detail = { page: landingConfig.page, cta: cta, source: fromAd ? 'ad' : 'organic', campaign: campaign };
+        if (a.dataset.landingTarget) detail.target = a.dataset.landingTarget;
+        if (pixelLoaded && window.fbq) fbq('trackCustom', EVENTS[cta], detail);
+        if (landingConfig.ctrEndpoint) {
+          try {
+            fetch(landingConfig.ctrEndpoint, {
+              method: 'POST',
+              keepalive: true,
+              // text/plain keeps this a simple request (no CORS preflight).
+              headers: { 'Content-Type': 'text/plain' },
+              body: JSON.stringify(Object.assign({ metric: 'press.landing.ctr' }, detail)),
+            }).catch(function () {});
+          } catch (e) {}
+        }
+      });
+    });
+
+    // Phone: slide the sticky bar (if the page has one) away while the closing pair is on screen.
+    var bar = document.getElementById('cta-bar');
+    var closing = document.getElementById('closing-ctas');
+    if (bar && closing && 'IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        bar.classList.toggle('translate-y-full', entries[0].isIntersecting);
+      }).observe(closing);
+    }
+  })();
+</script>

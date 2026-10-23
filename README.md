@@ -245,3 +245,25 @@ Typography uses Cinzel for mystical headers and Inter for readable body text.
 The "Prefer paper? Book 1 in paperback →" link (`PAPERBACK_URL`), the one-line book hooks (`BOOK_HOOKS`) and the review picks are constants at the top of the page file.
 
 The page uses the slim landing chrome (`<Layout landing>`): the name mark linking home, and a footer with only the legal links. The three review quotes are picked by testimonial id at the top of the page file. Resized covers and the 1200x630 `og:image` are in `public/images/landing/`.
+
+The pixel, consent bar, Attribution swap and click events are shared with the book landing pages: `src/components/landing/` and `src/utils/landing.ts`.
+
+## Book landing pages
+
+`/books/<slug>/landing` is built for every book whose frontmatter has a `landing:` block (Books → Landing Page in the CMS); the first is `/books/ward-breaker/landing`. Like the box-set page it is unlinked from the site and uses the slim landing chrome. It has three doors, in this order, each with a Kindle Unlimited, a Kindle and a print button:
+
+| Door | `target` | Goes to |
+| --- | --- | --- |
+| 1. This book | the book's slug (`ward-breaker`) | the book's `asin` (else its `amazonUrl`) and `paperbackAsin` |
+| 2. Start the series | `series-start` | the box set of the series whose `readingOrder` holds the book, if it has a `boxSetAsin`; else book 1 of that `readingOrder`. Left out when the book is book 1 |
+| 3. Same world | `landing.sameWorld.target` (`sophie`) | `landing.sameWorld.series`: its box set, or its book 1 |
+
+A print button whose book has no `paperbackAsin` goes to an Amazon paperback search for the title.
+
+Every button fires `LandingClickKU` / `LandingClickBuy` / `LandingClickPaperback` with `target` (and `page: <slug>-landing`, `cta`, `source`, `campaign`), and posts the `press.landing.ctr` beacon when `pressCtrEndpoint` is set. The pixel and consent rules are the box-set page's.
+
+Attribution: the page ships with plain Amazon links. A `landingAttributionTags` row in site config with the visitor's `utm_campaign` and a door's `target` puts its `tag` on that door's Kindle Unlimited and Kindle buttons and its `paperbackTag` on its print button. A door with no row (or an empty tag) stays plain: the box-set defaults are not used, so another ad's visitors are not counted against this one. Ward Breaker's campaign is `ward-breaker-us-landing`, with one row per door.
+
+The hook, the door titles and lines, the quotes (testimonial id plus an optional `excerpt`) and the reviews are in the book's `landing:` block. Covers come from `public/images/landing/<cover name>-400.(webp|jpg)` when that copy exists (`-640` for the hero), and the share image is `public/images/landing/<slug>-og.jpg` (1200x630).
+
+Tests: `npm run test:e2e` builds the site, serves it with `astro preview`, and checks both landing pages in Chrome (see `tests/e2e/landing.spec.ts`).
