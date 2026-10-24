@@ -3,6 +3,8 @@
 // picked by utm_campaign, and a pixel event + Press CTR beacon per button click.
 // Buttons are links with data-landing-cta="ku|buy|paperback" and, on a page with
 // doors, data-landing-target="<door>" (sent with every event as `target`).
+// The pixel and the beacon send only on the production hosts (site-config pixelHosts);
+// anywhere else (localhost, a preview) each call is a `[pixel] …` console line instead.
 import type { CampaignLinks } from '../../utils/landing';
 
 interface Props {
@@ -10,11 +12,19 @@ interface Props {
   page: string;
   campaignLinks: CampaignLinks;
   pixelId?: string;
+  /** Hostnames the pixel and beacon send from, e.g. gwendemarco.com, www.gwendemarco.com */
+  pixelHosts?: string[];
   ctrEndpoint?: string;
 }
 
-const { page, campaignLinks, pixelId, ctrEndpoint } = Astro.props;
-const landingConfig = { page, campaignLinks, pixelId: pixelId?.trim() || '', ctrEndpoint: ctrEndpoint?.trim() || '' };
+const { page, campaignLinks, pixelId, pixelHosts, ctrEndpoint } = Astro.props;
+const landingConfig = {
+  page,
+  campaignLinks,
+  pixelId: pixelId?.trim() || '',
+  pixelHosts: (pixelHosts ?? []).map((host) => host.trim().toLowerCase()).filter(Boolean),
+  ctrEndpoint: ctrEndpoint?.trim() || '',
+};
 ---
 
 <script is:inline define:vars={{ landingConfig }}>
@@ -53,11 +63,22 @@ const landingConfig = { page, campaignLinks, pixelId: pixelId?.trim() || '', ctr
       });
     }
 
+    // Production host only: anywhere else the same calls are console lines, nothing sent.
+    var live = landingConfig.pixelHosts.indexOf(location.hostname.toLowerCase()) !== -1;
+    function pixel(method, name, data) {
+      if (live) fbq(method, name, data);
+      else console.log('[pixel] ' + name + ' ' + JSON.stringify(data));
+    }
+
     // Meta pixel: US visitors without a click, everyone else after "Allow".
     var pixelLoaded = false;
     function loadPixel() {
       if (pixelLoaded || !landingConfig.pixelId) return;
       pixelLoaded = true;
+      if (!live) {
+        pixel('track', 'PageView', campaign ? { campaign: campaign } : {});
+        return;
+      }
       !function(f,b,e,v,n,t,s)
       {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
       n.callMethod.apply(n,arguments):n.queue.push(arguments)};
@@ -67,7 +88,7 @@ const landingConfig = { page, campaignLinks, pixelId: pixelId?.trim() || '', ctr
       s.parentNode.insertBefore(t,s)}(window,document,'script',
       'https://connect.facebook.net/en_US/fbevents.js');
       fbq('init', landingConfig.pixelId);
-      fbq('track', 'PageView', campaign ? { campaign: campaign } : {});
+      pixel('track', 'PageView', campaign ? { campaign: campaign } : {});
     }
 
     var zone = '';
@@ -96,8 +117,10 @@ const landingConfig = { page, campaignLinks, pixelId: pixelId?.trim() || '', ctr
         var cta = a.dataset.landingCta;
         var detail = { page: landingConfig.page, cta: cta, source: fromAd ? 'ad' : 'organic', campaign: campaign };
         if (a.dataset.landingTarget) detail.target = a.dataset.landingTarget;
-        if (pixelLoaded && window.fbq) fbq('trackCustom', EVENTS[cta], detail);
-        if (landingConfig.ctrEndpoint) {
+        if (pixelLoaded) pixel('trackCustom', EVENTS[cta], detail);
+        if (landingConfig.ctrEndpoint && !live) {
+          console.log('[pixel] beacon ' + JSON.stringify(Object.assign({ metric: 'press.landing.ctr' }, detail)));
+        } else if (landingConfig.ctrEndpoint) {
           try {
             fetch(landingConfig.ctrEndpoint, {
               method: 'POST',

@@ -208,6 +208,8 @@ const settings = defineCollection({
     }).optional(),
     // Ad landing pages: Meta pixel, Amazon Attribution tags (box set, paperback), Press CTR beacon
     metaPixelId: z.string().optional(),
+    // The hosts the pixel and the CTR beacon fire on; anywhere else they only log to the console
+    pixelHosts: z.array(z.string()).optional(),
     landingAttributionTag: z.string().optional(),
     paperbackAttributionTag: z.string().optional(),
     // Per-campaign tags, picked by the visitor's utm_campaign; empty → the defaults above

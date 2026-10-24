@@ -30,6 +30,9 @@ newsletter:
     - Sneak peeks at upcoming books
     - No spam, ever - unsubscribe anytime
 metaPixelId: "225692997192754"
+pixelHosts:
+  - gwendemarco.com
+  - www.gwendemarco.com
 landingAttributionTag: "https://www.amazon.com/dp/B0CK55M553?maas=maas_adg_D5817D714E2827419DF4FB3D60036461_afap_abs&ref_=aa_maas&tag=maas"
 paperbackAttributionTag: "https://www.amazon.com/dp/B08CWM839H?maas=maas_adg_1E93BCBC747961A6E7FE8EBE1F6CF616_afap_abs&ref_=aa_maas&tag=maas"
 landingAttributionTags:

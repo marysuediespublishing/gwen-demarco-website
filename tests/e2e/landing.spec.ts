@@ -3,7 +3,9 @@ import { buildCampaignLinks, doorLinks, withTag } from '../../src/utils/landing'
 
 // The two ad landing pages: /series/sophie-feegle/box-set and the book landing
 // template (/books/ward-breaker/landing). The pixel script is stubbed (its queue is
-// what we read), and clicks on the buttons are kept from leaving for Amazon.
+// what we read), and clicks on the buttons are kept from leaving for Amazon. The pixel
+// sends only from site-config pixelHosts, so stubOutside adds localhost to them unless
+// a test is walking a non-production host.
 
 const BOX_SET = '/series/sophie-feegle/box-set/';
 const WARD_BREAKER = '/books/ward-breaker/landing/';
@@ -15,9 +17,25 @@ const SOPHIE_PAPERBACK_TAG = 'maas=maas_adg_1E93BCBC747961A6E7FE8EBE1F6CF616_afa
 
 const CTR = 'https://press.example.test/ctr';
 
-async function stubOutside(page: Page) {
+/**
+ * Stub the pixel script and the beacon, and rewrite each page's built-in landing config:
+ * localhost becomes a production host (unless `production: false`), then `edit` runs
+ * (Attribution rows, beacon endpoint).
+ */
+async function stubOutside(page: Page, { production = true, edit }: { production?: boolean; edit?: (config: any) => void } = {}) {
   await page.route('**/connect.facebook.net/**', (route) => route.fulfill({ body: '' }));
   await page.route(CTR, (route) => route.fulfill({ body: 'ok' }));
+  await page.route('**/*', async (route) => {
+    if (route.request().resourceType() !== 'document') return route.fallback();
+    const response = await route.fetch();
+    const html = (await response.text()).replace(/const landingConfig = (\{.*?\});\n/, (_, json) => {
+      const config = JSON.parse(json);
+      if (production) config.pixelHosts.push('localhost');
+      edit?.(config);
+      return `const landingConfig = ${JSON.stringify(config)};\n`;
+    });
+    await route.fulfill({ response, body: html });
+  });
   await page.addInitScript(() => {
     document.addEventListener('click', (e) => {
       if ((e.target as Element).closest('a[data-landing-cta]')) e.preventDefault();
@@ -25,17 +43,13 @@ async function stubOutside(page: Page) {
   });
 }
 
-/** Rewrite the page's built-in landing config (Attribution rows, beacon endpoint) for a test. */
-async function withConfig(page: Page, path: string, edit: (config: any) => void) {
-  await page.route(`**${path}*`, async (route) => {
-    const response = await route.fetch();
-    const html = (await response.text()).replace(/const landingConfig = (\{.*?\});\n/, (_, json) => {
-      const config = JSON.parse(json);
-      edit(config);
-      return `const landingConfig = ${JSON.stringify(config)};\n`;
-    });
-    await route.fulfill({ response, body: html });
+/** The page's `[pixel] …` console lines (the non-production path). */
+function pixelLines(page: Page) {
+  const lines: string[] = [];
+  page.on('console', (msg) => {
+    if (msg.text().startsWith('[pixel] ')) lines.push(msg.text());
   });
+  return lines;
 }
 
 const fbqCalls = (page: Page) =>
@@ -103,9 +117,10 @@ test.describe('box-set page', () => {
   });
 
   test('an unknown campaign keeps the default tags', async ({ page }) => {
-    await stubOutside(page);
-    await withConfig(page, BOX_SET, (config) => {
-      config.campaignLinks.other = { '': { ku: 'https://x.test/ku', buy: 'https://x.test/buy', paperback: 'https://x.test/p' } };
+    await stubOutside(page, {
+      edit: (config) => {
+        config.campaignLinks.other = { '': { ku: 'https://x.test/ku', buy: 'https://x.test/buy', paperback: 'https://x.test/p' } };
+      },
     });
     await page.goto(`${BOX_SET}?utm_campaign=x`);
     await expect(page.locator('aside [data-landing-cta="buy"]')).toHaveAttribute('href', `https://www.amazon.com/dp/B0CK55M553?${SOPHIE_LPV_TAG}`);
@@ -161,9 +176,10 @@ test.describe('Ward Breaker landing page', () => {
   });
 
   test('every one of the nine buttons fires its event with its door as target, and the beacon', async ({ page }) => {
-    await stubOutside(page);
-    await withConfig(page, WARD_BREAKER, (config) => {
-      config.ctrEndpoint = CTR;
+    await stubOutside(page, {
+      edit: (config) => {
+        config.ctrEndpoint = CTR;
+      },
     });
     const beacons: unknown[] = [];
     page.on('request', (req) => {
@@ -184,12 +200,13 @@ test.describe('Ward Breaker landing page', () => {
   });
 
   test("each door takes its own campaign's tags; other doors and campaigns are untouched", async ({ page }) => {
-    await stubOutside(page);
-    await withConfig(page, WARD_BREAKER, (config) => {
-      config.campaignLinks['wb-test'] = {
-        'ward-breaker': { ku: 'https://www.amazon.com/dp/B0HJGDMMLM?maas=wb', buy: 'https://www.amazon.com/dp/B0HJGDMMLM?maas=wb', paperback: 'https://p.test/wb' },
-        sophie: { ku: 'https://www.amazon.com/dp/B0CK55M553?maas=s', buy: 'https://www.amazon.com/dp/B0CK55M553?maas=s', paperback: 'https://p.test/s' },
-      };
+    await stubOutside(page, {
+      edit: (config) => {
+        config.campaignLinks['wb-test'] = {
+          'ward-breaker': { ku: 'https://www.amazon.com/dp/B0HJGDMMLM?maas=wb', buy: 'https://www.amazon.com/dp/B0HJGDMMLM?maas=wb', paperback: 'https://p.test/wb' },
+          sophie: { ku: 'https://www.amazon.com/dp/B0CK55M553?maas=s', buy: 'https://www.amazon.com/dp/B0CK55M553?maas=s', paperback: 'https://p.test/s' },
+        };
+      },
     });
     await page.goto(`${WARD_BREAKER}?utm_campaign=wb-test`);
     const href = (door: string, cta: string) => page.locator(`[data-door="${door}"] [data-landing-cta="${cta}"]`).getAttribute('href');
@@ -254,4 +271,49 @@ test.describe('Asphalt Coven landing page (book one: no series-start door)', () 
     }
     expect(await customEvents(page)).toEqual(expected.map((detail) => ['trackCustom', EVENTS[detail.cta], detail]));
   });
+});
+
+test.describe('production hosts only', () => {
+  test.use({ timezoneId: 'America/New_York' });
+
+  test('site-config names the production hosts, and the built page carries them', async ({ page }) => {
+    await page.goto(WARD_BREAKER);
+    const html = await page.content();
+    const config = JSON.parse(html.match(/const landingConfig = (\{.*?\});\n/)![1]);
+    expect(config.pixelHosts).toEqual(['gwendemarco.com', 'www.gwendemarco.com']);
+  });
+
+  test('on localhost nothing is sent: PageView, clicks and beacon are console lines', async ({ page }) => {
+    const sent: string[] = [];
+    page.on('request', (req) => {
+      if (req.url().includes('facebook') || req.url() === CTR) sent.push(req.url());
+    });
+    const lines = pixelLines(page);
+    await stubOutside(page, {
+      production: false,
+      edit: (config) => {
+        config.ctrEndpoint = CTR;
+      },
+    });
+    await page.goto(`${WARD_BREAKER}?utm_campaign=x`);
+    await page.locator('[data-door="ward-breaker"] [data-landing-cta="ku"]').click();
+    const detail = { page: 'ward-breaker-landing', cta: 'ku', source: 'organic', campaign: 'x', target: 'ward-breaker' };
+    await expect.poll(() => lines.length).toBe(3);
+    expect(lines).toEqual([
+      '[pixel] PageView {"campaign":"x"}',
+      `[pixel] LandingClickKU ${JSON.stringify(detail)}`,
+      `[pixel] beacon ${JSON.stringify({ metric: 'press.landing.ctr', ...detail })}`,
+    ]);
+    expect(await page.evaluate(() => typeof (window as any).fbq)).toBe('undefined');
+    expect(sent).toEqual([]);
+  });
+
+  test('a production host sends and logs nothing to the console', async ({ page }) => {
+    const lines = pixelLines(page);
+    await stubOutside(page);
+    await page.goto(`${WARD_BREAKER}?utm_campaign=x`);
+    expect(await fbqCalls(page)).toContainEqual(['track', 'PageView', { campaign: 'x' }]);
+    expect(lines).toEqual([]);
+  });
+
 });
