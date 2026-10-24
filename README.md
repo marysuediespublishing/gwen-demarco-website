@@ -262,7 +262,7 @@ A print button whose book has no `paperbackAsin` goes to an Amazon paperback sea
 
 Every button fires `LandingClickKU` / `LandingClickBuy` / `LandingClickPaperback` with `target` (and `page: <slug>-landing`, `cta`, `source`, `campaign`), and posts the `press.landing.ctr` beacon when `pressCtrEndpoint` is set. The pixel and consent rules are the box-set page's.
 
-Attribution: the page ships with plain Amazon links. A `landingAttributionTags` row in site config with the visitor's `utm_campaign` and a door's `target` puts its `tag` on that door's Kindle Unlimited and Kindle buttons and its `paperbackTag` on its print button. A door with no row (or an empty tag) stays plain: the box-set defaults are not used, so another ad's visitors are not counted against this one. Ward Breaker's campaign is `ward-breaker-us-landing`, with one row per door.
+Attribution: the page ships with plain Amazon links. A `landingAttributionTags` row in site config with the visitor's `utm_campaign` and a door's `target` puts its `tag` on that door's Kindle Unlimited and Kindle buttons and its `paperbackTag` on its print button. A door with no row (or an empty tag) stays plain: the box-set defaults are not used, so another ad's visitors are not counted against this one. Ward Breaker's campaign is `ward-breaker-us-landing`, Asphalt Coven's `asphalt-coven-us-landing` (two doors, as a book 1 has no series-start door), with one row per door.
 
 The hook, the door titles and lines, the quotes (testimonial id plus an optional `excerpt`) and the reviews are in the book's `landing:` block. Covers come from `public/images/landing/<cover name>-400.(webp|jpg)` when that copy exists (`-640` for the hero), and the share image is `public/images/landing/<slug>-og.jpg` (1200x630).
 

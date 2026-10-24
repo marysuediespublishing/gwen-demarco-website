@@ -206,3 +206,52 @@ test.describe('Ward Breaker landing page', () => {
     expect(hrefs.filter((h) => h.includes('maas='))).toEqual([]);
   });
 });
+
+test.describe('Asphalt Coven landing page (book one: no series-start door)', () => {
+  test.use({ timezoneId: 'America/New_York' });
+  const ASPHALT_COVEN = '/books/asphalt-coven/landing/';
+  const AC_DOORS = ['asphalt-coven', 'sophie'] as const;
+
+  test('two doors, six /dp/ buttons with their door as target, the pull quote and no reviews section', async ({ page }) => {
+    await stubOutside(page);
+    await page.goto(`${ASPHALT_COVEN}?utm_campaign=x`);
+    expect(await page.locator('[data-door]').evaluateAll((els) => els.map((el) => (el as HTMLElement).dataset.door))).toEqual([...AC_DOORS]);
+    await expect(page.locator('#doors h2')).toHaveText('Two ways in');
+    for (const door of AC_DOORS) {
+      expect(
+        await page.locator(`[data-door="${door}"] [data-landing-cta]`).evaluateAll((els) =>
+          els.map((el) => [(el as HTMLElement).dataset.landingCta, (el as HTMLElement).dataset.landingTarget]),
+        ),
+      ).toEqual(CTAS.map((cta) => [cta, door]));
+    }
+    const hrefs = await page.locator('[data-landing-cta]').evaluateAll((els) => els.map((el) => (el as HTMLAnchorElement).href));
+    expect(hrefs).toEqual([
+      'https://www.amazon.com/dp/B0G4BFY4YS',
+      'https://www.amazon.com/dp/B0G4BFY4YS',
+      'https://www.amazon.com/dp/1963906373',
+      'https://www.amazon.com/dp/B0CK55M553',
+      'https://www.amazon.com/dp/B0CK55M553',
+      'https://www.amazon.com/dp/B08CWM839H',
+    ]);
+    // Rule 33: every Amazon link is amazon.<tld>/dp/<ASIN>
+    expect(hrefs.every((h) => /^https:\/\/www\.amazon\.[a-z.]+\/dp\/[0-9A-Z]{10}$/.test(h))).toBe(true);
+
+    const pull = page.locator('section figure').first();
+    await expect(pull).toContainText('not knowing they have magical powers');
+    await expect(pull.locator('figcaption')).toHaveText('Jillian K, Goodreads review of Asphalt Coven');
+    await expect(page.locator('[data-door="sophie"] figcaption')).toHaveText('Rhonda Jones, Amazon review of the Sophie Feegle box set');
+    await expect(page.getByRole('heading', { name: 'What readers say' })).toHaveCount(0);
+  });
+
+  test('every one of the six buttons fires its event with its door as target', async ({ page }) => {
+    await stubOutside(page);
+    await page.goto(`${ASPHALT_COVEN}?utm_campaign=asphalt-coven-us-landing`);
+    const expected = AC_DOORS.flatMap((door) =>
+      CTAS.map((cta) => ({ page: 'asphalt-coven-landing', cta, source: 'organic', campaign: 'asphalt-coven-us-landing', target: door })),
+    );
+    for (const door of AC_DOORS) {
+      for (const cta of CTAS) await page.locator(`[data-door="${door}"] [data-landing-cta="${cta}"]`).click();
+    }
+    expect(await customEvents(page)).toEqual(expected.map((detail) => ['trackCustom', EVENTS[detail.cta], detail]));
+  });
+});

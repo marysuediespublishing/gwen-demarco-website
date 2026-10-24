@@ -33,7 +33,8 @@ worldBuilding: "The world of Asphalt Coven pulses beneath the cracked streets
   mentors, no ancient tomes of wisdom, and no time to learn gracefully. There is
   only the bond, the city, and the fight to survive long enough to understand
   what they've become."
-readingOrder: []
+readingOrder:
+  - asphalt-coven
 featured: true
 ---
 # Witches of Kirra Cross Series

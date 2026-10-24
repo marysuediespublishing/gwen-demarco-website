@@ -48,6 +48,24 @@ languages:
   - language: German
     url: https://www.amazon.de/dp/B0G62LLZQ2
 hero_image: /images/asphalt-coven-hero-image.jpeg
+asin: B0G4BFY4YS
+paperbackAsin: "1963906373"
+landing:
+  hook: Five women. No training. No time. And a coven that won't burn.
+  pullQuote:
+    id: 1905-12-04-map-verified-false-featured-true-date-1905-12-04t18-39-00-000-05-00-booktitle-asphalt-coven-reviewername-jmkf2022-reviewerplatform-amazon-quote-fantastic-new-series-i-love-gwen-demarcos-series-especially-the-on
+    excerpt: Fantastic New Series!!! … Women from different backgrounds finding themselves drawn to each other in friendship not knowing they have magical powers, and growing together once they do. … I have read 11 of Gwen’s books, and I never saw that twist coming.
+  book:
+    title: Read Asphalt Coven now
+    line: Book 1 of the Witches of Kirra Cross, and a whole story on its own. Five accidental witches, one city, and the hunters who burn covens.
+  sameWorld:
+    series: sophie-feegle
+    target: sophie
+    title: Sophie's books, same world
+    line: Same world, a morgue in San Francisco. All five books in one box set.
+    review:
+      id: 2024-04-17-map-verified-false-featured-false-date-2024-04-17-booktitle-sophie-feegle-box-set-reviewername-rhonda-jones-reviewerplatform-amazon-quote-awesome-nthis-series-has-a-great-cast-of-characters-each-book-takes-up-after-t
+      excerpt: It starts with a human woman (Sophie) who is down on her luck … When she touches a corpse she can see how that person died. … Book 5 had an absolutely awesome ending!!! I loved it. Great series.
 ---
 # Asphalt Coven
 

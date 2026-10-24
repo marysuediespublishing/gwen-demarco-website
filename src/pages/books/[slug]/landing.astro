@@ -51,13 +51,23 @@ const bookById = (id?: string) => allBooks.find((b) => b.id === id);
 const seriesOf = (b: Book) => allSeries.find((s) => s.data.readingOrder.includes(b.id));
 const firstBook = (s: Series) => bookById(s.data.readingOrder[0]);
 
+// What a testimonial reviewed: its book, a series box set (bookTitle `<series>-box-set`),
+// or, with no bookTitle, this page's book.
+const aboutOf = (id?: string) => {
+  if (!id) return book.data.title;
+  const boxSet = allSeries.find((s) => `${s.id}-box-set` === id);
+  if (boxSet) return `the ${boxSet.data.title.replace(/\s+Series$/, '')} box set`;
+  return bookById(id)?.data.title;
+};
+
 const review = (pick?: ReviewPick) => {
   if (!pick) return undefined;
   const r = toReview(testimonials, pick.id, pick.excerpt);
   if (!r) return undefined;
   const platform = testimonials.find((t) => t.id === pick.id)!.data.reviewerPlatform;
-  const about = bookById(r.bookId)?.data.title ?? book.data.title;
-  return { ...r, cite: `${r.reviewer}, ${platform === 'goodreads' ? 'Goodreads' : 'Amazon'} review of ${about}` };
+  const about = aboutOf(r.bookId);
+  const cite = `${r.reviewer}, ${platform === 'goodreads' ? 'Goodreads' : 'Amazon'} review${about ? ` of ${about}` : ''}`;
+  return { ...r, cite };
 };
 
 interface Door extends DoorBase {
@@ -176,11 +186,13 @@ const pitch = book.data.description
   .slice(0, BLURB_PARAGRAPHS);
 
 const heroCover = landingCover(book.data.cover, 640);
+const waysIn = ['One way', 'Two ways', 'Three ways'][doors.length - 1] ?? `${doors.length} ways`;
+const hasSeriesStart = doors.some((door) => door.target === 'series-start');
 ---
 
 <Layout
   title={`${book.data.title}${seriesName ? `: ${seriesName} Book ${book.data.seriesOrder}` : ''} | Gwen DeMarco`}
-  description={`${landing.hook} Read it free with Kindle Unlimited, or start the series from book one.`}
+  description={`${landing.hook} Read it free with Kindle Unlimited${hasSeriesStart ? ', or start the series from book one' : ''}.`}
   image={`/images/landing/${book.id}-og.jpg`}
   landing
 >
@@ -224,7 +236,7 @@ const heroCover = landingCover(book.data.cover, 640);
 
       <!-- The doors: every way into the world, each with its own three buttons -->
       <section id="doors" class="mt-14 scroll-mt-6">
-        <h2 class="text-2xl md:text-3xl font-primary font-bold text-bone-white mb-2 text-center lg:text-left">Three ways in</h2>
+        <h2 class="text-2xl md:text-3xl font-primary font-bold text-bone-white mb-2 text-center lg:text-left">{waysIn} in</h2>
         <p class="text-fog-gray mb-6 text-center lg:text-left">All in the same world. Pick where you want to start.</p>
         <div class={`grid gap-6 ${doors.length === 3 ? 'lg:grid-cols-3' : 'lg:grid-cols-2'}`}>
           {doors.map((door, i) => (
