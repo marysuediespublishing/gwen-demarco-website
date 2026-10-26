@@ -83,6 +83,8 @@ const series = defineCollection({
     featured: z.boolean().default(false),
     // Box-set landing page (/series/<slug>/box-set)
     boxSetAsin: z.string().optional(),
+    // The box set's product slug in Press's Books (its Attribution tags' key); default <series>-box-set
+    boxSetSlug: z.string().optional(),
     boxSetBlurb: z.string().optional(),
     boxSetPrice: z.string().optional(),
     boxSetSeparatePrice: z.string().optional(),
@@ -206,20 +208,18 @@ const settings = defineCollection({
       leadMagnetDescription: z.string().optional(),
       benefits: z.array(z.string()).optional(),
     }).optional(),
-    // Ad landing pages: Meta pixel, Amazon Attribution tags (box set, paperback), Press CTR beacon
+    // Ad landing pages: Meta pixel, Amazon Attribution tags, Press CTR beacon
     metaPixelId: z.string().optional(),
     // The hosts the pixel and the CTR beacon fire on; anywhere else they only log to the console
     pixelHosts: z.array(z.string()).optional(),
-    landingAttributionTag: z.string().optional(),
-    paperbackAttributionTag: z.string().optional(),
-    // Per-campaign tags, picked by the visitor's utm_campaign; empty → the defaults above
-    landingAttributionTags: z.array(z.object({
-      campaign: z.string(),
-      // A book landing page's door (e.g. ward-breaker, series-start, sophie); empty → the box-set page
-      target: z.string().optional(),
-      tag: z.string().optional(),
-      paperbackTag: z.string().optional(),
-    })).optional(),
+    // Amazon Attribution tags per product and door (Press ad_desk_007, written by Ad Desk's
+    // Import tags): market → product slug → ku / kindle / print, each the Attribution URL.
+    // A landing button takes its product's tag for its door, whatever ad sent the visitor.
+    attributionTags: z.record(z.string(), z.record(z.string(), z.object({
+      ku: z.string().optional(),
+      kindle: z.string().optional(),
+      print: z.string().optional(),
+    }))).optional(),
     pressCtrEndpoint: z.string().optional(),
     amazonBadge: z.string().optional(),
   }),

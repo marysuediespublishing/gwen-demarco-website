@@ -1,26 +1,30 @@
 ---
-// The ad landing pages' one script: Meta pixel (with the consent bar), Attribution tags
-// picked by utm_campaign, and a pixel event + Press CTR beacon per button click.
+// The ad landing pages' one script: Meta pixel (with the consent bar), and a pixel event
+// + Press CTR beacon per button click carrying the page's utm_* unchanged. The buttons'
+// Attribution tags are baked in at build, per (book, door); no ad changes them.
 // Buttons are links with data-landing-cta="ku|buy|paperback" and, on a page with
 // doors, data-landing-target="<door>" (sent with every event as `target`).
 // The pixel and the beacon send only on the production hosts (site-config pixelHosts);
 // anywhere else (localhost, a preview) each call is a `[pixel] …` console line instead.
-import type { CampaignLinks } from '../../utils/landing';
+import { missingLine, type MissingTag } from '../../utils/landing';
 
 interface Props {
   /** The `page` parameter on every event, e.g. sophie-feegle-box-set */
   page: string;
-  campaignLinks: CampaignLinks;
+  /** The buttons with no Attribution tag (they link to the bare product page). */
+  missingTags: MissingTag[];
   pixelId?: string;
   /** Hostnames the pixel and beacon send from, e.g. gwendemarco.com, www.gwendemarco.com */
   pixelHosts?: string[];
   ctrEndpoint?: string;
 }
 
-const { page, campaignLinks, pixelId, pixelHosts, ctrEndpoint } = Astro.props;
+const { page, missingTags, pixelId, pixelHosts, ctrEndpoint } = Astro.props;
+// The build says which buttons go untagged, so a new book's missing tags are seen.
+if (missingTags.length) console.warn(`[attribution] missing on ${page}: ${missingLine(missingTags)}`);
 const landingConfig = {
   page,
-  campaignLinks,
+  missingTags,
   pixelId: pixelId?.trim() || '',
   pixelHosts: (pixelHosts ?? []).map((host) => host.trim().toLowerCase()).filter(Boolean),
   ctrEndpoint: ctrEndpoint?.trim() || '',
@@ -32,7 +36,7 @@ const landingConfig = {
     var EVENTS = { ku: 'LandingClickKU', buy: 'LandingClickBuy', paperback: 'LandingClickPaperback' };
     var CONSENT_KEY = 'gd_marketing_consent';
     var AD_KEY = 'gd_landing_from_ad';
-    var CAMPAIGN_KEY = 'gd_landing_campaign';
+    var UTM_KEY = 'gd_landing_utm';
     // IANA zones for the 50 states and DC; the site is static, so the browser's
     // time zone is our region signal.
     var US_ZONE = /^(America\/(New_York|Detroit|Kentucky\/.+|Indiana\/.+|Chicago|Menominee|North_Dakota\/.+|Denver|Boise|Phoenix|Los_Angeles|Anchorage|Juneau|Sitka|Metlakatla|Yakutat|Nome|Adak)|Pacific\/Honolulu|US\/.+)$/;
@@ -46,22 +50,19 @@ const landingConfig = {
       else fromAd = sessionStorage.getItem(AD_KEY) === '1';
     } catch (e) {}
 
-    // utm_campaign, remembered for the tab session: picks the Attribution tags (unknown
-    // or none keeps the default ones) and rides on every pixel event as `campaign`.
-    var campaign = params.get('utm_campaign') || '';
+    // The page's utm_* (which ad sent the visitor), remembered for the tab session and
+    // passed through unchanged on every click event; utm_campaign also rides as `campaign`.
+    var utm = {};
+    params.forEach(function (value, key) {
+      if (/^utm_/.test(key)) utm[key] = value;
+    });
     try {
-      if (campaign) sessionStorage.setItem(CAMPAIGN_KEY, campaign);
-      else campaign = sessionStorage.getItem(CAMPAIGN_KEY) || '';
+      if (Object.keys(utm).length) sessionStorage.setItem(UTM_KEY, JSON.stringify(utm));
+      else utm = JSON.parse(sessionStorage.getItem(UTM_KEY) || '{}') || {};
     } catch (e) {}
+    var campaign = utm.utm_campaign || '';
 
     var ctas = document.querySelectorAll('[data-landing-cta]');
-    var links = Object.prototype.hasOwnProperty.call(landingConfig.campaignLinks, campaign) && landingConfig.campaignLinks[campaign];
-    if (links) {
-      ctas.forEach(function (a) {
-        var door = links[a.dataset.landingTarget || ''];
-        if (door) a.href = door[a.dataset.landingCta];
-      });
-    }
 
     // Production host only: anywhere else the same calls are console lines, nothing sent.
     var live = landingConfig.pixelHosts.indexOf(location.hostname.toLowerCase()) !== -1;
@@ -117,6 +118,7 @@ const landingConfig = {
         var cta = a.dataset.landingCta;
         var detail = { page: landingConfig.page, cta: cta, source: fromAd ? 'ad' : 'organic', campaign: campaign };
         if (a.dataset.landingTarget) detail.target = a.dataset.landingTarget;
+        Object.keys(utm).forEach(function (key) { detail[key] = utm[key]; });
         if (pixelLoaded) pixel('trackCustom', EVENTS[cta], detail);
         if (landingConfig.ctrEndpoint && !live) {
           console.log('[pixel] beacon ' + JSON.stringify(Object.assign({ metric: 'press.landing.ctr' }, detail)));

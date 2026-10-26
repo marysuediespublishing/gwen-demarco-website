@@ -44,6 +44,7 @@ readingOrder:
   - odds-and-ends
 featured: true
 boxSetAsin: B0CK55M553
+boxSetSlug: sophie-boxset
 boxSetPrice: "9.99"
 boxSetSeparatePrice: ""
 ---

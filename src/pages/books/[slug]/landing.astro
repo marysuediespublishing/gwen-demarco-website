@@ -8,7 +8,10 @@
 //   3. another series in the same world (landing.sameWorld.target): its box set, or
 //      its book one
 // Every button fires LandingClickKU / LandingClickBuy / LandingClickPaperback with
-// `target`; each door's links take the site-config Attribution rows for its target.
+// `target` and the page's utm_*; each button carries its product's Attribution tag for
+// its door (site-config attributionTags.<market>.<product>.<ku|kindle|print>), whatever
+// ad sent the visitor. Ward Breaker's three doors are three products: ward-breaker,
+// gideon-bean (series start) and sophie-boxset (Sophie's world).
 import Layout from '../../../layouts/Layout.astro';
 import StarRating from '../../../components/StarRating.astro';
 import ConsentBar from '../../../components/landing/ConsentBar.astro';
@@ -18,7 +21,6 @@ import { existsSync } from 'node:fs';
 import {
   amazonDp,
   amazonSearch,
-  buildCampaignLinks,
   doorLinks,
   money,
   toReview,
@@ -104,6 +106,8 @@ const bookDoor = (b: Book, target: string, eyebrow: string, title: string): Door
     eyebrow,
     kindleUrl: amazonDp(b.data.asin) || b.data.amazonUrl || amazonSearch(`${b.data.title} Gwen DeMarco`),
     paperbackUrl: paperbackOf(b),
+    product: b.id,
+    printProduct: b.id,
     cover: landingCover(b.data.cover, 400),
     coverAlt: `${b.data.title} cover`,
     rating: b.data.rating > 0 && b.data.ratingCount > 0
@@ -127,6 +131,9 @@ const seriesDoor = (s: Series, target: string, title?: string): Door | undefined
       eyebrow: `${seriesName} · Books 1–${count} · Box set`,
       kindleUrl: amazonDp(s.data.boxSetAsin),
       paperbackUrl: paperbackOf(one),
+      // The box set is its own product (Press's Books slug); its Print button is book one's.
+      product: s.data.boxSetSlug?.trim() || `${s.id}-box-set`,
+      printProduct: one?.id ?? '',
       cover: landingCover(s.data.cover, 400),
       boxSet: true,
       coverAlt: `${seriesName} Box Set, Books 1–${count} by Gwen DeMarco`,
@@ -167,11 +174,11 @@ if (landing.sameWorld && sameWorldSeries) {
   if (door) doors.push({ ...door, line: landing.sameWorld.line, review: review(landing.sameWorld.review) });
 }
 
-// The page is static: it ships with plain links (no default Attribution tags, so a
-// visitor from another ad is not counted against this one), and the script swaps in
-// each door's tags for the visitor's utm_campaign.
-const campaignLinks = buildCampaignLinks(siteConfig?.data.landingAttributionTags ?? [], doors);
-const links = doors.map((door) => doorLinks(door));
+// Each button's tag is its product's for its door; one with none is the bare /dp link,
+// and the build lists it as missing.
+const built = doors.map((door) => doorLinks(door, siteConfig?.data.attributionTags));
+const links = built.map((b) => b.links);
+const missingTags = built.flatMap((b) => b.missing);
 
 const pullQuote = review(landing.pullQuote);
 const reviews = landing.reviews.map(review).filter((r): r is NonNullable<typeof r> => Boolean(r));
@@ -331,7 +338,7 @@ const hasSeriesStart = doors.some((door) => door.target === 'series-start');
 
   <LandingScript
     page={`${book.id}-landing`}
-    campaignLinks={campaignLinks}
+    missingTags={missingTags}
     pixelId={siteConfig?.data.metaPixelId}
     pixelHosts={siteConfig?.data.pixelHosts}
     ctrEndpoint={siteConfig?.data.pressCtrEndpoint}

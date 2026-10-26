@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { buildCampaignLinks, doorLinks, withTag } from '../../src/utils/landing';
+import { doorLinks, tagFor, withTag } from '../../src/utils/landing';
 
 // The two ad landing pages: /series/sophie-feegle/box-set and the book landing
 // template (/books/ward-breaker/landing). The pixel script is stubbed (its queue is
@@ -14,6 +14,8 @@ const CTAS = ['ku', 'buy', 'paperback'] as const;
 const DOORS = ['ward-breaker', 'series-start', 'sophie'] as const;
 const SOPHIE_LPV_TAG = 'maas=maas_adg_D5817D714E2827419DF4FB3D60036461_afap_abs&ref_=aa_maas&tag=maas';
 const SOPHIE_PAPERBACK_TAG = 'maas=maas_adg_1E93BCBC747961A6E7FE8EBE1F6CF616_afap_abs&ref_=aa_maas&tag=maas';
+const BOX_SET_DP = `https://www.amazon.com/dp/B0CK55M553?${SOPHIE_LPV_TAG}`;
+const BOOK_ONE_PRINT_DP = `https://www.amazon.com/dp/B08CWM839H?${SOPHIE_PAPERBACK_TAG}`;
 
 const CTR = 'https://press.example.test/ctr';
 
@@ -65,29 +67,28 @@ test.describe('attribution links (pure)', () => {
     expect(withTag('https://www.amazon.com/dp/B0HJGDMMLM', '  ')).toBe('https://www.amazon.com/dp/B0HJGDMMLM');
   });
 
-  test('rows go to the door their target names; no target is the box-set page', () => {
-    const doors = [
-      { target: 'ward-breaker', kindleUrl: 'https://www.amazon.com/dp/WB', paperbackUrl: 'https://www.amazon.com/dp/WBP' },
-      { target: 'sophie', kindleUrl: 'https://www.amazon.com/dp/BS', paperbackUrl: 'https://www.amazon.com/dp/SP' },
-    ];
-    const links = buildCampaignLinks(
-      [
-        { campaign: 'wb', target: 'ward-breaker', tag: 'maas=a', paperbackTag: 'maas=b' },
-        { campaign: 'wb', target: 'sophie', tag: '', paperbackTag: 'maas=c' },
-        { campaign: 'box', tag: 'maas=z' },
-        { campaign: 'wb', target: 'nobody', tag: 'maas=x' },
-      ],
-      doors,
-    );
-    expect(links).toEqual({
-      wb: {
-        'ward-breaker': { ku: 'https://www.amazon.com/dp/WB?maas=a', buy: 'https://www.amazon.com/dp/WB?maas=a', paperback: 'https://www.amazon.com/dp/WBP?maas=b' },
-        sophie: { ku: 'https://www.amazon.com/dp/BS', buy: 'https://www.amazon.com/dp/BS', paperback: 'https://www.amazon.com/dp/SP?maas=c' },
+  test('a button takes its product\'s tag for its door, in its storefront, only for its own product page', () => {
+    const tags = {
+      US: {
+        'ward-breaker': { ku: 'https://www.amazon.com/dp/B0HJGDMMLM?maas=ku', kindle: 'https://www.amazon.com/dp/B0HJGDMMLM?maas=kindle' },
+        'sophie-boxset': { kindle: 'https://www.amazon.com/dp/OTHERASIN0?maas=wrong' },
       },
-    });
-    const boxSet = { target: '', kindleUrl: 'https://www.amazon.com/dp/BS', paperbackUrl: 'https://www.amazon.com/dp/SP', defaultTag: 'maas=d' };
-    expect(buildCampaignLinks([{ campaign: 'box', tag: '' }, { campaign: 'wb', target: 'sophie', tag: 'maas=c' }], [boxSet])).toEqual({
-      box: { '': doorLinks(boxSet) },
+      UK: { 'ward-breaker': { ku: 'maas=uk' } },
+    };
+    expect(tagFor(tags, 'ward-breaker', 'ku', 'https://www.amazon.com/dp/B0HJGDMMLM')).toBe('https://www.amazon.com/dp/B0HJGDMMLM?maas=ku');
+    expect(tagFor(tags, 'ward-breaker', 'ku', 'https://www.amazon.co.uk/dp/B0HJGDMMLM')).toBe('maas=uk');
+    expect(tagFor(tags, 'ward-breaker', 'print', 'https://www.amazon.com/dp/1963906004')).toBeUndefined();
+    // A tag for another product page is not this button's.
+    expect(tagFor(tags, 'sophie-boxset', 'kindle', 'https://www.amazon.com/dp/B0CK55M553')).toBeUndefined();
+
+    const door = { target: 'ward-breaker', kindleUrl: 'https://www.amazon.com/dp/B0HJGDMMLM', paperbackUrl: 'https://www.amazon.com/dp/1963906004', product: 'ward-breaker', printProduct: 'ward-breaker' };
+    expect(doorLinks(door, tags)).toEqual({
+      links: {
+        ku: 'https://www.amazon.com/dp/B0HJGDMMLM?maas=ku',
+        buy: 'https://www.amazon.com/dp/B0HJGDMMLM?maas=kindle',
+        paperback: 'https://www.amazon.com/dp/1963906004',
+      },
+      missing: [{ product: 'ward-breaker', door: 'print', href: 'https://www.amazon.com/dp/1963906004' }],
     });
   });
 });
@@ -95,35 +96,29 @@ test.describe('attribution links (pure)', () => {
 test.describe('box-set page', () => {
   test.use({ timezoneId: 'America/Chicago' });
 
-  test('a known campaign gets its own tags; clicks fire the events with campaign and no target', async ({ page }) => {
+  test('the box set\'s tags on KU and Buy, book one\'s Print tag on the paperback, whatever the campaign; clicks carry the utm_* unchanged', async ({ page }) => {
     await stubOutside(page);
-    await page.goto(`${BOX_SET}?utm_campaign=sophie-feegle-set-us-landing&utm_source=meta`);
-    const ku = page.locator('aside [data-landing-cta="ku"]');
-    await expect(ku).toHaveAttribute('href', `https://www.amazon.com/dp/B0CK55M553?${SOPHIE_LPV_TAG}`);
-    await expect(page.locator('aside [data-landing-cta="paperback"]')).toHaveAttribute(
-      'href',
-      `https://www.amazon.com/dp/B08CWM839H?${SOPHIE_PAPERBACK_TAG}`,
-    );
+    await page.goto(`${BOX_SET}?utm_campaign=sophie-feegle-set-us-landing&utm_source=meta&utm_medium=paid&utm_content=ad-a`);
+    await expect(page.locator('aside [data-landing-cta="ku"]')).toHaveAttribute('href', BOX_SET_DP);
+    await expect(page.locator('aside [data-landing-cta="buy"]')).toHaveAttribute('href', BOX_SET_DP);
+    await expect(page.locator('aside [data-landing-cta="paperback"]')).toHaveAttribute('href', BOOK_ONE_PRINT_DP);
     expect(await fbqCalls(page)).toContainEqual(['track', 'PageView', { campaign: 'sophie-feegle-set-us-landing' }]);
 
     for (const cta of CTAS) await page.locator(`aside [data-landing-cta="${cta}"]`).click();
+    const utm = { utm_campaign: 'sophie-feegle-set-us-landing', utm_source: 'meta', utm_medium: 'paid', utm_content: 'ad-a' };
     expect(await customEvents(page)).toEqual(
-      CTAS.map((cta) => [
-        'trackCustom',
-        EVENTS[cta],
-        { page: 'sophie-feegle-box-set', cta, source: 'ad', campaign: 'sophie-feegle-set-us-landing' },
-      ]),
+      CTAS.map((cta) => ['trackCustom', EVENTS[cta], { page: 'sophie-feegle-box-set', cta, source: 'ad', campaign: 'sophie-feegle-set-us-landing', ...utm }]),
     );
   });
 
-  test('an unknown campaign keeps the default tags', async ({ page }) => {
-    await stubOutside(page, {
-      edit: (config) => {
-        config.campaignLinks.other = { '': { ku: 'https://x.test/ku', buy: 'https://x.test/buy', paperback: 'https://x.test/p' } };
-      },
-    });
+  test('another campaign, or none, gets the same tags', async ({ page }) => {
+    await stubOutside(page);
     await page.goto(`${BOX_SET}?utm_campaign=x`);
-    await expect(page.locator('aside [data-landing-cta="buy"]')).toHaveAttribute('href', `https://www.amazon.com/dp/B0CK55M553?${SOPHIE_LPV_TAG}`);
+    await expect(page.locator('aside [data-landing-cta="buy"]')).toHaveAttribute('href', BOX_SET_DP);
+    await page.goto(BOX_SET);
+    await expect(page.locator('aside [data-landing-cta="paperback"]')).toHaveAttribute('href', BOOK_ONE_PRINT_DP);
+    const config = JSON.parse((await page.content()).match(/const landingConfig = (\{.*?\});\n/)![1]);
+    expect(config.missingTags).toEqual([]);
   });
 
   test('a stored "denied" blocks the pixel even in a US zone', async ({ page }) => {
@@ -151,7 +146,7 @@ test.describe('box-set page outside the US', () => {
 test.describe('Ward Breaker landing page', () => {
   test.use({ timezoneId: 'America/New_York' });
 
-  test('three doors in order, three buttons each, plain links by default', async ({ page }) => {
+  test('three doors in order, three buttons each, each door its own product\'s tags', async ({ page }) => {
     await stubOutside(page);
     await page.goto(`${WARD_BREAKER}?utm_campaign=x`);
     await expect(page.locator('[data-door]')).toHaveCount(3);
@@ -169,8 +164,9 @@ test.describe('Ward Breaker landing page', () => {
     expect(await href('ward-breaker', 'buy')).toBe('https://www.amazon.com/dp/B0HJGDMMLM');
     expect(await href('series-start', 'ku')).toBe('https://www.amazon.com/dp/B0CT9ZX865');
     expect(await href('series-start', 'paperback')).toBe('https://www.amazon.com/dp/1963906004');
-    expect(await href('sophie', 'buy')).toBe('https://www.amazon.com/dp/B0CK55M553');
-    expect(await href('sophie', 'paperback')).toBe('https://www.amazon.com/dp/B08CWM839H');
+    // Sophie's world is the Sophie box set (and book one in print): their tags, as on the box-set page.
+    expect(await href('sophie', 'buy')).toBe(BOX_SET_DP);
+    expect(await href('sophie', 'paperback')).toBe(BOOK_ONE_PRINT_DP);
     await expect(page.locator('[data-door="sophie"] [data-landing-cta="buy"]')).toHaveText('Buy the Kindle box set — $9.99');
     await expect(page.locator('[data-door="ward-breaker"] [data-landing-cta="buy"]')).toHaveText('Buy for Kindle — $3.99');
   });
@@ -189,7 +185,7 @@ test.describe('Ward Breaker landing page', () => {
     expect(await fbqCalls(page)).toContainEqual(['track', 'PageView', { campaign: 'x' }]);
 
     const expected = DOORS.flatMap((door) =>
-      CTAS.map((cta) => ({ page: 'ward-breaker-landing', cta, source: 'organic', campaign: 'x', target: door })),
+      CTAS.map((cta) => ({ page: 'ward-breaker-landing', cta, source: 'organic', campaign: 'x', target: door, utm_campaign: 'x' })),
     );
     for (const door of DOORS) {
       for (const cta of CTAS) await page.locator(`[data-door="${door}"] [data-landing-cta="${cta}"]`).click();
@@ -199,28 +195,22 @@ test.describe('Ward Breaker landing page', () => {
     expect(beacons).toEqual(expected.map((detail) => ({ metric: 'press.landing.ctr', ...detail })));
   });
 
-  test("each door takes its own campaign's tags; other doors and campaigns are untouched", async ({ page }) => {
-    await stubOutside(page, {
-      edit: (config) => {
-        config.campaignLinks['wb-test'] = {
-          'ward-breaker': { ku: 'https://www.amazon.com/dp/B0HJGDMMLM?maas=wb', buy: 'https://www.amazon.com/dp/B0HJGDMMLM?maas=wb', paperback: 'https://p.test/wb' },
-          sophie: { ku: 'https://www.amazon.com/dp/B0CK55M553?maas=s', buy: 'https://www.amazon.com/dp/B0CK55M553?maas=s', paperback: 'https://p.test/s' },
-        };
-      },
-    });
+  test('a missing tag falls back to the bare /dp link, and the page lists it as missing', async ({ page }) => {
+    await stubOutside(page);
     await page.goto(`${WARD_BREAKER}?utm_campaign=wb-test`);
     const href = (door: string, cta: string) => page.locator(`[data-door="${door}"] [data-landing-cta="${cta}"]`).getAttribute('href');
-    expect(await href('ward-breaker', 'buy')).toBe('https://www.amazon.com/dp/B0HJGDMMLM?maas=wb');
-    expect(await href('ward-breaker', 'paperback')).toBe('https://p.test/wb');
-    expect(await href('series-start', 'ku')).toBe('https://www.amazon.com/dp/B0CT9ZX865');
-    expect(await href('sophie', 'ku')).toBe('https://www.amazon.com/dp/B0CK55M553?maas=s');
-  });
-
-  test('the box-set defaults never reach the book page', async ({ page }) => {
-    await stubOutside(page);
-    await page.goto(`${WARD_BREAKER}?utm_campaign=sophie-feegle-set-us-landing`);
-    const hrefs = await page.locator('[data-landing-cta]').evaluateAll((els) => els.map((el) => (el as HTMLAnchorElement).href));
-    expect(hrefs.filter((h) => h.includes('maas='))).toEqual([]);
+    expect(await href('ward-breaker', 'ku')).toBe('https://www.amazon.com/dp/B0HJGDMMLM');
+    expect(await href('series-start', 'paperback')).toBe('https://www.amazon.com/dp/1963906004');
+    const config = JSON.parse((await page.content()).match(/const landingConfig = (\{.*?\});\n/)![1]);
+    expect(config.missingTags.map((m: { product: string; door: string }) => `${m.product} · ${m.door}`)).toEqual([
+      'ward-breaker · ku',
+      'ward-breaker · kindle',
+      'ward-breaker · print',
+      'gideon-bean · ku',
+      'gideon-bean · kindle',
+      'gideon-bean · print',
+    ]);
+    expect(config).not.toHaveProperty('campaignLinks');
   });
 });
 
@@ -246,12 +236,12 @@ test.describe('Asphalt Coven landing page (book one: no series-start door)', () 
       'https://www.amazon.com/dp/B0G4BFY4YS',
       'https://www.amazon.com/dp/B0G4BFY4YS',
       'https://www.amazon.com/dp/1963906373',
-      'https://www.amazon.com/dp/B0CK55M553',
-      'https://www.amazon.com/dp/B0CK55M553',
-      'https://www.amazon.com/dp/B08CWM839H',
+      BOX_SET_DP,
+      BOX_SET_DP,
+      BOOK_ONE_PRINT_DP,
     ]);
-    // Rule 33: every Amazon link is amazon.<tld>/dp/<ASIN>
-    expect(hrefs.every((h) => /^https:\/\/www\.amazon\.[a-z.]+\/dp\/[0-9A-Z]{10}$/.test(h))).toBe(true);
+    // Rule 33: every Amazon link is amazon.<tld>/dp/<ASIN>, with at most its Attribution tag
+    expect(hrefs.every((h) => /^https:\/\/www\.amazon\.[a-z.]+\/dp\/[0-9A-Z]{10}(\?maas=[^&]+&ref_=aa_maas&tag=maas)?$/.test(h))).toBe(true);
 
     const pull = page.locator('section figure').first();
     await expect(pull).toContainText('not knowing they have magical powers');
@@ -264,7 +254,7 @@ test.describe('Asphalt Coven landing page (book one: no series-start door)', () 
     await stubOutside(page);
     await page.goto(`${ASPHALT_COVEN}?utm_campaign=asphalt-coven-us-landing`);
     const expected = AC_DOORS.flatMap((door) =>
-      CTAS.map((cta) => ({ page: 'asphalt-coven-landing', cta, source: 'organic', campaign: 'asphalt-coven-us-landing', target: door })),
+      CTAS.map((cta) => ({ page: 'asphalt-coven-landing', cta, source: 'organic', campaign: 'asphalt-coven-us-landing', target: door, utm_campaign: 'asphalt-coven-us-landing' })),
     );
     for (const door of AC_DOORS) {
       for (const cta of CTAS) await page.locator(`[data-door="${door}"] [data-landing-cta="${cta}"]`).click();
@@ -297,7 +287,7 @@ test.describe('production hosts only', () => {
     });
     await page.goto(`${WARD_BREAKER}?utm_campaign=x`);
     await page.locator('[data-door="ward-breaker"] [data-landing-cta="ku"]').click();
-    const detail = { page: 'ward-breaker-landing', cta: 'ku', source: 'organic', campaign: 'x', target: 'ward-breaker' };
+    const detail = { page: 'ward-breaker-landing', cta: 'ku', source: 'organic', campaign: 'x', target: 'ward-breaker', utm_campaign: 'x' };
     await expect.poll(() => lines.length).toBe(3);
     expect(lines).toEqual([
       '[pixel] PageView {"campaign":"x"}',

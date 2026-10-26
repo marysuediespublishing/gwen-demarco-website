@@ -33,35 +33,13 @@ metaPixelId: "225692997192754"
 pixelHosts:
   - gwendemarco.com
   - www.gwendemarco.com
-landingAttributionTag: "https://www.amazon.com/dp/B0CK55M553?maas=maas_adg_D5817D714E2827419DF4FB3D60036461_afap_abs&ref_=aa_maas&tag=maas"
-paperbackAttributionTag: "https://www.amazon.com/dp/B08CWM839H?maas=maas_adg_1E93BCBC747961A6E7FE8EBE1F6CF616_afap_abs&ref_=aa_maas&tag=maas"
-landingAttributionTags:
-  - campaign: "sophie-feegle-set-us-landing"
-    tag: "https://www.amazon.com/dp/B0CK55M553?maas=maas_adg_D5817D714E2827419DF4FB3D60036461_afap_abs&ref_=aa_maas&tag=maas"
-    paperbackTag: "https://www.amazon.com/dp/B08CWM839H?maas=maas_adg_1E93BCBC747961A6E7FE8EBE1F6CF616_afap_abs&ref_=aa_maas&tag=maas"
-  - campaign: "sophie-feegle-set-us-landing-conv"
-    tag: "https://www.amazon.com/dp/B0CK55M553?maas=maas_adg_B3D2A57998C0E61B6ABBA8704387DB51_afap_abs&ref_=aa_maas&tag=maas"
-    paperbackTag: "https://www.amazon.com/dp/B08CWM839H?maas=maas_adg_BBC6E5387A57141865EADFE7558552C9_afap_abs&ref_=aa_maas&tag=maas"
-  - campaign: "ward-breaker-us-landing"
-    target: "ward-breaker"
-    tag: ""
-    paperbackTag: ""
-  - campaign: "ward-breaker-us-landing"
-    target: "series-start"
-    tag: ""
-    paperbackTag: ""
-  - campaign: "ward-breaker-us-landing"
-    target: "sophie"
-    tag: ""
-    paperbackTag: ""
-  - campaign: "asphalt-coven-us-landing"
-    target: "asphalt-coven"
-    tag: ""
-    paperbackTag: ""
-  - campaign: "asphalt-coven-us-landing"
-    target: "sophie"
-    tag: ""
-    paperbackTag: ""
+attributionTags:
+  US:
+    sophie-boxset:
+      ku: "https://www.amazon.com/dp/B0CK55M553?maas=maas_adg_D5817D714E2827419DF4FB3D60036461_afap_abs&ref_=aa_maas&tag=maas"
+      kindle: "https://www.amazon.com/dp/B0CK55M553?maas=maas_adg_D5817D714E2827419DF4FB3D60036461_afap_abs&ref_=aa_maas&tag=maas"
+    sophie-and-the-odd-ones:
+      print: "https://www.amazon.com/dp/B08CWM839H?maas=maas_adg_1E93BCBC747961A6E7FE8EBE1F6CF616_afap_abs&ref_=aa_maas&tag=maas"
 pressCtrEndpoint: ""
 amazonBadge: ""
 ---

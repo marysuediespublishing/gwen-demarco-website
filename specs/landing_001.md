@@ -16,9 +16,9 @@ Three doors, in this order, each with **Kindle Unlimited / Kindle / Print**:
 | 2 | Start the series: the series box set if one exists, else book 1 (read from the series content) | `series-start` | Gideon Bean: B0CT9ZX865, $2.99, paperback 1963906004 |
 | 3 | The other series in the same world: its box set | `landing.sameWorld.target` | `sophie`: B0CK55M553, $9.99, Book 1 paperback B08CWM839H |
 
-Every button fires `LandingClickKU` / `LandingClickBuy` / `LandingClickPaperback` with `{page, cta, source, campaign, target}`. When `pressCtrEndpoint` is set it also sends the `press.landing.ctr` beacon with the same fields.
+Every button fires `LandingClickKU` / `LandingClickBuy` / `LandingClickPaperback` with `{page, cta, source, campaign, target}` and the page's `utm_*` unchanged. When `pressCtrEndpoint` is set it also sends the `press.landing.ctr` beacon with the same fields.
 
-Attribution is per door and per campaign. A site-config `landingAttributionTags` row has `campaign` + `target` + `tag` (KU and Kindle) + `paperbackTag` (Print). Doors have no default tags, so a visitor from another ad isn't counted against this one. Ward Breaker's campaign is `ward-breaker-us-landing`, with one empty row per door until the tags exist.
+Attribution was per door and per campaign (`landingAttributionTags`); since Press ad_desk_007 (signals #4997) it is per product and door: site-config `attributionTags.<market>.<product>.<ku|kindle|print>`, the same tag on every page that offers that product, whatever ad sent the visitor. Ward Breaker's three doors are three products: `ward-breaker`, `gideon-bean` (series start) and `sophie-boxset` (the Sophie box set, with book one `sophie-and-the-odd-ones` for print).
 
 ## Design
 

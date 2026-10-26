@@ -3,23 +3,30 @@
 
 export type CtaKind = 'ku' | 'buy' | 'paperback';
 export type CtaLinks = Record<CtaKind, string>;
-/** campaign (utm_campaign) → target ('' for a page without doors) → the three links */
-export type CampaignLinks = Record<string, Record<string, CtaLinks>>;
 
-export interface AttributionRow {
-  campaign?: string;
-  target?: string;
-  tag?: string;
-  paperbackTag?: string;
-}
+/** Amazon Attribution tags per product and door (Press ad_desk_007): site-config
+ *  `attributionTags.<market>.<product slug>.<door>`, each the whole Attribution URL. */
+export type TagDoor = 'ku' | 'kindle' | 'print';
+export type AttributionTags = Record<string, Record<string, Partial<Record<TagDoor, string>>>>;
 
-/** A door's Amazon pages and the Attribution tags it gets when the campaign has none. */
+/** The tag door each button takes: KU's, Kindle's (the Buy button), Print's. */
+export const CTA_DOOR: Record<CtaKind, TagDoor> = { ku: 'ku', buy: 'kindle', paperback: 'print' };
+
+/** A door's Amazon pages and the products they are: `product` for the Kindle page
+ *  (KU and Buy), `printProduct` for the paperback (a box set's is book one's). */
 export interface DoorBase {
   target: string;
   kindleUrl: string;
   paperbackUrl: string;
-  defaultTag?: string;
-  defaultPaperbackTag?: string;
+  product: string;
+  printProduct: string;
+}
+
+/** A button with no tag: it links to the bare product page. */
+export interface MissingTag {
+  product: string;
+  door: TagDoor;
+  href: string;
 }
 
 // Amazon Attribution: a tag may be the whole Attribution URL; only its query string is used.
@@ -31,30 +38,53 @@ export const withTag = (href: string, tag?: string) => {
   return url.toString();
 };
 
-export const doorLinks = (door: DoorBase, tag?: string, paperbackTag?: string): CtaLinks => {
-  const kindle = withTag(door.kindleUrl, tag?.trim() || door.defaultTag);
-  return {
-    ku: kindle,
-    buy: kindle,
-    paperback: withTag(door.paperbackUrl, paperbackTag?.trim() || door.defaultPaperbackTag),
-  };
+/** The ASIN of an Amazon `/dp/<ASIN>` link, or ''. */
+export const dpAsin = (href?: string) => /\/dp\/([0-9A-Z]{10})(?=[/?#]|$)/i.exec(href ?? '')?.[1]?.toUpperCase() ?? '';
+
+const MARKETS: Record<string, string> = {
+  'www.amazon.com': 'US',
+  'www.amazon.co.uk': 'UK',
+  'www.amazon.ca': 'CA',
+  'www.amazon.de': 'DE',
+  'www.amazon.fr': 'FR',
+  'www.amazon.it': 'IT',
+  'www.amazon.es': 'ES',
 };
 
-// Per-campaign links. A row applies to the door whose target it names; a row with no
-// target applies to a page without doors (target ''). An empty tag falls back to the
-// door's default.
-export const buildCampaignLinks = (rows: AttributionRow[], doors: DoorBase[]): CampaignLinks => {
-  const links: CampaignLinks = {};
-  for (const row of rows) {
-    const campaign = row.campaign?.trim();
-    if (!campaign) continue;
-    const door = doors.find((d) => d.target === (row.target?.trim() ?? ''));
-    if (!door) continue;
-    links[campaign] ??= {};
-    links[campaign][door.target] = doorLinks(door, row.tag, row.paperbackTag);
+/** The storefront a link goes to, as Press names it ('US'), or ''. */
+export const marketOf = (href: string) => {
+  try {
+    return MARKETS[new URL(href).hostname.toLowerCase()] ?? '';
+  } catch {
+    return '';
   }
-  return links;
 };
+
+/** The tag for one button: the product's tag for the door, in the link's storefront,
+ *  and only when the tag is for the button's own product page. */
+export const tagFor = (tags: AttributionTags | undefined, product: string, door: TagDoor, href: string) => {
+  const tag = tags?.[marketOf(href)]?.[product]?.[door]?.trim();
+  if (!tag) return undefined;
+  const asin = dpAsin(tag);
+  return !asin || asin === dpAsin(href) ? tag : undefined;
+};
+
+/** A door's three links, each with its (book, door) tag, and the buttons that have none. */
+export const doorLinks = (door: DoorBase, tags?: AttributionTags): { links: CtaLinks; missing: MissingTag[] } => {
+  const missing: MissingTag[] = [];
+  const link = (cta: CtaKind) => {
+    const href = cta === 'paperback' ? door.paperbackUrl : door.kindleUrl;
+    const product = cta === 'paperback' ? door.printProduct : door.product;
+    const tag = tagFor(tags, product, CTA_DOOR[cta], href);
+    if (!tag) missing.push({ product, door: CTA_DOOR[cta], href });
+    return withTag(href, tag);
+  };
+  return { links: { ku: link('ku'), buy: link('buy'), paperback: link('paperback') }, missing };
+};
+
+/** "sophie-boxset · KU, sophie-and-the-odd-ones · Print": the build's missing-tag line. */
+export const missingLine = (missing: MissingTag[]) =>
+  missing.map((m) => `${m.product} · ${{ ku: 'KU', kindle: 'Kindle', print: 'Print' }[m.door]}`).join(', ');
 
 export const money = (value?: string) => {
   const amount = value?.trim().replace(/^\$/, '');

@@ -236,17 +236,16 @@ Typography uses Cinzel for mystical headers and Inter for readable body text.
 | `boxSetPrice` | `src/content/series/sophie-feegle.md` | The Buy button reads "Buy the Kindle box set" with no price. When set (e.g. `9.99`) it reads "Buy the Kindle box set — $9.99" |
 | `boxSetSeparatePrice` | `src/content/series/sophie-feegle.md` | No value line. With `boxSetPrice` also set, "5 books for $X — $Y bought separately" shows under the Buy button |
 | `amazonBadge` | `src/content/settings/site-config.md` | No badge. Set it to Amazon's official "Available at Amazon" badge file, unaltered (Amazon brand-usage terms) |
-| `landingAttributionTag` | `src/content/settings/site-config.md` | No Amazon Attribution tag on the box-set buttons. When set (the Attribution URL, or just its query string `maas=...&ref_=aa_maas&tag=maas`), its query string is added to the Kindle Unlimited and Buy buttons for every visitor: the page is unlinked from the site, so everyone on it came from the ad |
-| `paperbackAttributionTag` | `src/content/settings/site-config.md` | No Amazon Attribution tag on the paperback link. When set, likewise added to the "Book 1 in paperback" link for every visitor |
-| `landingAttributionTags` | `src/content/settings/site-config.md` | Every visitor gets the two tags above. Each row is `campaign` (a `utm_campaign` value) with its own `tag` (box set) and `paperbackTag`: a visitor whose `utm_campaign` matches a row gets that row's tags instead, so each campaign has its own Attribution ad group. An unknown campaign, or an empty tag in the row, gets the default |
+| `boxSetSlug` | `src/content/series/sophie-feegle.md` | The box set's product key is `<series>-box-set`. Set it to the box set's slug in Press's Books (`sophie-boxset`), the key its Attribution tags are kept under |
+| `attributionTags` | `src/content/settings/site-config.md` | No Amazon Attribution tag: each button is the bare `/dp/<ASIN>` link and the build prints `[attribution] missing on <page>: …`. Written by Press's Ad Desk (Attribution → Import tags, ad_desk_007): `<market>` → `<product slug>` → `ku` / `kindle` / `print`, each the Attribution URL. KU and Buy take the box set's `ku` and `kindle` tags, the paperback link book one's `print` tag — for every visitor, whatever ad sent them. A tag whose `/dp/<ASIN>` is not the button's own is not used |
 | `metaPixelId` | `src/content/settings/site-config.md` | No pixel loads. When set, it loads without a consent click if the browser's time zone is a US zone. Anyone else, including visitors whose zone can't be read, sees an in-page Allow/No thanks bar first |
-| `pressCtrEndpoint` | `src/content/settings/site-config.md` | Clicks are counted only as the custom pixel events `LandingClickKU` / `LandingClickBuy` / `LandingClickPaperback`. When set, each click also POSTs a keepalive `press.landing.ctr` beacon. `PageView` and the click events carry the visitor's `utm_campaign` as `campaign` |
+| `pressCtrEndpoint` | `src/content/settings/site-config.md` | Clicks are counted only as the custom pixel events `LandingClickKU` / `LandingClickBuy` / `LandingClickPaperback`. When set, each click also POSTs a keepalive `press.landing.ctr` beacon. `PageView` carries the visitor's `utm_campaign` as `campaign`; the click events and the beacon carry it too, and every `utm_*` on the page's URL unchanged |
 
 The "Prefer paper? Book 1 in paperback →" link (`PAPERBACK_URL`), the one-line book hooks (`BOOK_HOOKS`) and the review picks are constants at the top of the page file.
 
 The page uses the slim landing chrome (`<Layout landing>`): the name mark linking home, and a footer with only the legal links. The three review quotes are picked by testimonial id at the top of the page file. Resized covers and the 1200x630 `og:image` are in `public/images/landing/`.
 
-The pixel, consent bar, Attribution swap and click events are shared with the book landing pages: `src/components/landing/` and `src/utils/landing.ts`.
+The pixel, consent bar, Attribution tags and click events are shared with the book landing pages: `src/components/landing/` and `src/utils/landing.ts`.
 
 ## Book landing pages
 
@@ -260,9 +259,9 @@ The pixel, consent bar, Attribution swap and click events are shared with the bo
 
 A print button whose book has no `paperbackAsin` goes to an Amazon paperback search for the title.
 
-Every button fires `LandingClickKU` / `LandingClickBuy` / `LandingClickPaperback` with `target` (and `page: <slug>-landing`, `cta`, `source`, `campaign`), and posts the `press.landing.ctr` beacon when `pressCtrEndpoint` is set. The pixel and consent rules are the box-set page's.
+Every button fires `LandingClickKU` / `LandingClickBuy` / `LandingClickPaperback` with `target` (and `page: <slug>-landing`, `cta`, `source`, `campaign`, and the page's `utm_*` unchanged), and posts the `press.landing.ctr` beacon when `pressCtrEndpoint` is set. The pixel and consent rules are the box-set page's.
 
-Attribution: the page ships with plain Amazon links. A `landingAttributionTags` row in site config with the visitor's `utm_campaign` and a door's `target` puts its `tag` on that door's Kindle Unlimited and Kindle buttons and its `paperbackTag` on its print button. A door with no row (or an empty tag) stays plain: the box-set defaults are not used, so another ad's visitors are not counted against this one. Ward Breaker's campaign is `ward-breaker-us-landing`, Asphalt Coven's `asphalt-coven-us-landing` (two doors, as a book 1 has no series-start door), with one row per door.
+Attribution is per product and door, not per ad (Press ad_desk_007): each button takes `attributionTags.<market>.<product>.<ku|kindle|print>` from site config, its product being the book its door shows (the book's slug), or a series' box set (`boxSetSlug`) with book one for print. Ward Breaker's three doors are three products: `ward-breaker`, `gideon-bean` and `sophie-boxset`. Which ad sent the visitor is the page's `utm_*` on the click events. A button with no tag is the bare `/dp` link, and the build lists it (`[attribution] missing on …`, and `missingTags` in the page's landing config).
 
 The hook, the door titles and lines, the quotes (testimonial id plus an optional `excerpt`) and the reviews are in the book's `landing:` block. Covers come from `public/images/landing/<cover name>-400.(webp|jpg)` when that copy exists (`-640` for the hero), and the share image is `public/images/landing/<slug>-og.jpg` (1200x630).
 

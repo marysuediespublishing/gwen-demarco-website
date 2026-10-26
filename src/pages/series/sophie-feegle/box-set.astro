@@ -1,15 +1,14 @@
 ---
 // Sophie Feegle box-set landing page: where readers land from the Meta ad.
 // CMS inputs (all optional, see README "Box-set landing page"):
-//   series boxSetAsin / boxSetBlurb / boxSetPrice / boxSetSeparatePrice, and
-//   site-config metaPixelId / landingAttributionTag / paperbackAttributionTag /
-//   landingAttributionTags / pressCtrEndpoint / amazonBadge
+//   series boxSetAsin / boxSetSlug / boxSetBlurb / boxSetPrice / boxSetSeparatePrice, and
+//   site-config metaPixelId / attributionTags / pressCtrEndpoint / amazonBadge
 import Layout from '../../../layouts/Layout.astro';
 import StarRating from '../../../components/StarRating.astro';
 import ConsentBar from '../../../components/landing/ConsentBar.astro';
 import LandingScript from '../../../components/landing/LandingScript.astro';
 import { getCollection, getEntry } from 'astro:content';
-import { buildCampaignLinks, landingImage, money, toReview as findReview, withTag } from '../../../utils/landing';
+import { doorLinks, landingImage, money, toReview as findReview } from '../../../utils/landing';
 
 const SERIES_SLUG = 'sophie-feegle';
 // Short, whole Amazon reviews: the pull-quote under the hero, then four lower down.
@@ -69,24 +68,23 @@ const showRating = rating > 0 && ratingCount > 0;
 const siteConfig = await getEntry('settings', 'site-config');
 const amazonBadge = siteConfig?.data.amazonBadge?.trim();
 
-// Amazon Attribution: every visitor gets the tags (the page is unlinked from the
-// site, so everyone on it came from the ad). A tag may be the whole Attribution
-// URL; only its query string is used. The page is static, so it ships with the
-// default tags and the script below swaps in the utm_campaign's own tags.
+// Amazon Attribution, per (product, door) whatever ad sent the visitor: KU and Kindle
+// take the box set's tags, the paperback link book one's Print tag. A tag may be the
+// whole Attribution URL; only its query string is used. No tag: the bare /dp link.
 const asin = series.data.boxSetAsin?.trim();
 const amazonBase = asin
   ? `https://www.amazon.com/dp/${asin}`
   : 'https://www.amazon.com/s?k=Sophie+Feegle+Box+Set+Gwen+DeMarco&i=digital-text';
-const defaultTag = siteConfig?.data.landingAttributionTag;
-const defaultPaperbackTag = siteConfig?.data.paperbackAttributionTag;
-const amazonUrl = withTag(amazonBase, defaultTag);
-const paperbackUrl = withTag(PAPERBACK_URL, defaultPaperbackTag);
-
-// Per-campaign links, keyed by utm_campaign: the rows without a `target` (rows with
-// one are for a book landing page's doors). An empty tag falls back to the default.
-const campaignLinks = buildCampaignLinks(siteConfig?.data.landingAttributionTags ?? [], [
-  { target: '', kindleUrl: amazonBase, paperbackUrl: PAPERBACK_URL, defaultTag, defaultPaperbackTag },
-]);
+const { links, missing: missingTags } = doorLinks(
+  {
+    target: '',
+    kindleUrl: amazonBase,
+    paperbackUrl: PAPERBACK_URL,
+    product: series.data.boxSetSlug?.trim() || `${SERIES_SLUG}-box-set`,
+    printProduct: readingOrder[0] ?? '',
+  },
+  siteConfig?.data.attributionTags,
+);
 
 const price = money(series.data.boxSetPrice);
 const separatePrice = money(series.data.boxSetSeparatePrice);
@@ -209,16 +207,16 @@ const pitch = (series.data.boxSetBlurb?.trim() || series.data.description)
             Snarky heroines. Grumpy heroes. Found family. All five books, one click.
           </p>
           <div class="lg:hidden max-w-md mx-auto">
-            <a href={amazonUrl} data-landing-cta="ku" class="btn btn-primary btn-lg w-full">
+            <a href={links.ku} data-landing-cta="ku" class="btn btn-primary btn-lg w-full">
               Read free with Kindle Unlimited
             </a>
             <p class="text-sm text-fog-gray text-center mt-1 mb-3">Free for Kindle Unlimited members</p>
-            <a href={amazonUrl} data-landing-cta="buy" class="btn btn-secondary btn-lg w-full">
+            <a href={links.buy} data-landing-cta="buy" class="btn btn-secondary btn-lg w-full">
               {buyLabel}
             </a>
             {valueLine && <p class="text-sm text-fog-gray text-center mt-1">{valueLine}</p>}
             <p class="text-center mt-4">
-              <a href={paperbackUrl} data-landing-cta="paperback" class="text-sm text-fog-gray underline underline-offset-2 hover:text-moon-silver">Prefer paper? Book 1 in paperback →</a>
+              <a href={links.paperback} data-landing-cta="paperback" class="text-sm text-fog-gray underline underline-offset-2 hover:text-moon-silver">Prefer paper? Book 1 in paperback →</a>
             </p>
           </div>
         </section>
@@ -236,16 +234,16 @@ const pitch = (series.data.boxSetBlurb?.trim() || series.data.description)
               <p class="text-xs text-fog-gray mt-1">{ratingCount.toLocaleString('en-US')} ratings across all {books.length} books</p>
             </div>
           )}
-          <a href={amazonUrl} data-landing-cta="ku" class="btn btn-primary btn-lg w-full !text-base !px-4">
+          <a href={links.ku} data-landing-cta="ku" class="btn btn-primary btn-lg w-full !text-base !px-4">
             Read free with Kindle Unlimited
           </a>
           <p class="text-sm text-fog-gray text-center mt-1 mb-4">Free for Kindle Unlimited members</p>
-          <a href={amazonUrl} data-landing-cta="buy" class="btn btn-secondary btn-lg w-full !text-base !px-4">
+          <a href={links.buy} data-landing-cta="buy" class="btn btn-secondary btn-lg w-full !text-base !px-4">
             {buyLabel}
           </a>
           {valueLine && <p class="text-sm text-fog-gray text-center mt-1">{valueLine}</p>}
           <p class="text-center mt-4">
-            <a href={paperbackUrl} data-landing-cta="paperback" class="text-sm text-fog-gray underline underline-offset-2 hover:text-moon-silver">Prefer paper? Book 1 in paperback →</a>
+            <a href={links.paperback} data-landing-cta="paperback" class="text-sm text-fog-gray underline underline-offset-2 hover:text-moon-silver">Prefer paper? Book 1 in paperback →</a>
           </p>
           {amazonBadge && (
             <img src={amazonBadge} alt="Available at Amazon" class="h-10 w-auto mx-auto mt-5" loading="lazy" />
@@ -257,11 +255,11 @@ const pitch = (series.data.boxSetBlurb?.trim() || series.data.description)
     <!-- Phone: the buttons in a bar fixed to the screen bottom; it slides away while the closing pair is in view -->
     <div id="cta-bar" class="lg:hidden fixed inset-x-0 bottom-0 z-40 border-t border-mystic-violet/30 bg-shadow-black/95 backdrop-blur px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] transition-transform duration-200">
       <div class="max-w-md mx-auto">
-        <a href={amazonUrl} data-landing-cta="ku" class="btn btn-primary btn-lg w-full">
+        <a href={links.ku} data-landing-cta="ku" class="btn btn-primary btn-lg w-full">
           Read free with Kindle Unlimited
         </a>
         <p class="text-xs text-fog-gray text-center mt-1 mb-2">Free for Kindle Unlimited members</p>
-        <a href={amazonUrl} data-landing-cta="buy" class="btn btn-secondary btn-lg w-full">
+        <a href={links.buy} data-landing-cta="buy" class="btn btn-secondary btn-lg w-full">
           {buyLabel}
         </a>
         {valueLine && <p class="text-xs text-fog-gray text-center mt-1">{valueLine}</p>}
@@ -271,7 +269,7 @@ const pitch = (series.data.boxSetBlurb?.trim() || series.data.description)
 
   <LandingScript
     page="sophie-feegle-box-set"
-    campaignLinks={campaignLinks}
+    missingTags={missingTags}
     pixelId={siteConfig?.data.metaPixelId}
     pixelHosts={siteConfig?.data.pixelHosts}
     ctrEndpoint={siteConfig?.data.pressCtrEndpoint}

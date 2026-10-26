@@ -204,6 +204,7 @@ collections:
       - { label: "Reading Order", name: "readingOrder", widget: "list", default: [] }
       - { label: "Featured Series", name: "featured", widget: "boolean", default: false }
       - { label: "Box Set Kindle ASIN", name: "boxSetAsin", widget: "string", required: false, hint: "Used by the box-set landing page buttons" }
+      - { label: "Box Set Product Slug", name: "boxSetSlug", widget: "string", required: false, hint: "The box set's slug in Press's Books (e.g. sophie-boxset): the key its Attribution tags are kept under. Empty: <series>-box-set" }
       - { label: "Box Set Blurb", name: "boxSetBlurb", widget: "text", required: false, hint: "Box-set description from KDP; the landing page shows its first three paragraphs and falls back to the series description" }
       - { label: "Box Set Kindle Price", name: "boxSetPrice", widget: "string", required: false, hint: "e.g. 9.99. Shown on the landing page Buy button; leave empty to show no price" }
       - { label: "Box Set Books Bought Separately", name: "boxSetSeparatePrice", widget: "string", required: false, hint: "Total of the five books' Kindle prices, e.g. 24.95. With the price, shows '5 books for $X — $Y bought separately'; leave empty to hide that line" }
@@ -377,18 +378,6 @@ collections:
           - { label: "Benefits", name: "benefits", widget: "list", required: false }
       - { label: "Meta Pixel ID", name: "metaPixelId", widget: "string", required: false, hint: "Loaded on ad landing pages only" }
       - { label: "Pixel Hosts", name: "pixelHosts", widget: "list", required: false, hint: "The production hostnames (e.g. gwendemarco.com, www.gwendemarco.com) the pixel and the Press CTR beacon fire on; on any other host (localhost, a preview) they log [pixel] lines to the console and send nothing" }
-      - { label: "Landing Attribution Tag (box set)", name: "landingAttributionTag", widget: "string", required: false, hint: "Amazon Attribution URL or query string (maas=...&ref_=aa_maas&tag=maas) for the box set; added to the box-set landing page's Kindle Unlimited and Buy buttons for every visitor" }
-      - { label: "Paperback Attribution Tag", name: "paperbackAttributionTag", widget: "string", required: false, hint: "Amazon Attribution URL or query string for Book 1 in paperback; added to the box-set landing page's paperback link for every visitor" }
-      - label: "Attribution Tags by Campaign"
-        name: "landingAttributionTags"
-        widget: "list"
-        required: false
-        hint: "A landing page picks the rows whose campaign matches the visitor's utm_campaign (on a book landing page, one row per door). On the box-set page an unknown campaign, or an empty tag, gets the default tags above; a book landing page's doors have no default tags"
-        fields:
-          - { label: "Campaign (utm_campaign)", name: "campaign", widget: "string" }
-          - { label: "Door (target)", name: "target", widget: "string", required: false, hint: "Empty: the box-set page. On a book landing page, the door this row tags: the book's slug (ward-breaker), series-start, or the same-world door's target (sophie)" }
-          - { label: "Kindle / Box Set Tag", name: "tag", widget: "string", required: false, hint: "Amazon Attribution URL or query string for the Kindle Unlimited and Kindle buttons (the box set on the box-set page)" }
-          - { label: "Paperback Tag", name: "paperbackTag", widget: "string", required: false, hint: "Amazon Attribution URL or query string for the print button (Book 1 in paperback on the box-set page)" }
       - { label: "Press CTR Endpoint", name: "pressCtrEndpoint", widget: "string", required: false, hint: "Leave empty to count landing clicks as Meta pixel events only" }
       - { label: "Amazon Badge", name: "amazonBadge", widget: "image", required: false, hint: "Amazon's official 'Available at Amazon' badge file, unaltered, used under Amazon's brand-usage terms. Shown under the landing page buttons; leave empty to show none" }
       - { label: "Content", name: "body", widget: "markdown", required: false }
