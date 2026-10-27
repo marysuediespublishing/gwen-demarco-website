@@ -4,6 +4,7 @@ import react from '@astrojs/react';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import { readingTimeRemarkPlugin } from './src/utils/reading-time.mjs';
+import landingCovers from './src/integrations/landing-covers.mjs';
 
 // In `astro dev`, serve public/admin/index.html at /admin/ (GitHub Pages does this itself).
 // Don't add a src/pages/admin route: its build output overwrites the CMS page.
@@ -21,6 +22,7 @@ export default defineConfig({
   site: 'https://gwendemarco.com',
   output: 'static',
   integrations: [
+    landingCovers(),
     tailwind({
       applyBaseStyles: false,
     }),

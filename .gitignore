@@ -28,3 +28,6 @@ Thumbs.db
 # Playwright
 test-results/
 playwright-report/
+
+# Landing-page cover copies: made by the build (src/integrations/landing-covers.mjs)
+public/images/landing/

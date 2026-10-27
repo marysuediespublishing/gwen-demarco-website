@@ -307,3 +307,23 @@ test.describe('production hosts only', () => {
   });
 
 });
+
+// The small covers and share images are made by the build (src/integrations/landing-covers.mjs).
+test.describe('landing covers', () => {
+  for (const path of [BOX_SET, WARD_BREAKER, '/books/asphalt-coven/landing/']) {
+    test(`${path}: its covers are the build's small copies, and they and the share image load`, async ({ page, request }) => {
+      await stubOutside(page);
+      await page.goto(path);
+      const covers = await page.locator('img[src^="/images/landing/"]').evaluateAll((imgs) =>
+        (imgs as HTMLImageElement[]).map((img) => ({ src: img.getAttribute('src'), loaded: img.complete && img.naturalWidth > 0 })),
+      );
+      expect(covers.length).toBeGreaterThan(1);
+      for (const cover of covers) expect(cover, cover.src ?? '').toMatchObject({ loaded: true });
+      const share = await page.locator('meta[property="og:image"]').getAttribute('content');
+      expect(share).toMatch(/\/images\/landing\/[^/]+-og\.jpg$/);
+      const response = await request.get(new URL(share!).pathname);
+      expect(response.status()).toBe(200);
+      expect(response.headers()['content-type']).toBe('image/jpeg');
+    });
+  }
+});

@@ -96,9 +96,10 @@ export const amazonDp = (asin?: string) => (asin?.trim() ? `https://www.amazon.c
 export const amazonSearch = (terms: string, paperback = false) =>
   `https://www.amazon.com/s?${new URLSearchParams({ k: terms, i: paperback ? 'stripbooks' : 'digital-text' })}`;
 
-// Small copies of the covers live in /images/landing so the page stays light on a phone.
-export const landingImage = (src: string, width: number) =>
-  src.replace(/^\/images\/(.+)\.(jpe?g|png)$/, `/images/landing/$1-${width}.jpg`);
+// Small copies of the covers live in /images/landing so the page stays light on a phone;
+// the build makes them from the covers (src/integrations/landing-covers.mjs).
+export const landingImage = (src: string, width: number, ext: 'jpg' | 'webp' = 'jpg') =>
+  src.replace(/^\/images\/(.+)\.(jpe?g|png)$/, `/images/landing/$1-${width}.${ext}`);
 
 export interface Review {
   title: string;

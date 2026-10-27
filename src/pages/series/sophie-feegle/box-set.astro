@@ -102,7 +102,7 @@ const pitch = (series.data.boxSetBlurb?.trim() || series.data.description)
 <Layout
   title="The Sophie Feegle Box Set: All Five Books | Gwen DeMarco"
   description="All five Sophie Feegle urban fantasy novels in one box set. Snarky heroines. Grumpy heroes. Found family. Free for Kindle Unlimited members."
-  image="/images/landing/sophie-feegle-box-set-og.jpg"
+  image={`/images/landing/${SERIES_SLUG}-box-set-og.jpg`}
   landing
 >
   <main id="main-content" class="relative z-10 pt-8 pb-12 lg:pt-12 lg:pb-16">
@@ -113,7 +113,7 @@ const pitch = (series.data.boxSetBlurb?.trim() || series.data.description)
         <!-- Hero: box set, hook, tropes, rating, pull-quote -->
         <section class="grid sm:grid-cols-[minmax(0,14rem)_1fr] gap-6 sm:gap-8 items-center">
           <img
-            src="/images/landing/sophie-feegle-box-set-640.webp"
+            src={landingImage(series.data.cover ?? '/images/boxset.png', 640, 'webp')}
             alt="Sophie Feegle Box Set, Books 1–5 by Gwen DeMarco"
             width="640"
             height="658"
