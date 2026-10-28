@@ -1,5 +1,7 @@
+import { readFileSync } from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
-import { doorLinks, tagFor, withTag } from '../../src/utils/landing';
+import matter from 'gray-matter';
+import { amazonSearch, doorLinks, tagFor, withTag, type AttributionTags, type CtaKind, type DoorBase } from '../../src/utils/landing';
 
 // The two ad landing pages: /series/sophie-feegle/box-set and the book landing
 // template (/books/ward-breaker/landing). The pixel script is stubbed (its queue is
@@ -12,10 +14,35 @@ const WARD_BREAKER = '/books/ward-breaker/landing/';
 const EVENTS = { ku: 'LandingClickKU', buy: 'LandingClickBuy', paperback: 'LandingClickPaperback' } as const;
 const CTAS = ['ku', 'buy', 'paperback'] as const;
 const DOORS = ['ward-breaker', 'series-start', 'sophie'] as const;
-const SOPHIE_LPV_TAG = 'maas=maas_adg_D5817D714E2827419DF4FB3D60036461_afap_abs&ref_=aa_maas&tag=maas';
-const SOPHIE_PAPERBACK_TAG = 'maas=maas_adg_1E93BCBC747961A6E7FE8EBE1F6CF616_afap_abs&ref_=aa_maas&tag=maas';
-const BOX_SET_DP = `https://www.amazon.com/dp/B0CK55M553?${SOPHIE_LPV_TAG}`;
-const BOOK_ONE_PRINT_DP = `https://www.amazon.com/dp/B08CWM839H?${SOPHIE_PAPERBACK_TAG}`;
+// The expected tags are site-config's, read here as the build reads them: a copy of a
+// tag in this file goes stale the day the tags are reimported.
+// Each button's tag door, written out here rather than taken from landing.ts's CTA_DOOR.
+const CTA_DOOR = { ku: 'ku', buy: 'kindle', paperback: 'print' } as const;
+const TAGS: AttributionTags = matter(readFileSync('src/content/settings/site-config.md', 'utf8')).data.attributionTags;
+/** A button's expected link: its bare /dp page with its product's tag for the button's door, if any. */
+const linkFor = (product: string, cta: CtaKind, href: string) => withTag(href, tagFor(TAGS, product, CTA_DOOR[cta], href));
+/** The same, for a button that must have a tag: fails, rather than expecting the bare link, when site-config has none. */
+const taggedLink = (product: string, cta: CtaKind, href: string) => {
+  expect(tagFor(TAGS, product, CTA_DOOR[cta], href), `site-config attributionTags for ${product} · ${CTA_DOOR[cta]}`).toBeTruthy();
+  return linkFor(product, cta, href);
+};
+// The Sophie box set (its own product, boxSetSlug) and book one in print.
+const BOX_SET_KINDLE = 'https://www.amazon.com/dp/B0CK55M553';
+const BOOK_ONE_PRINT = 'https://www.amazon.com/dp/B08CWM839H';
+// Functions, so a missing tag fails the tests that need it, not the whole file.
+const boxSetKu = () => taggedLink('sophie-boxset', 'ku', BOX_SET_KINDLE);
+const boxSetBuy = () => taggedLink('sophie-boxset', 'buy', BOX_SET_KINDLE);
+const bookOnePrint = () => taggedLink('sophie-and-the-odd-ones', 'paperback', BOOK_ONE_PRINT);
+// A made-up tag for the pure tests.
+// Ward Breaker's three doors: each button's bare page and the product it is.
+const WB_DOORS: DoorBase[] = [
+  { target: 'ward-breaker', kindleUrl: 'https://www.amazon.com/dp/B0HJGDMMLM', paperbackUrl: amazonSearch('Ward Breaker Gwen DeMarco paperback', true), product: 'ward-breaker', printProduct: 'ward-breaker' },
+  { target: 'series-start', kindleUrl: 'https://www.amazon.com/dp/B0CT9ZX865', paperbackUrl: 'https://www.amazon.com/dp/1963906004', product: 'gideon-bean', printProduct: 'gideon-bean' },
+  { target: 'sophie', kindleUrl: BOX_SET_KINDLE, paperbackUrl: BOOK_ONE_PRINT, product: 'sophie-boxset', printProduct: 'sophie-and-the-odd-ones' },
+];
+const bareOf = (door: DoorBase, cta: CtaKind) => (cta === 'paperback' ? door.paperbackUrl : door.kindleUrl);
+const productOf = (door: DoorBase, cta: CtaKind) => (cta === 'paperback' ? door.printProduct : door.product);
+const ANY_TAG = 'maas=maas_adg_0000_afap_abs&ref_=aa_maas&tag=maas';
 
 const CTR = 'https://press.example.test/ctr';
 
@@ -61,8 +88,8 @@ const customEvents = async (page: Page) => (await fbqCalls(page)).filter((call: 
 
 test.describe('attribution links (pure)', () => {
   test('withTag keeps only the query string of a whole Attribution URL', () => {
-    expect(withTag('https://www.amazon.com/dp/B0HJGDMMLM', `https://www.amazon.com/dp/OTHER?${SOPHIE_LPV_TAG}`)).toBe(
-      `https://www.amazon.com/dp/B0HJGDMMLM?${SOPHIE_LPV_TAG}`,
+    expect(withTag('https://www.amazon.com/dp/B0HJGDMMLM', `https://www.amazon.com/dp/OTHER?${ANY_TAG}`)).toBe(
+      `https://www.amazon.com/dp/B0HJGDMMLM?${ANY_TAG}`,
     );
     expect(withTag('https://www.amazon.com/dp/B0HJGDMMLM', '  ')).toBe('https://www.amazon.com/dp/B0HJGDMMLM');
   });
@@ -99,9 +126,9 @@ test.describe('box-set page', () => {
   test('the box set\'s tags on KU and Buy, book one\'s Print tag on the paperback, whatever the campaign; clicks carry the utm_* unchanged', async ({ page }) => {
     await stubOutside(page);
     await page.goto(`${BOX_SET}?utm_campaign=sophie-feegle-set-us-landing&utm_source=meta&utm_medium=paid&utm_content=ad-a`);
-    await expect(page.locator('aside [data-landing-cta="ku"]')).toHaveAttribute('href', BOX_SET_DP);
-    await expect(page.locator('aside [data-landing-cta="buy"]')).toHaveAttribute('href', BOX_SET_DP);
-    await expect(page.locator('aside [data-landing-cta="paperback"]')).toHaveAttribute('href', BOOK_ONE_PRINT_DP);
+    await expect(page.locator('aside [data-landing-cta="ku"]')).toHaveAttribute('href', boxSetKu());
+    await expect(page.locator('aside [data-landing-cta="buy"]')).toHaveAttribute('href', boxSetBuy());
+    await expect(page.locator('aside [data-landing-cta="paperback"]')).toHaveAttribute('href', bookOnePrint());
     expect(await fbqCalls(page)).toContainEqual(['track', 'PageView', { campaign: 'sophie-feegle-set-us-landing' }]);
 
     for (const cta of CTAS) await page.locator(`aside [data-landing-cta="${cta}"]`).click();
@@ -114,9 +141,10 @@ test.describe('box-set page', () => {
   test('another campaign, or none, gets the same tags', async ({ page }) => {
     await stubOutside(page);
     await page.goto(`${BOX_SET}?utm_campaign=x`);
-    await expect(page.locator('aside [data-landing-cta="buy"]')).toHaveAttribute('href', BOX_SET_DP);
+    await expect(page.locator('aside [data-landing-cta="buy"]')).toHaveAttribute('href', boxSetBuy());
     await page.goto(BOX_SET);
-    await expect(page.locator('aside [data-landing-cta="paperback"]')).toHaveAttribute('href', BOOK_ONE_PRINT_DP);
+    await expect(page.locator('aside [data-landing-cta="ku"]')).toHaveAttribute('href', boxSetKu());
+    await expect(page.locator('aside [data-landing-cta="paperback"]')).toHaveAttribute('href', bookOnePrint());
     const config = JSON.parse((await page.content()).match(/const landingConfig = (\{.*?\});\n/)![1]);
     expect(config.missingTags).toEqual([]);
   });
@@ -160,13 +188,14 @@ test.describe('Ward Breaker landing page', () => {
       ).toEqual(CTAS.map((cta) => [cta, door]));
     }
     const href = (door: string, cta: string) => page.locator(`[data-door="${door}"] [data-landing-cta="${cta}"]`).getAttribute('href');
-    expect(await href('ward-breaker', 'ku')).toBe('https://www.amazon.com/dp/B0HJGDMMLM');
-    expect(await href('ward-breaker', 'buy')).toBe('https://www.amazon.com/dp/B0HJGDMMLM');
-    expect(await href('series-start', 'ku')).toBe('https://www.amazon.com/dp/B0CT9ZX865');
-    expect(await href('series-start', 'paperback')).toBe('https://www.amazon.com/dp/1963906004');
+    // Each button: its bare page with its product's site-config tag for its door, if it has one.
+    for (const door of WB_DOORS) {
+      for (const cta of CTAS) expect(await href(door.target, cta), `${door.target} · ${cta}`).toBe(linkFor(productOf(door, cta), cta, bareOf(door, cta)));
+    }
     // Sophie's world is the Sophie box set (and book one in print): their tags, as on the box-set page.
-    expect(await href('sophie', 'buy')).toBe(BOX_SET_DP);
-    expect(await href('sophie', 'paperback')).toBe(BOOK_ONE_PRINT_DP);
+    expect(await href('sophie', 'ku')).toBe(boxSetKu());
+    expect(await href('sophie', 'buy')).toBe(boxSetBuy());
+    expect(await href('sophie', 'paperback')).toBe(bookOnePrint());
     await expect(page.locator('[data-door="sophie"] [data-landing-cta="buy"]')).toHaveText('Buy the Kindle box set — $9.99');
     await expect(page.locator('[data-door="ward-breaker"] [data-landing-cta="buy"]')).toHaveText('Buy for Kindle — $3.99');
   });
@@ -196,20 +225,18 @@ test.describe('Ward Breaker landing page', () => {
   });
 
   test('a missing tag falls back to the bare /dp link, and the page lists it as missing', async ({ page }) => {
+    // The /dp buttons site-config has no tag for, found from the data rather than assumed.
+    const untagged = WB_DOORS.flatMap((door) => CTAS.map((cta) => ({ door, cta, bare: bareOf(door, cta), product: productOf(door, cta) })))
+      .filter(({ cta, bare, product }) => bare.includes('/dp/') && !tagFor(TAGS, product, CTA_DOOR[cta], bare));
+    test.skip(untagged.length === 0, 'every Ward Breaker /dp button has a site-config tag; the fallback is covered by the pure tests');
     await stubOutside(page);
     await page.goto(`${WARD_BREAKER}?utm_campaign=wb-test`);
     const href = (door: string, cta: string) => page.locator(`[data-door="${door}"] [data-landing-cta="${cta}"]`).getAttribute('href');
-    expect(await href('ward-breaker', 'ku')).toBe('https://www.amazon.com/dp/B0HJGDMMLM');
-    expect(await href('series-start', 'paperback')).toBe('https://www.amazon.com/dp/1963906004');
+    for (const { door, cta, bare } of untagged) expect(await href(door.target, cta), `${door.target} · ${cta}`).toBe(bare);
     const config = JSON.parse((await page.content()).match(/const landingConfig = (\{.*?\});\n/)![1]);
-    expect(config.missingTags.map((m: { product: string; door: string }) => `${m.product} · ${m.door}`)).toEqual([
-      'ward-breaker · ku',
-      'ward-breaker · kindle',
-      'ward-breaker · print',
-      'gideon-bean · ku',
-      'gideon-bean · kindle',
-      'gideon-bean · print',
-    ]);
+    // Every untagged button, /dp or not (a book with no paperback ASIN is a search link), in door order.
+    expect(config.missingTags).toEqual(WB_DOORS.flatMap((door) => doorLinks(door, TAGS).missing));
+    for (const { product, cta, bare } of untagged) expect(config.missingTags).toContainEqual({ product, door: CTA_DOOR[cta], href: bare });
     expect(config).not.toHaveProperty('campaignLinks');
   });
 });
@@ -233,12 +260,12 @@ test.describe('Asphalt Coven landing page (book one: no series-start door)', () 
     }
     const hrefs = await page.locator('[data-landing-cta]').evaluateAll((els) => els.map((el) => (el as HTMLAnchorElement).href));
     expect(hrefs).toEqual([
-      'https://www.amazon.com/dp/B0G4BFY4YS',
-      'https://www.amazon.com/dp/B0G4BFY4YS',
-      'https://www.amazon.com/dp/1963906373',
-      BOX_SET_DP,
-      BOX_SET_DP,
-      BOOK_ONE_PRINT_DP,
+      linkFor('asphalt-coven', 'ku', 'https://www.amazon.com/dp/B0G4BFY4YS'),
+      linkFor('asphalt-coven', 'buy', 'https://www.amazon.com/dp/B0G4BFY4YS'),
+      linkFor('asphalt-coven', 'paperback', 'https://www.amazon.com/dp/1963906373'),
+      boxSetKu(),
+      boxSetBuy(),
+      bookOnePrint(),
     ]);
     // Rule 33: every Amazon link is amazon.<tld>/dp/<ASIN>, with at most its Attribution tag
     expect(hrefs.every((h) => /^https:\/\/www\.amazon\.[a-z.]+\/dp\/[0-9A-Z]{10}(\?maas=[^&]+&ref_=aa_maas&tag=maas)?$/.test(h))).toBe(true);
