@@ -1,7 +1,8 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { SITE_TITLE } from '../../consts';
-import { type CollectionEntry, getCollection, render } from 'astro:content';
+import { type CollectionEntry, getCollection, getEntry, render } from 'astro:content';
+import { FORMERLY_KU, KINDLE_PLUS, showFormerlyKU } from '../../utils/kindle-plus';
 import StarRating from '../../components/StarRating.astro';
 
 export async function getStaticPaths() {
@@ -164,6 +165,9 @@ const genreNames = book.data.genres
   ? book.data.genres.map(genre => formatGenreName(genre))
   : [];
 
+// Kindle+ (formerly Kindle Unlimited) through site-config kindlePlusFormerlyUntil
+const formerlyKU = showFormerlyKU((await getEntry('settings', 'site-config'))?.data.kindlePlusFormerlyUntil);
+
 // Get site config for newsletter
 let siteConfig: any = {};
 try {
@@ -257,8 +261,11 @@ const heatLevelDisplay: Record<string, { label: string; color: string }> = {
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      Read FREE on Kindle Unlimited
+                      Read free with {KINDLE_PLUS}
                     </a>
+                  )}
+                  {book.data.isKU && book.data.amazonUrl && formerlyKU && (
+                    <p class="text-xs text-fog-gray text-center -mt-3" data-formerly-ku>{FORMERLY_KU}</p>
                   )}
 
                   {book.data.amazonUrl && (

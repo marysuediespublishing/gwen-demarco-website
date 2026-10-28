@@ -1,7 +1,7 @@
 ---
 // Book landing page: where readers land from a book's Meta ad. Built for every book
 // whose frontmatter has a `landing:` block (see README "Book landing pages"). Three
-// doors, each with Kindle Unlimited / Kindle / Print:
+// doors, each with Kindle+ (the ku cta) / Kindle / Print:
 //   1. this book (target = the book's slug)
 //   2. the start of its series (target series-start): the series box set if it has
 //      one (boxSetAsin), else book one of its readingOrder
@@ -26,6 +26,7 @@ import {
   toReview,
   type DoorBase,
 } from '../../../utils/landing';
+import { FORMERLY_KU, KINDLE_PLUS, kindlePlusName, showFormerlyKU } from '../../../utils/kindle-plus';
 
 export async function getStaticPaths() {
   const books = await getCollection('books');
@@ -48,6 +49,8 @@ const allBooks = await getCollection('books');
 const allSeries = await getCollection('series');
 const testimonials = await getCollection('testimonials');
 const siteConfig = await getEntry('settings', 'site-config');
+// Kindle+ (formerly Kindle Unlimited) through site-config kindlePlusFormerlyUntil
+const formerlyKU = showFormerlyKU(siteConfig?.data.kindlePlusFormerlyUntil);
 
 const bookById = (id?: string) => allBooks.find((b) => b.id === id);
 const seriesOf = (b: Book) => allSeries.find((s) => s.data.readingOrder.includes(b.id));
@@ -199,7 +202,7 @@ const hasSeriesStart = doors.some((door) => door.target === 'series-start');
 
 <Layout
   title={`${book.data.title}${seriesName ? `: ${seriesName} Book ${book.data.seriesOrder}` : ''} | Gwen DeMarco`}
-  description={`${landing.hook} Read it free with Kindle Unlimited${hasSeriesStart ? ', or start the series from book one' : ''}.`}
+  description={`${landing.hook} Read it free with ${kindlePlusName(formerlyKU)}${hasSeriesStart ? ', or start the series from book one' : ''}.`}
   image={`/images/landing/${book.id}-og.jpg`}
   landing
 >
@@ -281,9 +284,9 @@ const hasSeriesStart = doors.some((door) => door.target === 'series-start');
               )}
               <div class="mt-auto">
                 <a href={links[i].ku} data-landing-cta="ku" data-landing-target={door.target} class="btn btn-primary btn-lg w-full !text-base !px-4">
-                  Read free with Kindle Unlimited
+                  Read free with {KINDLE_PLUS}
                 </a>
-                <p class="text-xs text-fog-gray text-center mt-1 mb-3">Free for Kindle Unlimited members</p>
+                <p class="text-xs text-fog-gray text-center mt-1 mb-3">Free for {KINDLE_PLUS} members{formerlyKU && <> · <span class="whitespace-nowrap" data-formerly-ku>{FORMERLY_KU}</span></>}</p>
                 <a href={links[i].buy} data-landing-cta="buy" data-landing-target={door.target} class="btn btn-secondary btn-lg w-full !text-base !px-4">
                   {door.buyLabel}
                 </a>

@@ -237,6 +237,7 @@ Typography uses Cinzel for mystical headers and Inter for readable body text.
 | `boxSetSeparatePrice` | `src/content/series/sophie-feegle.md` | No value line. With `boxSetPrice` also set, "5 books for $X — $Y bought separately" shows under the Buy button |
 | `amazonBadge` | `src/content/settings/site-config.md` | No badge. Set it to Amazon's official "Available at Amazon" badge file, unaltered (Amazon brand-usage terms) |
 | `boxSetSlug` | `src/content/series/sophie-feegle.md` | The box set's product key is `<series>-box-set`. Set it to the box set's slug in Press's Books (`sophie-boxset`), the key its Attribution tags are kept under |
+| `kindlePlusFormerlyUntil` | `src/content/settings/site-config.md` | Every page says just "Kindle+". Kindle Unlimited became Kindle+ on 2026-10-22; through this date (`YYYY-MM-DD`, now `2027-01-20`, 90 days on) "formerly Kindle Unlimited" shows in small text under a page's first Kindle+ mention (on the landing pages, in the line under every Kindle+ button), and badges carry it as their title. It drops on the first build after the date. The code keeps `ku`: the cta kind, `LandingClickKU`, the tag door, utm values |
 | `attributionTags` | `src/content/settings/site-config.md` | No Amazon Attribution tag: each button is the bare `/dp/<ASIN>` link and the build prints `[attribution] missing on <page>: …`. Written by Press's Ad Desk (Attribution → Import tags, ad_desk_007): `<market>` → `<product slug>` → `ku` / `kindle` / `print`, each the Attribution URL. KU and Buy take the box set's `ku` and `kindle` tags, the paperback link book one's `print` tag — for every visitor, whatever ad sent them. A tag whose `/dp/<ASIN>` is not the button's own is not used |
 | `metaPixelId` | `src/content/settings/site-config.md` | No pixel loads. When set, it loads without a consent click if the browser's time zone is a US zone. Anyone else, including visitors whose zone can't be read, sees an in-page Allow/No thanks bar first |
 | `pressCtrEndpoint` | `src/content/settings/site-config.md` | Clicks are counted only as the custom pixel events `LandingClickKU` / `LandingClickBuy` / `LandingClickPaperback`. When set, each click also POSTs a keepalive `press.landing.ctr` beacon. `PageView` carries the visitor's `utm_campaign` as `campaign`; the click events and the beacon carry it too, and every `utm_*` on the page's URL unchanged |
@@ -249,7 +250,7 @@ The pixel, consent bar, Attribution tags and click events are shared with the bo
 
 ## Book landing pages
 
-`/books/<slug>/landing` is built for every book whose frontmatter has a `landing:` block (Books → Landing Page in the CMS); the first is `/books/ward-breaker/landing`. Like the box-set page it is unlinked from the site and uses the slim landing chrome. It has three doors, in this order, each with a Kindle Unlimited, a Kindle and a print button:
+`/books/<slug>/landing` is built for every book whose frontmatter has a `landing:` block (Books → Landing Page in the CMS); the first is `/books/ward-breaker/landing`. Like the box-set page it is unlinked from the site and uses the slim landing chrome. It has three doors, in this order, each with a Kindle+ (formerly Kindle Unlimited), a Kindle and a print button:
 
 | Door | `target` | Goes to |
 | --- | --- | --- |

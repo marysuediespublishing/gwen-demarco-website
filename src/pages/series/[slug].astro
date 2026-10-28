@@ -1,7 +1,8 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { SITE_TITLE } from '../../consts';
-import { type CollectionEntry, getCollection, render } from 'astro:content';
+import { type CollectionEntry, getCollection, getEntry, render } from 'astro:content';
+import { KINDLE_PLUS, kindlePlusName, showFormerlyKU } from '../../utils/kindle-plus';
 import StarRating from '../../components/StarRating.astro';
 
 export async function getStaticPaths() {
@@ -182,6 +183,9 @@ try {
     }
   };
 }
+
+// Kindle+ (formerly Kindle Unlimited) through site-config kindlePlusFormerlyUntil
+const formerlyKU = showFormerlyKU((await getEntry('settings', 'site-config'))?.data.kindlePlusFormerlyUntil);
 ---
 
 <Layout
@@ -533,7 +537,7 @@ try {
                 )}
 
                 {book.data.isKU && (
-                  <span class="badge badge-primary text-xs mt-2">FREE on KU</span>
+                  <span class="badge badge-primary text-xs mt-2" title={formerlyKU ? kindlePlusName(true) : undefined}>FREE on {KINDLE_PLUS}</span>
                 )}
               </a>
             ))}

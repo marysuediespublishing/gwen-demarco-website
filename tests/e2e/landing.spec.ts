@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
 import matter from 'gray-matter';
 import { amazonSearch, doorLinks, tagFor, withTag, type AttributionTags, type CtaKind, type DoorBase } from '../../src/utils/landing';
+import { kindlePlusName, showFormerlyKU } from '../../src/utils/kindle-plus';
 
 // The two ad landing pages: /series/sophie-feegle/box-set and the book landing
 // template (/books/ward-breaker/landing). The pixel script is stubbed (its queue is
@@ -353,4 +354,65 @@ test.describe('landing covers', () => {
       expect(response.headers()['content-type']).toBe('image/jpeg');
     });
   }
+});
+
+// Kindle Unlimited is Kindle+ (2026-10-22). Readers see "Kindle+"; "formerly Kindle Unlimited"
+// shows under a page's first mention through site-config kindlePlusFormerlyUntil. The
+// code keeps "ku" (data-landing-cta, LandingClickKU, the tag door), tested above.
+test.describe('Kindle+ (formerly Kindle Unlimited)', () => {
+  const until = matter(readFileSync('src/content/settings/site-config.md', 'utf8')).data.kindlePlusFormerlyUntil;
+  const formerly = showFormerlyKU(until);
+
+  test('the site-config date switch: on through the whole of the date, off after it, off with no date', () => {
+    expect(until).toBe('2027-01-20');
+    expect(showFormerlyKU('2027-01-20', new Date('2026-10-27T12:00:00Z'))).toBe(true);
+    expect(showFormerlyKU('2027-01-20', new Date('2027-01-20T23:59:59Z'))).toBe(true);
+    expect(showFormerlyKU('2027-01-20', new Date('2027-01-21T00:00:00Z'))).toBe(false);
+    expect(showFormerlyKU(new Date('2027-01-20'), new Date('2027-01-20T12:00:00Z'))).toBe(true);
+    expect(showFormerlyKU(undefined)).toBe(false);
+    expect(showFormerlyKU('soon')).toBe(false);
+    expect(kindlePlusName(true)).toBe('Kindle+ (formerly Kindle Unlimited)');
+    expect(kindlePlusName(false)).toBe('Kindle+');
+  });
+
+  // Text outside the formerly lines, readers' quoted reviews and blog-post cards (their
+  // words stand as written, dated): no "Kindle Unlimited", no "KU".
+  const readerText = (page: Page) =>
+    page.locator('body').evaluate((body) => {
+      const copy = body.cloneNode(true) as HTMLElement;
+      copy.querySelectorAll('[data-formerly-ku], blockquote, a[href^="/blog/"], script, style').forEach((el) => el.remove());
+      return copy.innerText || copy.textContent || '';
+    });
+
+  for (const [path, buttons] of [[BOX_SET, 3], [WARD_BREAKER, 3], ['/books/asphalt-coven/landing/', 2]] as const) {
+    test(`${path}: every ku button reads "Read free with Kindle+" over "Free for Kindle+ members"${formerly ? ' · formerly Kindle Unlimited' : ''}; the meta description too`, async ({ page }) => {
+      await stubOutside(page);
+      await page.goto(path);
+      const ku = page.locator('[data-landing-cta="ku"]');
+      await expect(ku).toHaveCount(buttons);
+      for (const text of await ku.allTextContents()) expect(text.trim()).toBe('Read free with Kindle+');
+      const lines = await ku.evaluateAll((els) => els.map((el) => el.nextElementSibling?.textContent?.trim()));
+      expect(lines).toEqual(Array(buttons).fill(formerly ? 'Free for Kindle+ members · formerly Kindle Unlimited' : 'Free for Kindle+ members'));
+      await expect(page.locator('[data-formerly-ku]')).toHaveCount(formerly ? buttons : 0);
+      expect(await page.locator('meta[name="description"]').getAttribute('content')).toContain(kindlePlusName(formerly));
+      const text = await page.content();
+      expect(text).toContain('LandingClickKU');
+      expect(await readerText(page)).not.toMatch(/Kindle Unlimited|\bKU\b/);
+    });
+  }
+
+  test('a book page: "Read free with Kindle+" with the formerly line under it; the home page and grids say Kindle+', async ({ page }) => {
+    await page.goto('/books/ward-breaker/');
+    const button = page.getByRole('link', { name: 'Read free with Kindle+' });
+    await expect(button).toHaveCount(1);
+    await expect(page.locator('[data-formerly-ku]')).toHaveCount(formerly ? 1 : 0);
+    expect(await readerText(page)).not.toMatch(/Kindle Unlimited|\bKU\b/);
+    for (const path of ['/', '/books/', '/series/sophie-feegle/']) {
+      await page.goto(path);
+      expect(await readerText(page), path).not.toMatch(/Kindle Unlimited|\bKU\b/);
+      expect(await readerText(page), path).toContain('Kindle+');
+    }
+    await page.goto('/');
+    await expect(page.locator('[data-formerly-ku]')).toHaveCount(formerly ? 1 : 0);
+  });
 });

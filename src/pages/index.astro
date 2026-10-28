@@ -1,7 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { SITE_TITLE } from '../consts';
-import { getCollection } from 'astro:content';
+import { getCollection, getEntry } from 'astro:content';
+import { FORMERLY_KU, KINDLE_PLUS, kindlePlusName, showFormerlyKU } from '../utils/kindle-plus';
 import FormattedDate from '../components/FormattedDate.astro';
 import StarRating from '../components/StarRating.astro';
 
@@ -13,6 +14,8 @@ const featuredTestimonials = allTestimonials
 	.slice(0, 3);
 
 // Get site configuration from CMS
+// Kindle+ (formerly Kindle Unlimited) through site-config kindlePlusFormerlyUntil
+const formerlyKU = showFormerlyKU((await getEntry('settings', 'site-config'))?.data.kindlePlusFormerlyUntil);
 const settingsCollection = await getCollection('settings');
 const siteConfig = settingsCollection[0]?.data || {
 	tagline: "Paranormal romance with a focus on the weird and wonderful",
@@ -189,11 +192,14 @@ function getFirstTwoSentences(description: string | undefined): string {
 								</a>
 							</div>
 
-							{/* KU badge */}
+							{/* Kindle+ badge: the page's first mention, with the formerly line in the window */}
 							{latestBook.data.isKU && (
-								<div class="flex items-center justify-center lg:justify-start space-x-2 text-sm text-fog-gray">
-									<span class="badge badge-secondary text-xs">KU</span>
-									<span>Free on Kindle Unlimited</span>
+								<div class="text-center lg:text-left">
+									<div class="flex items-center justify-center lg:justify-start space-x-2 text-sm text-fog-gray">
+										<span class="badge badge-secondary text-xs">{KINDLE_PLUS}</span>
+										<span>Free on {KINDLE_PLUS}</span>
+									</div>
+									{formerlyKU && <p class="text-xs text-fog-gray mt-1" data-formerly-ku>{FORMERLY_KU}</p>}
 								</div>
 							)}
 						</div>
@@ -332,7 +338,7 @@ function getFirstTwoSentences(description: string | undefined): string {
 									)}
 									<div class="flex items-center space-x-2">
 										{book.data.isKU && (
-											<span class="badge badge-secondary text-xs">KU</span>
+											<span class="badge badge-secondary text-xs" title={formerlyKU ? kindlePlusName(true) : undefined}>{KINDLE_PLUS}</span>
 										)}
 										{book.data.price && (
 											<span class="text-mystic-teal font-medium text-sm">{book.data.price}</span>
@@ -444,7 +450,7 @@ function getFirstTwoSentences(description: string | undefined): string {
 								<span class="text-mystic-violet/50">|</span>
 								<span class="text-fog-gray">{sophieBook?.data.ratingCount ? `${sophieBook.data.ratingCount}+ reviews` : '245+ reviews'}</span>
 								<span class="text-mystic-violet/50">|</span>
-								<span class="text-mystic-teal">Free on Kindle Unlimited</span>
+								<span class="text-mystic-teal" title={formerlyKU ? kindlePlusName(true) : undefined}>Free on {KINDLE_PLUS}</span>
 							</div>
 						</div>
 					</div>

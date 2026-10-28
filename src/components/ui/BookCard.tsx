@@ -197,7 +197,7 @@ const BookCard: React.FC<BookCardProps> = ({
                   onClick={(e) => handlePurchaseClick(e, book.data.amazonUrl!)}
                   data-testid={`purchase-book-${book.slug}`}
                 >
-                  {book.data.isKU ? 'Read Free on KU' : `Buy ${book.data.price || '$4.99'}`}
+                  {book.data.isKU ? 'Read free with Kindle+' : `Buy ${book.data.price || '$4.99'}`}
                 </button>
               )}
             </div>
@@ -212,7 +212,7 @@ const BookCard: React.FC<BookCardProps> = ({
             )}
             {book.data.isKU && (
               <span className="bg-mystic-teal text-shadow-black text-xs px-2 py-1 rounded font-medium">
-                KU
+                Kindle+
               </span>
             )}
             {showSeriesOrder && book.data.seriesOrder && (
@@ -315,7 +315,7 @@ const BookCard: React.FC<BookCardProps> = ({
                 onClick={(e) => handlePurchaseClick(e, book.data.amazonUrl!)}
                 data-testid={`featured-purchase-${book.slug}`}
               >
-                {book.data.isKU ? 'Read Free on KU' : `Buy ${book.data.price || '$4.99'}`}
+                {book.data.isKU ? 'Read free with Kindle+' : `Buy ${book.data.price || '$4.99'}`}
               </button>
             )}
             {book.data.goodreadsUrl && (

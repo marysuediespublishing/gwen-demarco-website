@@ -222,6 +222,9 @@ const settings = defineCollection({
     }))).optional(),
     pressCtrEndpoint: z.string().optional(),
     amazonBadge: z.string().optional(),
+    // Kindle Unlimited is Kindle+ (2026-10-22): "formerly Kindle Unlimited" shows under
+    // the first Kindle+ mention on a page through this date (YYYY-MM-DD), then drops.
+    kindlePlusFormerlyUntil: z.union([z.string(), z.date()]).optional(),
   }),
 });
 

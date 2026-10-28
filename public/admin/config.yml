@@ -59,7 +59,7 @@ collections:
         multiple: true
         default: []
       - { label: "Genres", name: "genres", widget: "list", default: [] }
-      - { label: "Available on Kindle Unlimited", name: "isKU", widget: "boolean", default: true }
+      - { label: "Available on Kindle+ (formerly Kindle Unlimited)", name: "isKU", widget: "boolean", default: true }
       - { label: "Amazon URL", name: "amazonUrl", widget: "string", required: false }
       - { label: "Goodreads URL", name: "goodreadsUrl", widget: "string", required: false }
       - { label: "Price", name: "price", widget: "string", required: false }
@@ -130,14 +130,14 @@ collections:
         widget: "image"
         required: false
         hint: "Wide banner image for use as homepage hero background when this book is featured"
-      - { label: "Kindle ASIN", name: "asin", widget: "string", required: false, hint: "The Kindle edition's ASIN (B0...). Used by the landing pages' Kindle Unlimited and Kindle buttons; empty → the Amazon URL above" }
+      - { label: "Kindle ASIN", name: "asin", widget: "string", required: false, hint: "The Kindle edition's ASIN (B0...). Used by the landing pages' Kindle+ and Kindle buttons; empty → the Amazon URL above" }
       - { label: "Paperback ASIN", name: "paperbackAsin", widget: "string", required: false, hint: "The paperback's ASIN or ISBN-10. Used by the landing pages' print buttons; empty → an Amazon paperback search for the title" }
       - label: "Landing Page"
         name: "landing"
         widget: "object"
         required: false
         collapsed: true
-        hint: "Fill this in to build an ad landing page at /books/<slug>/landing (unlinked from the site): three doors, each with Kindle Unlimited / Kindle / Print — this book, the start of its series, and a series in the same world. See README 'Book landing pages'"
+        hint: "Fill this in to build an ad landing page at /books/<slug>/landing (unlinked from the site): three doors, each with Kindle+ / Kindle / Print — this book, the start of its series, and a series in the same world. See README 'Book landing pages'"
         fields:
           - { label: "Hook", name: "hook", widget: "string", hint: "One or two sentences under the title" }
           - label: "Pull-quote"
@@ -380,6 +380,7 @@ collections:
       - { label: "Pixel Hosts", name: "pixelHosts", widget: "list", required: false, hint: "The production hostnames (e.g. gwendemarco.com, www.gwendemarco.com) the pixel and the Press CTR beacon fire on; on any other host (localhost, a preview) they log [pixel] lines to the console and send nothing" }
       - { label: "Press CTR Endpoint", name: "pressCtrEndpoint", widget: "string", required: false, hint: "Leave empty to count landing clicks as Meta pixel events only" }
       - { label: "Amazon Badge", name: "amazonBadge", widget: "image", required: false, hint: "Amazon's official 'Available at Amazon' badge file, unaltered, used under Amazon's brand-usage terms. Shown under the landing page buttons; leave empty to show none" }
+      - { label: "Kindle+ \"formerly Kindle Unlimited\" until", name: "kindlePlusFormerlyUntil", widget: "datetime", type: "date", format: "YYYY-MM-DD", required: false, hint: "Kindle Unlimited became Kindle+ on 2026-10-22. Through this date the site shows \"formerly Kindle Unlimited\" under the first Kindle+ mention on a page; after it, just \"Kindle+\" (on the next build). Leave empty to never show it" }
       - { label: "Content", name: "body", widget: "markdown", required: false }
 
   # Species collection

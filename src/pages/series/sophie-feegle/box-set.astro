@@ -9,6 +9,7 @@ import ConsentBar from '../../../components/landing/ConsentBar.astro';
 import LandingScript from '../../../components/landing/LandingScript.astro';
 import { getCollection, getEntry } from 'astro:content';
 import { doorLinks, landingImage, money, toReview as findReview } from '../../../utils/landing';
+import { FORMERLY_KU, KINDLE_PLUS, kindlePlusName, showFormerlyKU } from '../../../utils/kindle-plus';
 
 const SERIES_SLUG = 'sophie-feegle';
 // Short, whole Amazon reviews: the pull-quote under the hero, then four lower down.
@@ -67,6 +68,8 @@ const showRating = rating > 0 && ratingCount > 0;
 
 const siteConfig = await getEntry('settings', 'site-config');
 const amazonBadge = siteConfig?.data.amazonBadge?.trim();
+// Kindle+ (formerly Kindle Unlimited) through site-config kindlePlusFormerlyUntil
+const formerlyKU = showFormerlyKU(siteConfig?.data.kindlePlusFormerlyUntil);
 
 // Amazon Attribution, per (product, door) whatever ad sent the visitor: KU and Kindle
 // take the box set's tags, the paperback link book one's Print tag. A tag may be the
@@ -101,7 +104,7 @@ const pitch = (series.data.boxSetBlurb?.trim() || series.data.description)
 
 <Layout
   title="The Sophie Feegle Box Set: All Five Books | Gwen DeMarco"
-  description="All five Sophie Feegle urban fantasy novels in one box set. Snarky heroines. Grumpy heroes. Found family. Free for Kindle Unlimited members."
+  description={`All five Sophie Feegle urban fantasy novels in one box set. Snarky heroines. Grumpy heroes. Found family. Free for ${kindlePlusName(formerlyKU)} members.`}
   image={`/images/landing/${SERIES_SLUG}-box-set-og.jpg`}
   landing
 >
@@ -208,9 +211,9 @@ const pitch = (series.data.boxSetBlurb?.trim() || series.data.description)
           </p>
           <div class="lg:hidden max-w-md mx-auto">
             <a href={links.ku} data-landing-cta="ku" class="btn btn-primary btn-lg w-full">
-              Read free with Kindle Unlimited
+              Read free with {KINDLE_PLUS}
             </a>
-            <p class="text-sm text-fog-gray text-center mt-1 mb-3">Free for Kindle Unlimited members</p>
+            <p class="text-sm text-fog-gray text-center mt-1 mb-3">Free for {KINDLE_PLUS} members{formerlyKU && <> · <span class="whitespace-nowrap" data-formerly-ku>{FORMERLY_KU}</span></>}</p>
             <a href={links.buy} data-landing-cta="buy" class="btn btn-secondary btn-lg w-full">
               {buyLabel}
             </a>
@@ -235,9 +238,9 @@ const pitch = (series.data.boxSetBlurb?.trim() || series.data.description)
             </div>
           )}
           <a href={links.ku} data-landing-cta="ku" class="btn btn-primary btn-lg w-full !text-base !px-4">
-            Read free with Kindle Unlimited
+            Read free with {KINDLE_PLUS}
           </a>
-          <p class="text-sm text-fog-gray text-center mt-1 mb-4">Free for Kindle Unlimited members</p>
+          <p class="text-sm text-fog-gray text-center mt-1 mb-4">Free for {KINDLE_PLUS} members{formerlyKU && <> · <span class="whitespace-nowrap" data-formerly-ku>{FORMERLY_KU}</span></>}</p>
           <a href={links.buy} data-landing-cta="buy" class="btn btn-secondary btn-lg w-full !text-base !px-4">
             {buyLabel}
           </a>
@@ -256,9 +259,9 @@ const pitch = (series.data.boxSetBlurb?.trim() || series.data.description)
     <div id="cta-bar" class="lg:hidden fixed inset-x-0 bottom-0 z-40 border-t border-mystic-violet/30 bg-shadow-black/95 backdrop-blur px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] transition-transform duration-200">
       <div class="max-w-md mx-auto">
         <a href={links.ku} data-landing-cta="ku" class="btn btn-primary btn-lg w-full">
-          Read free with Kindle Unlimited
+          Read free with {KINDLE_PLUS}
         </a>
-        <p class="text-xs text-fog-gray text-center mt-1 mb-2">Free for Kindle Unlimited members</p>
+        <p class="text-xs text-fog-gray text-center mt-1 mb-2">Free for {KINDLE_PLUS} members{formerlyKU && <> · <span class="whitespace-nowrap" data-formerly-ku>{FORMERLY_KU}</span></>}</p>
         <a href={links.buy} data-landing-cta="buy" class="btn btn-secondary btn-lg w-full">
           {buyLabel}
         </a>

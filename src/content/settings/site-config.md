@@ -87,6 +87,7 @@ attributionTags:
       kindle: "https://www.amazon.com/dp/B0G4BFY4YS?maas=maas_adg_3670DD033A56CACE4FE4C41CE809F55A_afap_abs&ref_=aa_maas&tag=maas"
 pressCtrEndpoint: ""
 amazonBadge: ""
+kindlePlusFormerlyUntil: "2027-01-20"
 ---
 
 # Site Configuration

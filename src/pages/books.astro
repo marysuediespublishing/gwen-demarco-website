@@ -1,7 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { SITE_TITLE } from '../consts';
-import { getCollection } from 'astro:content';
+import { getCollection, getEntry } from 'astro:content';
+import { KINDLE_PLUS, kindlePlusName, showFormerlyKU } from '../utils/kindle-plus';
 import StarRating from '../components/StarRating.astro';
 
 // Get all books and series for display
@@ -30,6 +31,8 @@ const avgRating = booksWithRatings.length > 0
 	: '4.5';
 
 // Get site configuration for newsletter section
+// Kindle+ (formerly Kindle Unlimited) through site-config kindlePlusFormerlyUntil
+const formerlyKU = showFormerlyKU((await getEntry('settings', 'site-config'))?.data.kindlePlusFormerlyUntil);
 const settingsCollection = await getCollection('settings');
 const siteConfigData = settingsCollection[0]?.data;
 const siteConfig = {
@@ -208,7 +211,7 @@ function getSeriesDisplay(seriesSlug: string | undefined): string {
 								{book.data.description}
 							</p>
 
-							<!-- Footer with rating and KU badge -->
+							<!-- Footer with rating and Kindle+ badge -->
 							<div class="flex items-center justify-between mt-auto pt-3 border-t border-mystic-violet/20">
 								{book.data.rating && (
 									<div class="flex items-center space-x-1.5">
@@ -217,7 +220,7 @@ function getSeriesDisplay(seriesSlug: string | undefined): string {
 									</div>
 								)}
 								{book.data.isKU && (
-									<span class="badge badge-secondary text-xs">KU</span>
+									<span class="badge badge-secondary text-xs" title={formerlyKU ? kindlePlusName(true) : undefined}>{KINDLE_PLUS}</span>
 								)}
 								{book.data.price && !book.data.isKU && (
 									<span class="text-mystic-teal text-sm font-medium">{book.data.price}</span>
