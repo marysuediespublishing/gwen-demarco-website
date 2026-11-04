@@ -41,7 +41,7 @@ export const withTag = (href: string, tag?: string) => {
 /** The ASIN of an Amazon `/dp/<ASIN>` link, or ''. */
 export const dpAsin = (href?: string) => /\/dp\/([0-9A-Z]{10})(?=[/?#]|$)/i.exec(href ?? '')?.[1]?.toUpperCase() ?? '';
 
-const MARKETS: Record<string, string> = {
+export const MARKETS: Record<string, string> = {
   'www.amazon.com': 'US',
   'www.amazon.co.uk': 'UK',
   'www.amazon.ca': 'CA',
@@ -91,10 +91,30 @@ export const money = (value?: string) => {
   return amount ? `$${amount}` : '';
 };
 
-export const amazonDp = (asin?: string) => (asin?.trim() ? `https://www.amazon.com/dp/${asin.trim()}` : '');
+/** The storefront host per market: the inverse of `marketOf` ('DE' → www.amazon.de). */
+export const STOREFRONTS: Record<string, string> = Object.fromEntries(
+  Object.entries(MARKETS).map(([host, market]) => [market, host]),
+);
 
-export const amazonSearch = (terms: string, paperback = false) =>
-  `https://www.amazon.com/s?${new URLSearchParams({ k: terms, i: paperback ? 'stripbooks' : 'digital-text' })}`;
+const storefront = (market: string) => {
+  const host = STOREFRONTS[market.toUpperCase()];
+  if (!host) throw new Error(`No Amazon storefront for market ${market}`);
+  return `https://${host}`;
+};
+
+/** `https://www.amazon.<tld>/dp/<ASIN>` in the market's storefront (US by default), or ''. */
+export const amazonDp = (asin?: string, market = 'US') => (asin?.trim() ? `${storefront(market)}/dp/${asin.trim()}` : '');
+
+export const amazonSearch = (terms: string, paperback = false, market = 'US') =>
+  `${storefront(market)}/s?${new URLSearchParams({ k: terms, i: paperback ? 'stripbooks' : 'digital-text' })}`;
+
+/** The landing pages' languages besides English, and the market each one sells in. */
+export const LANDING_LANGS = ['de', 'fr'] as const;
+export type LandingLang = 'en' | (typeof LANDING_LANGS)[number];
+export const LANG_MARKET: Record<LandingLang, string> = { en: 'US', de: 'DE', fr: 'FR' };
+
+/** A landing page's path in a language: English at the root, the others under /<lang>. */
+export const langPath = (lang: LandingLang, path: string) => (lang === 'en' ? path : `/${lang}${path}`);
 
 // Small copies of the covers live in /images/landing so the page stays light on a phone;
 // the build makes them from the covers (src/integrations/landing-covers.mjs).

@@ -9,6 +9,8 @@
 //   hero covers          ->  landing/<cover>-640.webp    books with a `landing:` block, box-set series
 //   share images         ->  landing/<slug>-og.jpg        1200x630, books with a `landing:` block
 //                            landing/<series>-box-set-og.jpg   series with a box-set page
+//   edition covers       ->  the same, from `editions.<lang>.cover`, the share images as
+//                            landing/<slug>-<lang>-og.jpg, landing/<series>-box-set-<lang>-og.jpg
 import { existsSync, mkdirSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -48,16 +50,30 @@ export const plan = (root) => {
     if (c) add(`${c.name}-640.webp`, cover, 'cover', 640);
   };
 
-  for (const { data } of [...books, ...series]) small(data.cover);
+  // The original's cover, then each edition's that has its own: [suffix, cover]
+  const covers = (data) => [
+    ['', data.cover],
+    ...Object.entries(data.editions ?? {})
+      .filter(([, e]) => e?.cover)
+      .map(([lang, e]) => [`-${lang}`, e.cover]),
+  ];
+
+  for (const { data } of [...books, ...series]) for (const [, c] of covers(data)) small(c);
   for (const { slug, data } of books) {
-    if (!data.landing || !coverName(data.cover)) continue;
-    hero(data.cover);
-    add(`${slug}-og.jpg`, data.cover, 'og');
+    if (!data.landing) continue;
+    for (const [suffix, c] of covers(data)) {
+      if (!coverName(c)) continue;
+      hero(c);
+      add(`${slug}${suffix}-og.jpg`, c, 'og');
+    }
   }
   for (const { slug, data } of series) {
-    if (!existsSync(join(root, 'src/pages/series', slug, 'box-set.astro')) || !coverName(data.cover)) continue;
-    hero(data.cover);
-    add(`${slug}-box-set-og.jpg`, data.cover, 'og');
+    if (!existsSync(join(root, 'src/pages/series', slug, 'box-set.astro'))) continue;
+    for (const [suffix, c] of covers(data)) {
+      if (!coverName(c)) continue;
+      hero(c);
+      add(`${slug}-box-set${suffix}-og.jpg`, c, 'og');
+    }
   }
   return [...jobs.values()];
 };

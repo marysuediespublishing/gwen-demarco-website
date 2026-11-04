@@ -1,0 +1,22 @@
+---
+// The Sophie Feegle box-set landing page in German and French: built for each language the
+// box set has an edition in (series editions.<lang>); the build says which it skipped.
+import { getEntry } from 'astro:content';
+import BoxSetPage from '../../../../components/landing/BoxSetPage.astro';
+import { editionOf } from '../../../../utils/editions';
+import { LANDING_LANGS, type LandingLang } from '../../../../utils/landing';
+
+export async function getStaticPaths() {
+  const series = await getEntry('series', 'sophie-feegle');
+  if (!series) throw new Error('Missing series entry: sophie-feegle');
+  return LANDING_LANGS.filter((lang) => {
+    if (editionOf('series', series, lang)) return true;
+    console.warn(`[landing] not built: /${lang}/series/sophie-feegle/box-set/ (the sophie-feegle box set has no ${lang} edition)`);
+    return false;
+  }).map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params as { lang: LandingLang };
+---
+
+<BoxSetPage lang={lang} />

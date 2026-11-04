@@ -1,15 +1,24 @@
 ---
 // Shown by LandingScript only outside US time zones, until Allow / No thanks.
+import type { LandingStrings } from '../../i18n/landing';
+import { en } from '../../i18n/landing.en';
+
+interface Props {
+  /** The bar's words in the page's language; default English */
+  strings?: LandingStrings['consent'];
+}
+
+const { strings = en.consent } = Astro.props;
 ---
 
 <div id="consent-bar" hidden class="max-w-6xl mx-auto px-4 mb-6">
   <div class="flex flex-col sm:flex-row sm:items-center gap-3 rounded-lg border border-mystic-violet/30 bg-dark-surface/90 px-4 py-3 text-sm text-fog-gray">
     <p class="flex-1">
-      We use a Meta pixel to measure our ads. <a href="/cookie-policy" class="text-mystic-teal underline">Cookie policy</a>
+      {strings.text} <a href="/cookie-policy" class="text-mystic-teal underline">{strings.cookiePolicy}</a>
     </p>
     <div class="flex gap-2">
-      <button type="button" data-consent="granted" class="btn btn-sm btn-secondary">Allow</button>
-      <button type="button" data-consent="denied" class="btn btn-sm btn-outline">No thanks</button>
+      <button type="button" data-consent="granted" class="btn btn-sm btn-secondary">{strings.allow}</button>
+      <button type="button" data-consent="denied" class="btn btn-sm btn-outline">{strings.deny}</button>
     </div>
   </div>
 </div>

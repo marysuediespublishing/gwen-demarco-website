@@ -1,7 +1,13 @@
-import { readFileSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
+import { mkdtempSync, readFileSync, rmSync, symlinkSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { expect, test, type Page } from '@playwright/test';
 import matter from 'gray-matter';
-import { amazonSearch, doorLinks, tagFor, withTag, type AttributionTags, type CtaKind, type DoorBase } from '../../src/utils/landing';
+import { amazonDp, amazonSearch, doorLinks, marketOf, tagFor, withTag, type AttributionTags, type CtaKind, type DoorBase } from '../../src/utils/landing';
+import type { LandingStrings } from '../../src/i18n/landing';
+import { en } from '../../src/i18n/landing.en';
+import { normalizeHtml } from '../lib/normalize-html.mjs';
 import { kindlePlusName, showFormerlyKU } from '../../src/utils/kindle-plus';
 
 // The two ad landing pages: /series/sophie-feegle/box-set and the book landing
@@ -135,7 +141,7 @@ test.describe('box-set page', () => {
     for (const cta of CTAS) await page.locator(`aside [data-landing-cta="${cta}"]`).click();
     const utm = { utm_campaign: 'sophie-feegle-set-us-landing', utm_source: 'meta', utm_medium: 'paid', utm_content: 'ad-a' };
     expect(await customEvents(page)).toEqual(
-      CTAS.map((cta) => ['trackCustom', EVENTS[cta], { page: 'sophie-feegle-box-set', cta, source: 'ad', campaign: 'sophie-feegle-set-us-landing', ...utm }]),
+      CTAS.map((cta) => ['trackCustom', EVENTS[cta], { page: 'sophie-feegle-box-set', market: 'US', cta, source: 'ad', campaign: 'sophie-feegle-set-us-landing', ...utm }]),
     );
   });
 
@@ -215,7 +221,7 @@ test.describe('Ward Breaker landing page', () => {
     expect(await fbqCalls(page)).toContainEqual(['track', 'PageView', { campaign: 'x' }]);
 
     const expected = DOORS.flatMap((door) =>
-      CTAS.map((cta) => ({ page: 'ward-breaker-landing', cta, source: 'organic', campaign: 'x', target: door, utm_campaign: 'x' })),
+      CTAS.map((cta) => ({ page: 'ward-breaker-landing', market: 'US', cta, source: 'organic', campaign: 'x', target: door, utm_campaign: 'x' })),
     );
     for (const door of DOORS) {
       for (const cta of CTAS) await page.locator(`[data-door="${door}"] [data-landing-cta="${cta}"]`).click();
@@ -282,7 +288,7 @@ test.describe('Asphalt Coven landing page (book one: no series-start door)', () 
     await stubOutside(page);
     await page.goto(`${ASPHALT_COVEN}?utm_campaign=asphalt-coven-us-landing`);
     const expected = AC_DOORS.flatMap((door) =>
-      CTAS.map((cta) => ({ page: 'asphalt-coven-landing', cta, source: 'organic', campaign: 'asphalt-coven-us-landing', target: door, utm_campaign: 'asphalt-coven-us-landing' })),
+      CTAS.map((cta) => ({ page: 'asphalt-coven-landing', market: 'US', cta, source: 'organic', campaign: 'asphalt-coven-us-landing', target: door, utm_campaign: 'asphalt-coven-us-landing' })),
     );
     for (const door of AC_DOORS) {
       for (const cta of CTAS) await page.locator(`[data-door="${door}"] [data-landing-cta="${cta}"]`).click();
@@ -315,7 +321,7 @@ test.describe('production hosts only', () => {
     });
     await page.goto(`${WARD_BREAKER}?utm_campaign=x`);
     await page.locator('[data-door="ward-breaker"] [data-landing-cta="ku"]').click();
-    const detail = { page: 'ward-breaker-landing', cta: 'ku', source: 'organic', campaign: 'x', target: 'ward-breaker', utm_campaign: 'x' };
+    const detail = { page: 'ward-breaker-landing', market: 'US', cta: 'ku', source: 'organic', campaign: 'x', target: 'ward-breaker', utm_campaign: 'x' };
     await expect.poll(() => lines.length).toBe(3);
     expect(lines).toEqual([
       '[pixel] PageView {"campaign":"x"}',
@@ -414,5 +420,243 @@ test.describe('Kindle+ (formerly Kindle Unlimited)', () => {
     }
     await page.goto('/');
     await expect(page.locator('[data-formerly-ku]')).toHaveCount(formerly ? 1 : 0);
+  });
+});
+
+// ---------------------------------------------------------------------------------------
+// /de/ and /fr/ landing pages (Press suite_006 §2): the same templates, built for each
+// product with an edition in the language. The e2e build takes its editions and DE tags
+// from tests/fixtures/landing-editions.json (the content has none yet).
+// ---------------------------------------------------------------------------------------
+
+type FixtureEdition = { asin: string; paperbackAsin?: string; title: string; kuEnrolled: boolean; reviews?: { body: string }[] };
+const FIXTURE: {
+  series: Record<string, Record<'de' | 'fr', FixtureEdition>>;
+  books: Record<string, Partial<Record<'de' | 'fr', FixtureEdition>>>;
+  attributionTags: AttributionTags;
+} = JSON.parse(readFileSync('tests/fixtures/landing-editions.json', 'utf8'));
+// The tags the DE/FR pages are built with: site-config's, with the fixture's where site-config has none.
+const I18N_TAGS: AttributionTags = Object.fromEntries(
+  [...new Set([...Object.keys(TAGS ?? {}), ...Object.keys(FIXTURE.attributionTags)])].map((market) => [
+    market,
+    { ...(FIXTURE.attributionTags[market] ?? {}), ...(TAGS?.[market] ?? {}) },
+  ]),
+);
+const i18nLink = (product: string, cta: CtaKind, href: string) => withTag(href, tagFor(I18N_TAGS, product, CTA_DOOR[cta], href));
+const STOREFRONT = { de: 'https://www.amazon.de/', fr: 'https://www.amazon.fr/' } as const;
+
+/** The English table's words: each string, and the fixed parts of each phrase (the
+ *  parts between its arguments). A word the other languages use as they are is not
+ *  English copy (SHARED). */
+const SHARED = ['Cookies', 'Contact', '| Gwen DeMarco'];
+const englishCopy = () => {
+  const ARG = '\u0001';
+  const out = new Set<string>();
+  const walk = (a: unknown) => {
+    if (typeof a === 'string') out.add(a);
+    else if (typeof a === 'function') for (const part of String(a(ARG, 5, ARG)).split(/\u0001|\b5\b/)) out.add(part);
+    else if (a && typeof a === 'object') Object.values(a).forEach(walk);
+  };
+  for (const key of Object.keys(en) as (keyof LandingStrings)[]) if (key !== 'lang' && key !== 'locale') walk(en[key]);
+  // Short scraps (" · ", "Book") would match inside other words.
+  return [...out].map((s) => s.trim()).filter((s) => s.length >= 5 && !SHARED.includes(s));
+};
+
+/** Everything a reader can see or hear on the page, plus its title and description. */
+const pageWords = (page: Page) =>
+  page.evaluate(() => {
+    const body = document.body.cloneNode(true) as HTMLElement;
+    body.querySelectorAll('script, style').forEach((el) => el.remove());
+    body.querySelectorAll('[hidden]').forEach((el) => el.removeAttribute('hidden'));
+    const attrs = [...document.querySelectorAll('[alt], [aria-label], [title]')].map(
+      (el) => `${el.getAttribute('alt') ?? ''} ${el.getAttribute('aria-label') ?? ''} ${el.getAttribute('title') ?? ''}`,
+    );
+    return [document.title, document.querySelector('meta[name="description"]')?.getAttribute('content') ?? '', body.textContent ?? '', ...attrs].join('\n');
+  });
+
+test.describe('the English table and the others (pure)', () => {
+  test('the English copy the DE/FR pages are checked against: every string and phrase of the table, but the shared words', () => {
+    const copy = englishCopy();
+    expect(copy).toContain('Read free with Kindle+');
+    expect(copy).toContain('We use a Meta pixel to measure our ads.');
+    expect(copy).toContain('All in the same world. Pick where you want to start.');
+    expect(copy).toContain('Free for Kindle+ members');
+    expect(copy).not.toContain('Contact');
+  });
+
+  test('a market is its storefront: amazonDp and the search fallback build the market\'s host, the inverse of marketOf', () => {
+    expect(amazonDp('B0FIXDE001', 'DE')).toBe('https://www.amazon.de/dp/B0FIXDE001');
+    expect(amazonDp('B0FIXFR001', 'FR')).toBe('https://www.amazon.fr/dp/B0FIXFR001');
+    expect(amazonDp('B0CK55M553')).toBe('https://www.amazon.com/dp/B0CK55M553');
+    expect(amazonDp('', 'DE')).toBe('');
+    expect(amazonSearch('Sophie Feegle', true, 'FR')).toBe('https://www.amazon.fr/s?k=Sophie+Feegle&i=stripbooks');
+    for (const market of ['US', 'UK', 'CA', 'DE', 'FR', 'IT', 'ES']) expect(marketOf(amazonDp('B0FIXDE001', market))).toBe(market);
+    expect(() => amazonDp('B0FIXDE001', 'JP')).toThrow(/No Amazon storefront/);
+  });
+});
+
+test.describe('/de/ and /fr/ landing pages', () => {
+  test.use({ timezoneId: 'America/Chicago' });
+
+  test('DE box set: KU and Buy on amazon.de with the DE tags, book one\'s German paperback plain, every link on amazon.de', async ({ page }) => {
+    await stubOutside(page);
+    await page.goto(`/de${BOX_SET}`);
+    const kindle = amazonDp(FIXTURE.series['sophie-feegle'].de.asin, 'DE');
+    const ku = i18nLink('sophie-boxset', 'ku', kindle);
+    expect(ku).toContain('FIXTURE_DE_KU');
+    await expect(page.locator('aside [data-landing-cta="ku"]')).toHaveAttribute('href', ku);
+    await expect(page.locator('aside [data-landing-cta="buy"]')).toHaveAttribute('href', i18nLink('sophie-boxset', 'buy', kindle));
+    // No DE Print tag for book one: the plain German paperback page.
+    await expect(page.locator('aside [data-landing-cta="paperback"]')).toHaveAttribute('href', 'https://www.amazon.de/dp/B0FIXDE0P1');
+    const hrefs = await page.locator('[data-landing-cta]').evaluateAll((els) => els.map((el) => el.getAttribute('href')!));
+    expect(hrefs.length).toBe(8);
+    for (const href of hrefs) expect(href.startsWith(STOREFRONT.de), href).toBe(true);
+    await expect(page.locator('h1')).toHaveText('Sophie Feegle Sammelband');
+    await expect(page.locator('html')).toHaveAttribute('lang', 'de');
+    // No English reader quotes (the edition has none of its own).
+    await expect(page.locator('blockquote')).toHaveCount(0);
+  });
+
+  test('FR box set: the edition is not in KU, so no KU button; plain amazon.fr links (no FR tags); the edition\'s own review', async ({ page }) => {
+    await stubOutside(page);
+    await page.goto(`/fr${BOX_SET}`);
+    await expect(page.locator('[data-landing-cta="ku"]')).toHaveCount(0);
+    await expect(page.locator('aside [data-landing-cta]')).toHaveCount(2);
+    await expect(page.locator('aside [data-landing-cta="buy"]')).toHaveAttribute('href', 'https://www.amazon.fr/dp/B0FIXFR001');
+    await expect(page.locator('aside [data-landing-cta="paperback"]')).toHaveAttribute(
+      'href',
+      amazonSearch('Sophie et les Bizarres Gwen DeMarco', true, 'FR'),
+    );
+    await expect(page.locator('blockquote')).toHaveCount(1);
+    await expect(page.locator('blockquote')).toContainText('Une série drôle et prenante');
+    await expect(page.locator('figcaption')).toHaveText('Camille, avis sur Amazon.fr');
+  });
+
+  test('DE Ward Breaker: three doors in the editions\' words; the KU button on each door follows its edition', async ({ page }) => {
+    await stubOutside(page);
+    await page.goto(`/de${WARD_BREAKER}`);
+    await expect(page.locator('[data-door]')).toHaveCount(3);
+    expect(await page.locator('[data-door]').evaluateAll((els) => els.map((el) => (el as HTMLElement).dataset.door))).toEqual([...DOORS]);
+    // gideon-bean's German edition is not in KU.
+    for (const [door, ku] of [['ward-breaker', 1], ['series-start', 0], ['sophie', 1]] as const) {
+      await expect(page.locator(`[data-door="${door}"] [data-landing-cta="ku"]`)).toHaveCount(ku);
+    }
+    const wb = amazonDp('B0FIXDE021', 'DE');
+    await expect(page.locator('[data-door="ward-breaker"] [data-landing-cta="ku"]')).toHaveAttribute('href', i18nLink('ward-breaker', 'ku', wb));
+    await expect(page.locator('[data-door="ward-breaker"] [data-landing-cta="buy"]')).toHaveAttribute('href', wb);
+    await expect(page.locator('[data-door="series-start"] [data-landing-cta="buy"]')).toHaveAttribute('href', 'https://www.amazon.de/dp/B0FIXDE031');
+    await expect(page.locator('[data-door="sophie"] [data-landing-cta="ku"]')).toHaveAttribute(
+      'href',
+      i18nLink('sophie-boxset', 'ku', amazonDp('B0FIXDE001', 'DE')),
+    );
+    await expect(page.locator('[data-door="sophie"] h3')).toHaveText('Sophies Bücher, dieselbe Welt');
+    await expect(page.locator('#doors h2')).toHaveText('Drei Wege in die Geschichte');
+    await expect(page.locator('h1')).toHaveText('Der Bannbrecher');
+  });
+
+  test('FR Ward Breaker: a door with no French edition (Gideon Bean) is left out; two doors, all on amazon.fr', async ({ page }) => {
+    await stubOutside(page);
+    await page.goto(`/fr${WARD_BREAKER}`);
+    expect(await page.locator('[data-door]').evaluateAll((els) => els.map((el) => (el as HTMLElement).dataset.door))).toEqual(['ward-breaker', 'sophie']);
+    await expect(page.locator('[data-door="sophie"] [data-landing-cta="ku"]')).toHaveCount(0);
+    await expect(page.locator('[data-door="ward-breaker"] [data-landing-cta="ku"]')).toHaveAttribute('href', 'https://www.amazon.fr/dp/B0FIXFR021');
+    const hrefs = await page.locator('[data-landing-cta]').evaluateAll((els) => els.map((el) => el.getAttribute('href')!));
+    for (const href of hrefs) expect(href.startsWith(STOREFRONT.fr), href).toBe(true);
+    await expect(page.locator('#doors h2')).toHaveText('Deux portes d’entrée');
+  });
+
+  for (const lang of ['de', 'fr'] as const) {
+    for (const path of [BOX_SET, WARD_BREAKER]) {
+      test(`/${lang}${path}: no string from the English table, no English reader quote`, async ({ page }) => {
+        await stubOutside(page);
+        await page.goto(`/${lang}${path}`);
+        const words = await pageWords(page);
+        for (const english of englishCopy()) expect(words, `"${english}" on /${lang}${path}`).not.toContain(english);
+        // And none of the English page's own words: its reviews and its title line.
+        expect(words).not.toContain('Amazon review');
+        expect(words).not.toContain('Snarky heroines');
+      });
+    }
+  }
+
+  test('a DE page\'s clicks and beacon carry market DE; an FR page\'s FR', async ({ page }) => {
+    const beacons: any[] = [];
+    page.on('request', (req) => {
+      if (req.url() === CTR) beacons.push(JSON.parse(req.postData() ?? '{}'));
+    });
+    await stubOutside(page, { edit: (config) => (config.ctrEndpoint = CTR) });
+    await page.goto(`/de${BOX_SET}?utm_campaign=sophie-feegle-set-de-landing&utm_source=meta`);
+    for (const cta of CTAS) await page.locator(`aside [data-landing-cta="${cta}"]`).click();
+    const utm = { utm_campaign: 'sophie-feegle-set-de-landing', utm_source: 'meta' };
+    const expected = CTAS.map((cta) => ({ page: 'sophie-feegle-box-set', market: 'DE', cta, source: 'ad', campaign: 'sophie-feegle-set-de-landing', ...utm }));
+    expect(await customEvents(page)).toEqual(expected.map((detail, i) => ['trackCustom', EVENTS[CTAS[i]], detail]));
+    await expect.poll(() => beacons.length).toBe(3);
+    expect(beacons).toEqual(expected.map((detail) => ({ metric: 'press.landing.ctr', ...detail })));
+
+    // Same tab session: still the ad's visitor (source ad), with the new page's utm_*.
+    await page.goto(`/fr${WARD_BREAKER}?utm_campaign=x`);
+    await page.locator('[data-door="ward-breaker"] [data-landing-cta="buy"]').click();
+    expect((await customEvents(page)).at(-1)).toEqual([
+      'trackCustom',
+      'LandingClickBuy',
+      { page: 'ward-breaker-landing', market: 'FR', cta: 'buy', source: 'ad', campaign: 'x', target: 'ward-breaker', utm_campaign: 'x' },
+    ]);
+  });
+
+  for (const path of [BOX_SET, WARD_BREAKER]) {
+    test(`${path}: hreflang links the English, German and French pages to each other; the sitemap lists all three`, async ({ page, request }) => {
+      const expected = [
+        ['en', `https://gwendemarco.com${path}`],
+        ['de', `https://gwendemarco.com/de${path}`],
+        ['fr', `https://gwendemarco.com/fr${path}`],
+        ['x-default', `https://gwendemarco.com${path}`],
+      ];
+      for (const [lang, url] of expected.slice(0, 3)) {
+        await page.goto(new URL(url).pathname);
+        await expect(page.locator('html')).toHaveAttribute('lang', lang);
+        const links = await page.locator('link[rel="alternate"][hreflang]').evaluateAll((els) =>
+          els.map((el) => [el.getAttribute('hreflang'), el.getAttribute('href')]),
+        );
+        expect(links, url).toEqual(expected);
+      }
+      const sitemap = await (await request.get('/sitemap-0.xml')).text();
+      for (const [, url] of expected.slice(0, 3)) expect(sitemap).toContain(`<loc>${url}</loc>`);
+    });
+  }
+
+  test('a page with no edition in the language is not built', async ({ request }) => {
+    expect((await request.get('/de/books/asphalt-coven/landing/')).status()).toBe(404);
+    expect((await request.get('/fr/books/asphalt-coven/landing/')).status()).toBe(404);
+  });
+});
+
+// The English landing pages are what they were before the /de/ and /fr/ pages: this
+// build's HTML against a build of the base (ENGLISH_BASE_REF, default the merge-base with
+// main), compared as tests/lib/normalize-html.mjs says (whitespace, build ids, the hreflang
+// lines and the new `market` field aside, byte for byte).
+test.describe('English pages unchanged', () => {
+  test.setTimeout(240_000);
+  const PAGES = ['series/sophie-feegle/box-set', 'books/ward-breaker/landing', 'books/asphalt-coven/landing'];
+
+  test('the three English landing pages build the same HTML as the base', async () => {
+    const git = (...args: string[]) => execFileSync('git', args, { encoding: 'utf8' }).trim();
+    const main = ['origin/main', 'main'].find((ref) => {
+      try { git('rev-parse', '--verify', '--quiet', ref); return true; } catch { return false; }
+    });
+    const base = process.env.ENGLISH_BASE_REF || (main ? git('merge-base', 'HEAD', main) : '');
+    test.skip(!base || base === git('rev-parse', 'HEAD'), 'no base to compare with (this is the base)');
+    const dir = mkdtempSync(join(tmpdir(), 'gd-english-base-'));
+    try {
+      git('worktree', 'add', '--detach', dir, base);
+      symlinkSync(join(process.cwd(), 'node_modules'), join(dir, 'node_modules'));
+      execFileSync('npm', ['run', 'build'], { cwd: dir, stdio: 'ignore', env: { ...process.env, LANDING_EDITIONS_FIXTURE: '' } });
+      for (const path of PAGES) {
+        const before = normalizeHtml(readFileSync(join(dir, 'dist', path, 'index.html'), 'utf8'));
+        const after = normalizeHtml(readFileSync(join('dist', path, 'index.html'), 'utf8'));
+        expect(after, `/${path}/ against ${base.slice(0, 7)}`).toBe(before);
+      }
+    } finally {
+      try { git('worktree', 'remove', '--force', dir); } catch { rmSync(dir, { recursive: true, force: true }); }
+    }
   });
 });

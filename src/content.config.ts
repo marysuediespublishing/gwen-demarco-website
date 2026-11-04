@@ -10,6 +10,38 @@ const landingDoor = z.object({
   review: landingReview.optional(),
 });
 
+// A product's edition in another language (Press suite_006 §2): the market's ASINs and
+// the edition's own words, as Amazon shows them. A /<lang>/ landing page is built only for
+// a product with an edition in that language. `kuEnrolled` decides the KU button.
+const editionReview = z.object({ title: z.string().optional(), body: z.string(), reviewer: z.string() });
+const editionDoor = z.object({ title: z.string().optional(), line: z.string().optional() });
+const edition = z.object({
+  asin: z.string(),
+  paperbackAsin: z.string().optional(),
+  title: z.string(),
+  blurb: z.string(),
+  kuEnrolled: z.boolean(),
+  // The edition's own cover (/images/…), when it is not the English one
+  cover: z.string().optional(),
+  // The series' name in the language (eyebrows and door titles); default the English one
+  seriesName: z.string().optional(),
+  // The landing hero's one line, and a short line of tropes under it
+  hook: z.string().optional(),
+  tagline: z.string().optional(),
+  // As the storefront shows it, e.g. "9,99 €"
+  price: z.string().optional(),
+  separatePrice: z.string().optional(),
+  // The edition's own reader reviews; a translated English review is not one
+  reviews: z.array(editionReview).default([]),
+  // Book landing pages: the doors' copy in the language
+  doors: z.object({
+    book: editionDoor.optional(),
+    seriesStart: editionDoor.optional(),
+    sameWorld: editionDoor.optional(),
+  }).optional(),
+});
+const editions = z.object({ de: edition.optional(), fr: edition.optional() }).optional();
+
 // Books collection - individual book entries
 const books = defineCollection({
   loader: glob({ base: './src/content/books', pattern: '**/*.{md,mdx}' }),
@@ -46,6 +78,7 @@ const books = defineCollection({
     // paperback (its ASIN, or ISBN-10)
     asin: z.string().optional(),
     paperbackAsin: z.string().optional(),
+    editions,
     // Ad landing page at /books/<slug>/landing, built for every book with this block.
     // Three doors, each with KU / Kindle / Print: this book, the start of its series,
     // and another series in the same world.
@@ -88,6 +121,8 @@ const series = defineCollection({
     boxSetBlurb: z.string().optional(),
     boxSetPrice: z.string().optional(),
     boxSetSeparatePrice: z.string().optional(),
+    // The box set's editions in other languages (/<lang>/series/<slug>/box-set)
+    editions,
   }),
 });
 

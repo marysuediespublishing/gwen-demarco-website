@@ -132,6 +132,36 @@ collections:
         hint: "Wide banner image for use as homepage hero background when this book is featured"
       - { label: "Kindle ASIN", name: "asin", widget: "string", required: false, hint: "The Kindle edition's ASIN (B0...). Used by the landing pages' Kindle+ and Kindle buttons; empty → the Amazon URL above" }
       - { label: "Paperback ASIN", name: "paperbackAsin", widget: "string", required: false, hint: "The paperback's ASIN or ISBN-10. Used by the landing pages' print buttons; empty → an Amazon paperback search for the title" }
+      - label: "Editions in other languages"
+        name: "editions"
+        widget: "object"
+        required: false
+        collapsed: true
+        hint: "The book in German and French on amazon.de / amazon.fr, in the edition's own words. With a Landing Page, each one builds /de/ or /fr/books/<slug>/landing. See README 'German and French landing pages'"
+        fields:
+          - label: "German (amazon.de)"
+            name: "de"
+            widget: "object"
+            required: false
+            collapsed: true
+            fields: &edition_fields
+              - { label: "Kindle ASIN", name: "asin", widget: "string", required: false, hint: "The edition's Kindle ASIN in this storefront (required for the page)" }
+              - { label: "Paperback ASIN", name: "paperbackAsin", widget: "string", required: false, hint: "Empty → a paperback search in this storefront" }
+              - { label: "Title", name: "title", widget: "string", required: false, hint: "The edition's title as Amazon shows it (required)" }
+              - { label: "Blurb", name: "blurb", widget: "text", required: false, hint: "The edition's description as Amazon shows it (required); the page shows its first three paragraphs" }
+              - { label: "In Kindle Unlimited", name: "kuEnrolled", widget: "boolean", default: false, hint: "Off → the page has no Kindle Unlimited button" }
+              - { label: "Cover", name: "cover", widget: "image", required: false, hint: "The edition's own cover; empty → the English one" }
+              - { label: "Series Name", name: "seriesName", widget: "string", required: false, hint: "The series' name in this language; empty → the English one" }
+              - { label: "Hook", name: "hook", widget: "string", required: false, hint: "One or two sentences under the title, in this language" }
+              - { label: "Tagline", name: "tagline", widget: "string", required: false, hint: "A short line of tropes under the hook (box-set page)" }
+              - { label: "Kindle Price", name: "price", widget: "string", required: false, hint: "As the storefront shows it, e.g. 9,99 €; empty → no price on the button" }
+              - { label: "Books Bought Separately", name: "separatePrice", widget: "string", required: false, hint: "Box sets: e.g. 24,95 €; with the price, shows the value line" }
+          - label: "French (amazon.fr)"
+            name: "fr"
+            widget: "object"
+            required: false
+            collapsed: true
+            fields: *edition_fields
       - label: "Landing Page"
         name: "landing"
         widget: "object"
@@ -208,6 +238,36 @@ collections:
       - { label: "Box Set Blurb", name: "boxSetBlurb", widget: "text", required: false, hint: "Box-set description from KDP; the landing page shows its first three paragraphs and falls back to the series description" }
       - { label: "Box Set Kindle Price", name: "boxSetPrice", widget: "string", required: false, hint: "e.g. 9.99. Shown on the landing page Buy button; leave empty to show no price" }
       - { label: "Box Set Books Bought Separately", name: "boxSetSeparatePrice", widget: "string", required: false, hint: "Total of the five books' Kindle prices, e.g. 24.95. With the price, shows '5 books for $X — $Y bought separately'; leave empty to hide that line" }
+      - label: "Editions in other languages"
+        name: "editions"
+        widget: "object"
+        required: false
+        collapsed: true
+        hint: "The box set in German and French on amazon.de / amazon.fr; each one builds /de/ or /fr/series/<slug>/box-set. See README 'German and French landing pages'"
+        fields:
+          - label: "German (amazon.de)"
+            name: "de"
+            widget: "object"
+            required: false
+            collapsed: true
+            fields: &edition_fields
+              - { label: "Kindle ASIN", name: "asin", widget: "string", required: false, hint: "The edition's Kindle ASIN in this storefront (required for the page)" }
+              - { label: "Paperback ASIN", name: "paperbackAsin", widget: "string", required: false, hint: "Empty → a paperback search in this storefront" }
+              - { label: "Title", name: "title", widget: "string", required: false, hint: "The edition's title as Amazon shows it (required)" }
+              - { label: "Blurb", name: "blurb", widget: "text", required: false, hint: "The edition's description as Amazon shows it (required); the page shows its first three paragraphs" }
+              - { label: "In Kindle Unlimited", name: "kuEnrolled", widget: "boolean", default: false, hint: "Off → the page has no Kindle Unlimited button" }
+              - { label: "Cover", name: "cover", widget: "image", required: false, hint: "The edition's own cover; empty → the English one" }
+              - { label: "Series Name", name: "seriesName", widget: "string", required: false, hint: "The series' name in this language; empty → the English one" }
+              - { label: "Hook", name: "hook", widget: "string", required: false, hint: "One or two sentences under the title, in this language" }
+              - { label: "Tagline", name: "tagline", widget: "string", required: false, hint: "A short line of tropes under the hook (box-set page)" }
+              - { label: "Kindle Price", name: "price", widget: "string", required: false, hint: "As the storefront shows it, e.g. 9,99 €; empty → no price on the button" }
+              - { label: "Books Bought Separately", name: "separatePrice", widget: "string", required: false, hint: "Box sets: e.g. 24,95 €; with the price, shows the value line" }
+          - label: "French (amazon.fr)"
+            name: "fr"
+            widget: "object"
+            required: false
+            collapsed: true
+            fields: *edition_fields
       - { label: "Content", name: "body", widget: "markdown" }
 
   # Blog Categories collection

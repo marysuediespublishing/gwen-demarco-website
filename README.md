@@ -266,4 +266,37 @@ Attribution is per product and door, not per ad (Press ad_desk_007): each button
 
 The hook, the door titles and lines, the quotes (testimonial id plus an optional `excerpt`) and the reviews are in the book's `landing:` block. Covers come from `public/images/landing/<cover name>-400.(webp|jpg)` when that copy exists (`-640` for the hero), and the share image is `public/images/landing/<slug>-og.jpg` (1200x630). The build makes these from the covers in `public/images` (`src/integrations/landing-covers.mjs`, at the start of `astro dev` and `astro build`): a 400px copy of every book and series cover (webp for a transparent PNG box set, trimmed), and for each book with a `landing:` block and each series with a box-set page a 640px webp hero and the share image (the cover centred over a blurred, darkened copy of itself; a box set on a midnight-purple glow — `<series>-box-set-og.jpg`). `public/images/landing/` is not in git: change a cover and the next build remakes its copies (a copy newer than its cover is kept). `npm run test:covers` tests it.
 
-Tests: `npm run test:e2e` builds the site, serves it with `astro preview`, and checks both landing pages in Chrome (see `tests/e2e/landing.spec.ts`).
+Tests: `npm run test:e2e` builds the site, serves it with `astro preview`, and checks both landing pages, in English, German and French, in Chrome (see `tests/e2e/landing.spec.ts`).
+
+## German and French landing pages
+
+Both landing pages also exist in German and French for a product that has an edition in that language (Press suite_006 §2): `/de/series/sophie-feegle/box-set/`, `/fr/series/sophie-feegle/box-set/` and `/{de|fr}/books/<slug>/landing/`. They use the same templates (`src/components/landing/BoxSetPage.astro`, `BookLandingPage.astro`). The English pages stay where they are, unchanged. A page is built only when the product has an edition in that language. The build names every page it skips (`[landing] not built: …`).
+
+- **Editions** are written in the product's frontmatter (CMS: Editions in other languages). On a series they describe its box set; on a book, the book:
+
+  ```yaml
+  editions:
+    de:
+      asin: B0XXXXXXXX        # the Kindle edition on amazon.de (required)
+      paperbackAsin: …        # optional; empty → a paperback search on amazon.de
+      title: Sophie Feegle Sammelband   # as Amazon shows it (required)
+      blurb: …                # as Amazon shows it (required); the page shows 3 paragraphs
+      kuEnrolled: true        # required; false → no Kindle Unlimited button
+      cover: /images/…        # optional; empty → the English cover
+      seriesName: …           # optional series name in German
+      hook: …                 # optional hero line
+      tagline: …              # optional tropes line
+      price: 9,99 €           # optional; shown on the Buy button
+      separatePrice: …        # optional
+      reviews: [{ title, body, reviewer }]   # optional, German reviews only
+      doors: { book: { title, line }, seriesStart: {…}, sameWorld: {…} }   # optional door copy
+    fr: { … }
+  ```
+
+  No export from Press's Books fills these yet, so they are written by hand.
+- **Storefront.** Every button goes to the market's storefront (`amazonDp(asin, market)` and `amazonSearch(…, market)` in `src/utils/landing.ts`; the market → host table is the inverse of `marketOf`). Tags come from `attributionTags.DE` / `.FR` as on the English pages. A button with no tag gets the plain `.de` / `.fr` link. On a book page, a door whose product has no edition in the language is left out.
+- **Words.** Title, series name, hook, tagline, blurb and price come from the edition. The fixed copy comes from `src/i18n/landing.de.ts` / `landing.fr.ts`. Both tables are machine-drafted and wait for a native check before the first ad. The English table is `landing.en.ts`. English reader quotes never appear on a German or French page; only the edition's own `reviews` do.
+- **hreflang.** Once a product has an edition, each language version links to the others with `<link rel="alternate" hreflang>` (and `x-default` → English). The sitemap lists all of them.
+- **Events.** Every click event and the `press.landing.ctr` beacon carry `market` (`US` on the English pages, `DE`, `FR`).
+
+Tests: the e2e build sets `LANDING_EDITIONS_FIXTURE=tests/fixtures/landing-editions.json`, which supplies made-up DE/FR editions and DE tags that the content does not have. The tests check the storefront links, the tags, the KU rule, hreflang, the sitemap, `market` on the events, and that no German or French page carries a string from the English table. They also rebuild the base commit (`ENGLISH_BASE_REF`, default the merge-base with main) and compare the English pages' HTML against it, as `tests/lib/normalize-html.mjs` describes.

@@ -4,6 +4,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import FogBackground from '../components/ui/FogBackground';
 import NewsletterCTA from '../components/ui/NewsletterCTA';
+import { en } from '../i18n/landing.en';
 
 export interface Props {
   title: string;
@@ -12,6 +13,12 @@ export interface Props {
   type?: string;
   /** Ad landing pages: name mark and legal links only, so the page has one exit. */
   landing?: boolean;
+  /** The page's language (the /de/ and /fr/ ad landing pages); default en */
+  lang?: string;
+  /** The page's versions in each language, for <link rel="alternate" hreflang> */
+  alternates?: { hreflang: string; href: string }[];
+  /** The landing chrome's words in the page's language (skip link, footer links) */
+  chrome?: { skip: string; privacy: string; cookies: string; contact: string };
 }
 
 const {
@@ -19,7 +26,10 @@ const {
   description = "Gwen DeMarco writes paranormal romance with a focus on the weird and wonderful. Snarky heroines, grumpy heroes, and found family.",
   image,
   type = "website",
-  landing = false
+  landing = false,
+  lang = "en",
+  alternates = [],
+  chrome = en.chrome
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -27,7 +37,7 @@ const socialImageURL = image ? new URL(image, Astro.url) : undefined;
 ---
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang={lang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="description" content={description} />
@@ -36,6 +46,7 @@ const socialImageURL = image ? new URL(image, Astro.url) : undefined;
 
     <!-- Canonical URL -->
     <link rel="canonical" href={canonicalURL} />
+    {alternates.map((alt) => <link rel="alternate" hreflang={alt.hreflang} href={new URL(alt.href, Astro.site)} />)}
 
     <!-- Favicons -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -73,7 +84,7 @@ const socialImageURL = image ? new URL(image, Astro.url) : undefined;
 
     <!-- Skip to main content for accessibility -->
     <a href="#main-content" class="skip-link">
-      Skip to main content
+      {chrome.skip}
     </a>
 
     {landing ? (
@@ -96,11 +107,11 @@ const socialImageURL = image ? new URL(image, Astro.url) : undefined;
     {landing ? (
       <footer class="relative z-10 border-t border-mystic-violet/20 py-6 text-sm text-moon-silver/60">
         <p class="container mx-auto px-4 text-center">
-          <a href="/privacy-policy" class="hover:text-ember-orange transition-colors">Privacy</a>
+          <a href="/privacy-policy" class="hover:text-ember-orange transition-colors">{chrome.privacy}</a>
           <span aria-hidden="true" class="mx-2">·</span>
-          <a href="/cookie-policy" class="hover:text-ember-orange transition-colors">Cookies</a>
+          <a href="/cookie-policy" class="hover:text-ember-orange transition-colors">{chrome.cookies}</a>
           <span aria-hidden="true" class="mx-2">·</span>
-          <a href="/contact" class="hover:text-ember-orange transition-colors">Contact</a>
+          <a href="/contact" class="hover:text-ember-orange transition-colors">{chrome.contact}</a>
         </p>
       </footer>
     ) : (

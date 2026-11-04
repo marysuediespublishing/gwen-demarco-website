@@ -1,0 +1,366 @@
+---
+// Sophie Feegle box-set landing page: where readers land from the Meta ad, in English at
+// /series/sophie-feegle/box-set and in each language the box set has an edition in at
+// /<lang>/series/sophie-feegle/box-set (Press suite_006 §2).
+// CMS inputs (all optional, see README "Box-set landing page"):
+//   series boxSetAsin / boxSetSlug / boxSetBlurb / boxSetPrice / boxSetSeparatePrice /
+//   editions.<lang>, and site-config metaPixelId / attributionTags / pressCtrEndpoint / amazonBadge
+// English keeps its own words below; a German or French page takes the edition's title,
+// hook, tagline, blurb, price and reviews, and its fixed copy from src/i18n/landing.<lang>.ts.
+import Layout from '../../layouts/Layout.astro';
+import StarRating from '../StarRating.astro';
+import ConsentBar from './ConsentBar.astro';
+import LandingScript from './LandingScript.astro';
+import { getCollection, getEntry } from 'astro:content';
+import {
+  amazonDp,
+  amazonSearch,
+  doorLinks,
+  landingImage,
+  LANDING_LANGS,
+  LANG_MARKET,
+  langPath,
+  money,
+  toReview as findReview,
+  type LandingLang,
+} from '../../utils/landing';
+import { editionOf, withFixtureTags } from '../../utils/editions';
+import { FORMERLY_KU, kindlePlusName, showFormerlyKU } from '../../utils/kindle-plus';
+import { LANDING_STRINGS } from '../../i18n';
+import { formatCount, formatRating } from '../../i18n/landing';
+
+interface Props {
+  lang: LandingLang;
+}
+
+const { lang } = Astro.props;
+const t = LANDING_STRINGS[lang];
+const english = lang === 'en';
+const market = LANG_MARKET[lang];
+
+const SERIES_SLUG = 'sophie-feegle';
+const PATH = `/series/${SERIES_SLUG}/box-set/`;
+// Short, whole Amazon reviews: the pull-quote under the hero, then four lower down.
+// Placeholders until the box-set review quotes land on signals #2684.
+const PULL_QUOTE_ID = '2024-04-11-map-verified-false-featured-false-date-2024-04-11-booktitle-odd-times-for-sophie-feegle-reviewername-mrs-dustbunny-reviewerplatform-amazon-quote-holy-wow-nan-amazing-storyline-with-enough-twist-to-make-your-head-spin';
+// Each names something specific; four different books. `excerpt` replaces a long
+// review's body, with an ellipsis wherever text is cut.
+const REVIEWS: { id: string; excerpt?: string }[] = [
+  {
+    id: '2023-10-07-map-verified-false-featured-false-date-2023-10-07-booktitle-odds-and-ends-reviewername-bglanton-reviewerplatform-amazon-quote-absolutely-love-this-series-nits-an-absolute-joy-to-read-these-books-they-have-twists',
+    excerpt: 'It’s an absolute joy to read these books. They have twists, revelations, the whole nine yards. … The familiar tropes are dusted off and spun in new and interesting directions. Highly recommended.',
+  },
+  { id: '2024-12-28-map-verified-false-featured-false-date-2024-12-28-booktitle-sophie-and-the-odd-ones-reviewername-anne-reviewerplatform-amazon-quote-thoroughly-enjoyable-ngreat-plot-great-pacing-well-developed-and-believable-charact' },
+  {
+    id: '2024-04-17-map-verified-false-featured-false-date-2024-04-17-booktitle-sophie-feegle-box-set-reviewername-rhonda-jones-reviewerplatform-amazon-quote-awesome-nthis-series-has-a-great-cast-of-characters-each-book-takes-up-after-t',
+    excerpt: '… It starts with a human woman (Sophie) who is down on her luck, but due to an act of kindness, gets a job as a coroner’s assistant. There she learns she has an unusual gift. When she touches a corpse she can see how that person died. … Book 5 had an absolutely awesome ending!!!',
+  },
+  { id: '2021-12-28-map-verified-false-featured-false-date-2021-12-28-booktitle-portents-and-oddities-reviewername-lastenia-s-reviewerplatform-amazon-quote-excellent-series-nthis-author-is-new-to-me-and-quickly-becoming-a-favorite-the' },
+];
+// One line under each cover, lifted from each book's page. Keep them short enough
+// not to wrap at phone width. (Another language: each book edition's `hook`.)
+const BOOK_HOOKS: Record<string, string> = {
+  'sophie-and-the-odd-ones': 'Her calling: the morgue’s graveyard shift.',
+  'portents-and-oddities': 'She gets visions of the victims’ deaths.',
+  'odd-times-for-sophie-feegle': 'Murders in a mythical-run town.',
+  'against-all-odds': 'Undercover at a Vegas shifter fight club.',
+  'odds-and-ends': 'The finale: who Sophie truly is.',
+};
+// Book 1 in paperback: a quiet link that measures interest in print.
+const PAPERBACK_URL = 'https://www.amazon.com/dp/B08CWM839H';
+const BLURB_PARAGRAPHS = 3;
+
+const series = await getEntry('series', SERIES_SLUG);
+if (!series) throw new Error(`Missing series entry: ${SERIES_SLUG}`);
+const edition = editionOf('series', series, lang);
+if (!english && !edition) throw new Error(`No ${lang} edition of the ${SERIES_SLUG} box set`);
+
+const readingOrder = series.data.readingOrder ?? [];
+const allBooks = await getCollection('books');
+const books = readingOrder
+  .map((slug) => allBooks.find((book) => book.id === slug))
+  .filter((book): book is NonNullable<typeof book> => Boolean(book));
+const bookTitle = (book: (typeof books)[number]) => editionOf('books', book, lang)?.title ?? book.data.title;
+const bookHook = (book: (typeof books)[number]) => (english ? BOOK_HOOKS[book.id] : editionOf('books', book, lang)?.hook);
+
+// Reader quotes: English reviews on the English page; another language only shows its
+// edition's own (a translated English review is not a review).
+const testimonials = await getCollection('testimonials');
+const toReview = (id: string, excerpt?: string) => {
+  const review = findReview(testimonials, id, excerpt);
+  if (!review) return undefined;
+  const book = books.find((b) => b.id === review.bookId);
+  const about = book ? book.data.title : 'the Sophie Feegle Box Set';
+  return { ...review, cite: `${review.reviewer}, Amazon review of ${about}` };
+};
+const pullQuote = english ? toReview(PULL_QUOTE_ID) : undefined;
+const reviews = english
+  ? REVIEWS.map((r) => toReview(r.id, r.excerpt)).filter((r): r is NonNullable<typeof r> => Boolean(r))
+  : edition!.reviews.map((r) => ({ title: r.title ?? '', body: r.body, cite: t.reviewCite(r.reviewer) }));
+
+// Series-wide numbers, labelled as such: the box set has its own (smaller) Amazon rating.
+const rating = series.data.overallRating;
+const ratingCount = series.data.totalRatings;
+const showRating = rating > 0 && ratingCount > 0;
+
+const siteConfig = await getEntry('settings', 'site-config');
+const amazonBadge = siteConfig?.data.amazonBadge?.trim();
+// Kindle+ (formerly Kindle Unlimited) through site-config kindlePlusFormerlyUntil; English only
+const formerlyKU = english && showFormerlyKU(siteConfig?.data.kindlePlusFormerlyUntil);
+// The KU button: always in English (the box set is in Kindle+); else when the edition is in KU
+const showKU = english || edition!.kuEnrolled;
+
+// Amazon Attribution, per (product, door) whatever ad sent the visitor: KU and Kindle
+// take the box set's tags, the paperback link book one's Print tag, from the tags of the
+// page's market. A tag may be the whole Attribution URL; only its query string is used.
+// No tag: the bare /dp link.
+const asin = series.data.boxSetAsin?.trim();
+const bookOne = books[0];
+const bookOneEdition = bookOne && editionOf('books', bookOne, lang);
+const amazonBase = english
+  ? asin
+    ? `https://www.amazon.com/dp/${asin}`
+    : 'https://www.amazon.com/s?k=Sophie+Feegle+Box+Set+Gwen+DeMarco&i=digital-text'
+  : amazonDp(edition!.asin, market);
+const paperbackUrl = english
+  ? PAPERBACK_URL
+  : amazonDp(bookOneEdition?.paperbackAsin, market) ||
+    amazonDp(edition!.paperbackAsin, market) ||
+    amazonSearch(`${bookOne ? bookTitle(bookOne) : edition!.title} Gwen DeMarco`, true, market);
+const { links, missing } = doorLinks(
+  {
+    target: '',
+    kindleUrl: amazonBase,
+    paperbackUrl,
+    product: series.data.boxSetSlug?.trim() || `${SERIES_SLUG}-box-set`,
+    printProduct: readingOrder[0] ?? '',
+  },
+  english ? siteConfig?.data.attributionTags : withFixtureTags(siteConfig?.data.attributionTags),
+);
+
+// A hidden KU button (an edition not in KU) is not a missing tag.
+const missingTags = missing.filter((m) => m.door !== 'ku' || showKU);
+
+const price = english ? money(series.data.boxSetPrice) : (edition!.price?.trim() ?? '');
+const separatePrice = english ? money(series.data.boxSetSeparatePrice) : (edition!.separatePrice?.trim() ?? '');
+const buyLabel = t.buyBoxSet(price);
+const valueLine = price && separatePrice ? t.valueLine(books.length, price, separatePrice) : '';
+
+// The full blurb stays on Amazon; the page carries the first three paragraphs.
+const pitch = (english ? series.data.boxSetBlurb?.trim() || series.data.description : edition!.blurb)
+  .split(/\n\s*\n/)
+  .map((p) => p.trim())
+  .filter(Boolean)
+  .slice(0, BLURB_PARAGRAPHS);
+
+// The product's words: English's own, or the edition's.
+const title = english ? 'The Sophie Feegle Box Set' : edition!.title;
+const hook = english ? 'The dead keep their secrets at the San Francisco City Morgue. Until Sophie touches them.' : edition!.hook;
+const tagline = english ? 'Snarky heroines. Grumpy heroes. Found family.' : edition!.tagline;
+const closing = [tagline, t.allOneClick(books.length)].filter(Boolean).join(' ');
+const pageTitle = english ? 'The Sophie Feegle Box Set: All Five Books | Gwen DeMarco' : t.boxSetTitle(title, books.length);
+const description = english
+  ? `All five Sophie Feegle urban fantasy novels in one box set. Snarky heroines. Grumpy heroes. Found family. Free for ${kindlePlusName(formerlyKU)} members.`
+  : t.boxSetDescription(title, books.length, showKU);
+const editionCover = edition?.cover;
+const heroCover = landingImage(editionCover ?? series.data.cover ?? '/images/boxset.png', 640, 'webp');
+const ogImage = `/images/landing/${SERIES_SLUG}-box-set${editionCover ? `-${lang}` : ''}-og.jpg`;
+const ratingText = formatRating(t, rating);
+const ratingCountText = formatCount(t, ratingCount);
+
+// hreflang: this page in every language the box set has (only once there is more than English).
+const langs: LandingLang[] = ['en', ...LANDING_LANGS.filter((l) => editionOf('series', series, l))];
+const alternates = langs.length > 1
+  ? [
+      ...langs.map((l) => ({ hreflang: l, href: langPath(l, PATH) })),
+      { hreflang: 'x-default', href: PATH },
+    ]
+  : [];
+---
+
+<Layout title={pageTitle} description={description} image={ogImage} landing lang={lang} alternates={alternates} chrome={t.chrome}>
+  <main id="main-content" class="relative z-10 pt-8 pb-12 lg:pt-12 lg:pb-16">
+    <ConsentBar strings={t.consent} />
+
+    <div class="max-w-6xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_23rem] gap-10 items-start">
+      <div>
+        <!-- Hero: box set, hook, tropes, rating, pull-quote -->
+        <section class="grid sm:grid-cols-[minmax(0,14rem)_1fr] gap-6 sm:gap-8 items-center">
+          <img
+            src={heroCover}
+            alt={t.boxSetCoverAlt('Sophie Feegle', books.length, title)}
+            width="640"
+            height="658"
+            class="w-full max-w-[13rem] sm:max-w-none mx-auto drop-shadow-[0_20px_35px_rgba(107,70,193,0.35)]"
+            fetchpriority="high"
+          />
+          <div class="text-center sm:text-left">
+            <p class="text-mystic-teal font-medium uppercase tracking-widest text-sm mb-2">{t.completeSeries(books.length)}</p>
+            <h1 class="text-3xl md:text-5xl font-primary font-bold text-bone-white mb-3">{title}</h1>
+            {hook && (
+              <p class="text-lg md:text-xl text-moon-silver mb-2">
+                {hook}
+              </p>
+            )}
+            {tagline && <p class="text-ember-orange font-medium mb-4">{tagline}</p>}
+            {showRating && (
+              <div class="text-moon-silver">
+                <div class="flex items-center justify-center sm:justify-start gap-2">
+                  <StarRating rating={rating} id="box-set-hero" />
+                  <span>{t.seriesAverage(ratingText)}</span>
+                </div>
+                <p class="text-sm text-fog-gray mt-1">{t.ratingsAcross(ratingCountText, books.length)}</p>
+              </div>
+            )}
+          </div>
+        </section>
+
+        {pullQuote && (
+          <figure class="mt-8 border-l-4 border-ember-orange pl-5">
+            <blockquote>
+              <p class="font-primary text-2xl text-bone-white mb-2">“{pullQuote.title}”</p>
+              <p class="text-moon-silver">{pullQuote.body}</p>
+            </blockquote>
+            <figcaption class="mt-2 text-sm text-fog-gray">{pullQuote.cite}</figcaption>
+          </figure>
+        )}
+
+        <!-- Covers in series order, one hook line each -->
+        <section class="mt-12">
+          <h2 class="text-2xl md:text-3xl font-primary font-bold text-bone-white mb-6">{t.booksInside(books.length)}</h2>
+          <ol class="space-y-4">
+            {books.map((book) => (
+              <li class="flex items-center gap-3 sm:gap-4">
+                {book.data.cover && (
+                  <img
+                    src={landingImage(editionOf('books', book, lang)?.cover ?? book.data.cover, 400)}
+                    alt={t.coverOf(bookTitle(book))}
+                    width="400"
+                    height="600"
+                    loading="lazy"
+                    decoding="async"
+                    class="w-14 sm:w-20 shrink-0 rounded-md shadow-lg shadow-mystic-violet/20 aspect-[2/3] object-cover"
+                  />
+                )}
+                <div class="min-w-0">
+                  <p class="text-xs text-mystic-teal">{t.book(book.data.seriesOrder ?? '')}</p>
+                  <p class="font-medium text-bone-white leading-tight">{bookTitle(book)}</p>
+                  {bookHook(book) && (
+                    <p class="text-sm text-moon-silver mt-1 whitespace-nowrap">{bookHook(book)}</p>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        <!-- Pitch -->
+        <section class="mt-12 prose prose-lg max-w-none">
+          {pitch.map((paragraph) => <p>{paragraph}</p>)}
+        </section>
+
+        <!-- Reviews (text only, attributed), two by two -->
+        {reviews.length > 0 && (
+          <section class="mt-12">
+            <h2 class="text-2xl md:text-3xl font-primary font-bold text-bone-white mb-6">{t.readersSayAmazon}</h2>
+            <div class="grid md:grid-cols-2 gap-6">
+              {reviews.map((review) => (
+                <figure class="rounded-lg border border-mystic-violet/20 bg-dark-surface/60 p-6 flex flex-col">
+                  <blockquote class="flex-1">
+                    {review.title && <p class="font-primary text-lg text-bone-white mb-2">“{review.title}”</p>}
+                    <p class="text-moon-silver">{review.body}</p>
+                  </blockquote>
+                  <figcaption class="mt-4 text-sm text-fog-gray">{review.cite}</figcaption>
+                </figure>
+              ))}
+            </div>
+          </section>
+        )}
+
+        <!-- Closing line; on phones the last pair of buttons follows it (at desktop the sidebar is the pair) -->
+        <section id="closing-ctas" class="mt-12 text-center lg:text-left">
+          <p class="font-primary text-xl md:text-2xl text-bone-white mb-6">
+            {closing}
+          </p>
+          <div class="lg:hidden max-w-md mx-auto">
+            {showKU && (
+              <>
+                <a href={links.ku} data-landing-cta="ku" class="btn btn-primary btn-lg w-full">
+                  {t.readFree}
+                </a>
+                <p class="text-sm text-fog-gray text-center mt-1 mb-3">{t.freeFor}{formerlyKU && <> · <span class="whitespace-nowrap" data-formerly-ku>{FORMERLY_KU}</span></>}</p>
+              </>
+            )}
+            <a href={links.buy} data-landing-cta="buy" class="btn btn-secondary btn-lg w-full">
+              {buyLabel}
+            </a>
+            {valueLine && <p class="text-sm text-fog-gray text-center mt-1">{valueLine}</p>}
+            <p class="text-center mt-4">
+              <a href={links.paperback} data-landing-cta="paperback" class="text-sm text-fog-gray underline underline-offset-2 hover:text-moon-silver">{t.preferPaper}</a>
+            </p>
+          </div>
+        </section>
+      </div>
+
+      <!-- Box-set sidebar: rating and the buttons, always on screen at desktop widths -->
+      <aside class="hidden lg:block lg:sticky lg:top-8">
+        <div class="card p-6">
+          {showRating && (
+            <div class="mb-6 text-sm">
+              <p class="flex items-center gap-1.5 text-moon-silver font-medium">
+                <StarRating rating={rating} size="w-3.5 h-3.5" id="box-set-sidebar" />
+                {t.seriesAverage(ratingText)}
+              </p>
+              <p class="text-xs text-fog-gray mt-1">{t.ratingsAcross(ratingCountText, books.length)}</p>
+            </div>
+          )}
+          {showKU && (
+            <>
+              <a href={links.ku} data-landing-cta="ku" class="btn btn-primary btn-lg w-full !text-base !px-4">
+                {t.readFree}
+              </a>
+              <p class="text-sm text-fog-gray text-center mt-1 mb-4">{t.freeFor}{formerlyKU && <> · <span class="whitespace-nowrap" data-formerly-ku>{FORMERLY_KU}</span></>}</p>
+            </>
+          )}
+          <a href={links.buy} data-landing-cta="buy" class="btn btn-secondary btn-lg w-full !text-base !px-4">
+            {buyLabel}
+          </a>
+          {valueLine && <p class="text-sm text-fog-gray text-center mt-1">{valueLine}</p>}
+          <p class="text-center mt-4">
+            <a href={links.paperback} data-landing-cta="paperback" class="text-sm text-fog-gray underline underline-offset-2 hover:text-moon-silver">{t.preferPaper}</a>
+          </p>
+          {amazonBadge && (
+            <img src={amazonBadge} alt={t.availableAtAmazon} class="h-10 w-auto mx-auto mt-5" loading="lazy" />
+          )}
+        </div>
+      </aside>
+    </div>
+
+    <!-- Phone: the buttons in a bar fixed to the screen bottom; it slides away while the closing pair is in view -->
+    <div id="cta-bar" class="lg:hidden fixed inset-x-0 bottom-0 z-40 border-t border-mystic-violet/30 bg-shadow-black/95 backdrop-blur px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] transition-transform duration-200">
+      <div class="max-w-md mx-auto">
+        {showKU && (
+          <>
+            <a href={links.ku} data-landing-cta="ku" class="btn btn-primary btn-lg w-full">
+              {t.readFree}
+            </a>
+            <p class="text-xs text-fog-gray text-center mt-1 mb-2">{t.freeFor}{formerlyKU && <> · <span class="whitespace-nowrap" data-formerly-ku>{FORMERLY_KU}</span></>}</p>
+          </>
+        )}
+        <a href={links.buy} data-landing-cta="buy" class="btn btn-secondary btn-lg w-full">
+          {buyLabel}
+        </a>
+        {valueLine && <p class="text-xs text-fog-gray text-center mt-1">{valueLine}</p>}
+      </div>
+    </div>
+  </main>
+
+  <LandingScript
+    page="sophie-feegle-box-set"
+    market={market}
+    missingTags={missingTags}
+    pixelId={siteConfig?.data.metaPixelId}
+    pixelHosts={siteConfig?.data.pixelHosts}
+    ctrEndpoint={siteConfig?.data.pressCtrEndpoint}
+  />
+</Layout>

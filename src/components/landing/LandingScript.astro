@@ -3,7 +3,8 @@
 // + Press CTR beacon per button click carrying the page's utm_* unchanged. The buttons'
 // Attribution tags are baked in at build, per (book, door); no ad changes them.
 // Buttons are links with data-landing-cta="ku|buy|paperback" and, on a page with
-// doors, data-landing-target="<door>" (sent with every event as `target`).
+// doors, data-landing-target="<door>" (sent with every event as `target`). Every event
+// and the beacon carry `market`, the storefront the page's buttons go to (US, DE, FR).
 // The pixel and the beacon send only on the production hosts (site-config pixelHosts);
 // anywhere else (localhost, a preview) each call is a `[pixel] …` console line instead.
 import { missingLine, type MissingTag } from '../../utils/landing';
@@ -11,6 +12,8 @@ import { missingLine, type MissingTag } from '../../utils/landing';
 interface Props {
   /** The `page` parameter on every event, e.g. sophie-feegle-box-set */
   page: string;
+  /** The page's market (Press's name for the storefront: US, DE, FR), sent as `market` */
+  market: string;
   /** The buttons with no Attribution tag (they link to the bare product page). */
   missingTags: MissingTag[];
   pixelId?: string;
@@ -19,11 +22,12 @@ interface Props {
   ctrEndpoint?: string;
 }
 
-const { page, missingTags, pixelId, pixelHosts, ctrEndpoint } = Astro.props;
+const { page, market, missingTags, pixelId, pixelHosts, ctrEndpoint } = Astro.props;
 // The build says which buttons go untagged, so a new book's missing tags are seen.
-if (missingTags.length) console.warn(`[attribution] missing on ${page}: ${missingLine(missingTags)}`);
+if (missingTags.length) console.warn(`[attribution] missing on ${page}${market === 'US' ? '' : ` (${market})`}: ${missingLine(missingTags)}`);
 const landingConfig = {
   page,
+  market,
   missingTags,
   pixelId: pixelId?.trim() || '',
   pixelHosts: (pixelHosts ?? []).map((host) => host.trim().toLowerCase()).filter(Boolean),
@@ -116,7 +120,7 @@ const landingConfig = {
     ctas.forEach(function (a) {
       a.addEventListener('click', function () {
         var cta = a.dataset.landingCta;
-        var detail = { page: landingConfig.page, cta: cta, source: fromAd ? 'ad' : 'organic', campaign: campaign };
+        var detail = { page: landingConfig.page, market: landingConfig.market, cta: cta, source: fromAd ? 'ad' : 'organic', campaign: campaign };
         if (a.dataset.landingTarget) detail.target = a.dataset.landingTarget;
         Object.keys(utm).forEach(function (key) { detail[key] = utm[key]; });
         if (pixelLoaded) pixel('trackCustom', EVENTS[cta], detail);

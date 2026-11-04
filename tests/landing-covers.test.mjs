@@ -73,3 +73,19 @@ test('a cover change produces new copies of that cover', async () => {
   const [r, , b] = await firstPixel(landing(root, 'hero-400.jpg'));
   assert.ok(b > 200 && r < 50, `new copy is the new (blue) cover, got r=${r} b=${b}`);
 });
+
+test('an edition with its own cover gets its own copies and share image (<slug>-<lang>-og.jpg)', async () => {
+  const root = await site();
+  writeFileSync(
+    join(root, 'src/content/books/hero.md'),
+    '---\ncover: /images/hero.jpg\neditions:\n  de:\n    cover: /images/hero-de.jpg\n  fr:\n    title: no cover of its own\nlanding:\n  hook: x\n---\n',
+  );
+  writeFileSync(join(root, 'src/content/series/box.md'), '---\ncover: /images/box.png\neditions:\n  fr:\n    cover: /images/box-fr.jpg\n---\n');
+  await solid(join(root, 'public/images/hero-de.jpg'), '#ffff00');
+  await solid(join(root, 'public/images/box-fr.jpg'), '#00ffff');
+  const { made } = await makeLandingCovers(root);
+  assert.deepEqual(made.sort(), [
+    'box-400.webp', 'box-640.webp', 'box-box-set-fr-og.jpg', 'box-box-set-og.jpg', 'box-fr-400.jpg', 'box-fr-640.webp',
+    'hero-400.jpg', 'hero-640.webp', 'hero-de-400.jpg', 'hero-de-640.webp', 'hero-de-og.jpg', 'hero-og.jpg', 'plain-400.jpg',
+  ]);
+});
