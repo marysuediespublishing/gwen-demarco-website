@@ -12,6 +12,9 @@ export interface LandingStrings {
   ku: string;
   readFree: string;
   freeFor: string;
+  /** The small "formerly Kindle Unlimited" line beside freeFor, through site-config
+   *  kindlePlusFormerlyUntil (src/utils/kindle-plus.ts) */
+  formerlyKU: string;
   buyKindle: (price?: string) => string;
   buyBoxSet: (price?: string) => string;
   buyPaperback: string;
@@ -44,9 +47,9 @@ export interface LandingStrings {
   availableAtAmazon: string;
   reviewCite: (reviewer: string) => string;
   boxSetTitle: (title: string, books: number) => string;
-  boxSetDescription: (title: string, books: number, ku: boolean) => string;
+  boxSetDescription: (title: string, books: number, ku: boolean, formerly?: boolean) => string;
   bookTitle: (title: string, series?: string, order?: number) => string;
-  bookDescription: (hook: string, ku: boolean, seriesStart: boolean) => string;
+  bookDescription: (hook: string, ku: boolean, seriesStart: boolean, formerly?: boolean) => string;
   consent: { text: string; cookiePolicy: string; allow: string; deny: string };
   chrome: { skip: string; privacy: string; cookies: string; contact: string };
 }

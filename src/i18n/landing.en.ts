@@ -3,7 +3,7 @@
 // pages keep their own title and description lines (with the Kindle+ "formerly" window), so
 // boxSetTitle, boxSetDescription and bookDescription here only complete the table and the
 // English-copy check the German and French pages are tested against.
-import { KINDLE_PLUS } from '../utils/kindle-plus';
+import { FORMERLY_KU, KINDLE_PLUS, kindlePlusName } from '../utils/kindle-plus';
 import type { LandingStrings } from './landing';
 
 const WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
@@ -16,6 +16,7 @@ export const en: LandingStrings = {
   ku: KINDLE_PLUS,
   readFree: `Read free with ${KINDLE_PLUS}`,
   freeFor: `Free for ${KINDLE_PLUS} members`,
+  formerlyKU: FORMERLY_KU,
   buyKindle: (price) => (price ? `Buy for Kindle — ${price}` : 'Buy for Kindle'),
   buyBoxSet: (price) => (price ? `Buy the Kindle box set — ${price}` : 'Buy the Kindle box set'),
   buyPaperback: 'Buy the paperback',
@@ -48,10 +49,11 @@ export const en: LandingStrings = {
   availableAtAmazon: 'Available at Amazon',
   reviewCite: (reviewer) => `${reviewer}, Amazon review`,
   boxSetTitle: (title, n) => `${title}: All ${Word(n)} Books | Gwen DeMarco`,
-  boxSetDescription: (title, n, ku) => `${title}: all ${word(n)} books in one box set.${ku ? ` Free for ${KINDLE_PLUS} members.` : ''}`,
+  boxSetDescription: (title, n, ku, formerly = false) =>
+    `${title}: all ${word(n)} books in one box set.${ku ? ` Free for ${kindlePlusName(formerly)} members.` : ''}`,
   bookTitle: (title, series, order) => `${title}${series ? `: ${series} Book ${order}` : ''} | Gwen DeMarco`,
-  bookDescription: (hook, ku, seriesStart) =>
-    `${hook}${ku ? ` Read it free with ${KINDLE_PLUS}${seriesStart ? ', or start the series from book one' : ''}.` : ''}`,
+  bookDescription: (hook, ku, seriesStart, formerly = false) =>
+    `${hook}${ku ? ` Read it free with ${kindlePlusName(formerly)}${seriesStart ? ', or start the series from book one' : ''}.` : ''}`,
   consent: { text: 'We use a Meta pixel to measure our ads.', cookiePolicy: 'Cookie policy', allow: 'Allow', deny: 'No thanks' },
   chrome: { skip: 'Skip to main content', privacy: 'Privacy', cookies: 'Cookies', contact: 'Contact' },
 };

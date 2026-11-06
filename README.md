@@ -281,7 +281,7 @@ Both landing pages also exist in German and French for a product that has an edi
       paperbackAsin: …        # optional; empty → a paperback search on amazon.de
       title: Sophie Feegle Sammelband   # as Amazon shows it (required)
       blurb: …                # as Amazon shows it (required); the page shows 3 paragraphs
-      kuEnrolled: true        # required; false → no Kindle Unlimited button
+      kuEnrolled: true        # required; false → no Kindle+ button
       cover: /images/…        # optional; empty → the English cover
       seriesName: …           # optional series name in German
       hook: …                 # optional hero line

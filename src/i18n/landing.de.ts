@@ -1,18 +1,24 @@
 // MACHINE-DRAFTED, NATIVE CHECK PENDING. German fixed copy for the /de/ ad landing pages
 // (Press suite_006 §2.3): a German reader checks it before the first DE ad (a step of the
-// first run's approve card). Kindle Unlimited keeps its name in the German store.
+// first run's approve card). Kindle Unlimited became Kindle+ on amazon.de on 2026-10-22, as
+// in the US: the name is KINDLE_PLUS, shared with the other tables, and "ehemals Kindle
+// Unlimited" shows beside it through site-config kindlePlusFormerlyUntil (kindle-plus.ts).
+import { KINDLE_PLUS } from '../utils/kindle-plus';
 import type { LandingStrings } from './landing';
 
 const WORDS = ['null', 'ein', 'zwei', 'drei', 'vier', 'fünf', 'sechs', 'sieben', 'acht', 'neun', 'zehn'];
 const word = (n: number) => WORDS[n] ?? String(n);
-const KU = 'Kindle Unlimited';
+const KU = KINDLE_PLUS;
+const FORMERLY = 'ehemals Kindle Unlimited';
+const kuName = (formerly = false) => (formerly ? `${KU} (${FORMERLY})` : KU);
 
 export const de: LandingStrings = {
   lang: 'de',
   locale: 'de-DE',
   ku: KU,
   readFree: `Gratis lesen mit ${KU}`,
-  freeFor: 'Für Kindle-Unlimited-Abonnenten kostenlos',
+  freeFor: `Für ${KU}-Mitglieder kostenlos`,
+  formerlyKU: FORMERLY,
   buyKindle: (price) => (price ? `Als Kindle-E-Book kaufen – ${price}` : 'Als Kindle-E-Book kaufen'),
   buyBoxSet: (price) => (price ? `Kindle-Sammelband kaufen – ${price}` : 'Kindle-Sammelband kaufen'),
   buyPaperback: 'Taschenbuch kaufen',
@@ -45,10 +51,11 @@ export const de: LandingStrings = {
   availableAtAmazon: 'Erhältlich bei Amazon',
   reviewCite: (reviewer) => `${reviewer}, Rezension auf Amazon.de`,
   boxSetTitle: (title, n) => `${title}: alle ${n} Bände | Gwen DeMarco`,
-  boxSetDescription: (title, n, ku) => `${title}: alle ${word(n)} Bände in einem Sammelband.${ku ? ' Für Kindle-Unlimited-Abonnenten kostenlos.' : ''}`,
+  boxSetDescription: (title, n, ku, formerly) =>
+    `${title}: alle ${word(n)} Bände in einem Sammelband.${ku ? ` Für ${KU}-Mitglieder${formerly ? ` (${FORMERLY})` : ''} kostenlos.` : ''}`,
   bookTitle: (title, series, order) => `${title}${series ? `: ${series}, Band ${order}` : ''} | Gwen DeMarco`,
-  bookDescription: (hook, ku, seriesStart) =>
-    `${hook}${ku ? ` Gratis lesen mit ${KU}${seriesStart ? ' – oder die Reihe mit Band 1 beginnen' : ''}.` : ''}`,
+  bookDescription: (hook, ku, seriesStart, formerly) =>
+    `${hook}${ku ? ` Gratis lesen mit ${kuName(formerly)}${seriesStart ? ' – oder die Reihe mit Band 1 beginnen' : ''}.` : ''}`,
   consent: {
     text: 'Wir messen unsere Anzeigen mit einem Meta-Pixel.',
     cookiePolicy: 'Cookie-Richtlinie',

@@ -25,7 +25,7 @@ import {
   type LandingLang,
 } from '../../utils/landing';
 import { editionOf, withFixtureTags } from '../../utils/editions';
-import { FORMERLY_KU, kindlePlusName, showFormerlyKU } from '../../utils/kindle-plus';
+import { kindlePlusName, showFormerlyKU } from '../../utils/kindle-plus';
 import { LANDING_STRINGS } from '../../i18n';
 import { formatCount, formatRating } from '../../i18n/landing';
 
@@ -105,8 +105,8 @@ const showRating = rating > 0 && ratingCount > 0;
 
 const siteConfig = await getEntry('settings', 'site-config');
 const amazonBadge = siteConfig?.data.amazonBadge?.trim();
-// Kindle+ (formerly Kindle Unlimited) through site-config kindlePlusFormerlyUntil; English only
-const formerlyKU = english && showFormerlyKU(siteConfig?.data.kindlePlusFormerlyUntil);
+// Kindle+ (formerly Kindle Unlimited) through site-config kindlePlusFormerlyUntil, in every language
+const formerlyKU = showFormerlyKU(siteConfig?.data.kindlePlusFormerlyUntil);
 // The KU button: always in English (the box set is in Kindle+); else when the edition is in KU
 const showKU = english || edition!.kuEnrolled;
 
@@ -161,7 +161,7 @@ const closing = [tagline, t.allOneClick(books.length)].filter(Boolean).join(' ')
 const pageTitle = english ? 'The Sophie Feegle Box Set: All Five Books | Gwen DeMarco' : t.boxSetTitle(title, books.length);
 const description = english
   ? `All five Sophie Feegle urban fantasy novels in one box set. Snarky heroines. Grumpy heroes. Found family. Free for ${kindlePlusName(formerlyKU)} members.`
-  : t.boxSetDescription(title, books.length, showKU);
+  : t.boxSetDescription(title, books.length, showKU, formerlyKU);
 const editionCover = edition?.cover;
 const heroCover = landingImage(editionCover ?? series.data.cover ?? '/images/boxset.png', 640, 'webp');
 const ogImage = `/images/landing/${SERIES_SLUG}-box-set${editionCover ? `-${lang}` : ''}-og.jpg`;
@@ -288,7 +288,7 @@ const alternates = langs.length > 1
                 <a href={links.ku} data-landing-cta="ku" class="btn btn-primary btn-lg w-full">
                   {t.readFree}
                 </a>
-                <p class="text-sm text-fog-gray text-center mt-1 mb-3">{t.freeFor}{formerlyKU && <> · <span class="whitespace-nowrap" data-formerly-ku>{FORMERLY_KU}</span></>}</p>
+                <p class="text-sm text-fog-gray text-center mt-1 mb-3">{t.freeFor}{formerlyKU && <> · <span class="whitespace-nowrap" data-formerly-ku>{t.formerlyKU}</span></>}</p>
               </>
             )}
             <a href={links.buy} data-landing-cta="buy" class="btn btn-secondary btn-lg w-full">
@@ -319,7 +319,7 @@ const alternates = langs.length > 1
               <a href={links.ku} data-landing-cta="ku" class="btn btn-primary btn-lg w-full !text-base !px-4">
                 {t.readFree}
               </a>
-              <p class="text-sm text-fog-gray text-center mt-1 mb-4">{t.freeFor}{formerlyKU && <> · <span class="whitespace-nowrap" data-formerly-ku>{FORMERLY_KU}</span></>}</p>
+              <p class="text-sm text-fog-gray text-center mt-1 mb-4">{t.freeFor}{formerlyKU && <> · <span class="whitespace-nowrap" data-formerly-ku>{t.formerlyKU}</span></>}</p>
             </>
           )}
           <a href={links.buy} data-landing-cta="buy" class="btn btn-secondary btn-lg w-full !text-base !px-4">
@@ -344,7 +344,7 @@ const alternates = langs.length > 1
             <a href={links.ku} data-landing-cta="ku" class="btn btn-primary btn-lg w-full">
               {t.readFree}
             </a>
-            <p class="text-xs text-fog-gray text-center mt-1 mb-2">{t.freeFor}{formerlyKU && <> · <span class="whitespace-nowrap" data-formerly-ku>{FORMERLY_KU}</span></>}</p>
+            <p class="text-xs text-fog-gray text-center mt-1 mb-2">{t.freeFor}{formerlyKU && <> · <span class="whitespace-nowrap" data-formerly-ku>{t.formerlyKU}</span></>}</p>
           </>
         )}
         <a href={links.buy} data-landing-cta="buy" class="btn btn-secondary btn-lg w-full">

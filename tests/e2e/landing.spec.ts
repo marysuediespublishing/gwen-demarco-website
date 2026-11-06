@@ -8,7 +8,7 @@ import { amazonDp, amazonSearch, doorLinks, marketOf, tagFor, withTag, type Attr
 import type { LandingStrings } from '../../src/i18n/landing';
 import { en } from '../../src/i18n/landing.en';
 import { normalizeHtml } from '../lib/normalize-html.mjs';
-import { kindlePlusName, showFormerlyKU } from '../../src/utils/kindle-plus';
+import { KINDLE_PLUS, kindlePlusName, showFormerlyKU } from '../../src/utils/kindle-plus';
 
 // The two ad landing pages: /series/sophie-feegle/box-set and the book landing
 // template (/books/ward-breaker/landing). The pixel script is stubbed (its queue is
@@ -447,8 +447,9 @@ const STOREFRONT = { de: 'https://www.amazon.de/', fr: 'https://www.amazon.fr/' 
 
 /** The English table's words: each string, and the fixed parts of each phrase (the
  *  parts between its arguments). A word the other languages use as they are is not
- *  English copy (SHARED). */
-const SHARED = ['Cookies', 'Contact', '| Gwen DeMarco'];
+ *  English copy (SHARED). Kindle+ is the programme's name in every store (KINDLE_PLUS),
+ *  skipped by name; the English phrases around it still count. */
+const SHARED = ['Cookies', 'Contact', '| Gwen DeMarco', KINDLE_PLUS];
 const englishCopy = () => {
   const ARG = '\u0001';
   const out = new Set<string>();
@@ -482,6 +483,8 @@ test.describe('the English table and the others (pure)', () => {
     expect(copy).toContain('All in the same world. Pick where you want to start.');
     expect(copy).toContain('Free for Kindle+ members');
     expect(copy).not.toContain('Contact');
+    expect(copy).not.toContain('Kindle+');
+    expect(copy).toContain('formerly Kindle Unlimited');
   });
 
   test('a market is its storefront: amazonDp and the search fallback build the market\'s host, the inverse of marketOf', () => {
@@ -564,6 +567,29 @@ test.describe('/de/ and /fr/ landing pages', () => {
     for (const href of hrefs) expect(href.startsWith(STOREFRONT.fr), href).toBe(true);
     await expect(page.locator('#doors h2')).toHaveText('Deux portes d’entrée');
   });
+
+  // Kindle+ in every store (2026-10-22 in DE and FR too): the KU door says Kindle+, with the
+  // language's "formerly" line through kindlePlusFormerlyUntil, the same window as English.
+  const formerlyWindow = showFormerlyKU(matter(readFileSync('src/content/settings/site-config.md', 'utf8')).data.kindlePlusFormerlyUntil);
+  const KU_COPY = {
+    de: { button: 'Gratis lesen mit Kindle+', line: 'Für Kindle+-Mitglieder kostenlos', formerly: 'ehemals Kindle Unlimited' },
+    fr: { button: 'Lire gratuitement avec Kindle+', line: 'Gratuit pour les membres Kindle+', formerly: 'anciennement Kindle Unlimited' },
+  } as const;
+  for (const [lang, path, buttons] of [['de', BOX_SET, 3], ['de', WARD_BREAKER, 2], ['fr', WARD_BREAKER, 1]] as const) {
+    test(`/${lang}${path}: every KU button reads "${KU_COPY[lang].button}" over "${KU_COPY[lang].line}"${formerlyWindow ? ` · ${KU_COPY[lang].formerly}` : ''}; the description too`, async ({ page }) => {
+      await stubOutside(page);
+      await page.goto(`/${lang}${path}`);
+      const ku = page.locator('[data-landing-cta="ku"]');
+      await expect(ku).toHaveCount(buttons);
+      for (const text of await ku.allTextContents()) expect(text.trim()).toBe(KU_COPY[lang].button);
+      const lines = await ku.evaluateAll((els) => els.map((el) => el.nextElementSibling!.textContent!.replace(/\s+/g, ' ').trim()));
+      expect(lines).toEqual(Array(buttons).fill(formerlyWindow ? `${KU_COPY[lang].line} · ${KU_COPY[lang].formerly}` : KU_COPY[lang].line));
+      await expect(page.locator('[data-formerly-ku]')).toHaveCount(formerlyWindow ? buttons : 0);
+      const description = (await page.locator('meta[name="description"]').getAttribute('content'))!;
+      expect(description).toContain('Kindle+');
+      expect(description.includes(KU_COPY[lang].formerly)).toBe(formerlyWindow);
+    });
+  }
 
   for (const lang of ['de', 'fr'] as const) {
     for (const path of [BOX_SET, WARD_BREAKER]) {

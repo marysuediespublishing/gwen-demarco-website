@@ -37,7 +37,7 @@ import {
   type LandingLang,
 } from '../../utils/landing';
 import { editionOf, withFixtureTags, type Edition } from '../../utils/editions';
-import { FORMERLY_KU, kindlePlusName, showFormerlyKU } from '../../utils/kindle-plus';
+import { kindlePlusName, showFormerlyKU } from '../../utils/kindle-plus';
 import { LANDING_STRINGS } from '../../i18n';
 import { formatCount, formatRating } from '../../i18n/landing';
 
@@ -63,8 +63,8 @@ const allBooks = await getCollection('books');
 const allSeries = await getCollection('series');
 const testimonials = await getCollection('testimonials');
 const siteConfig = await getEntry('settings', 'site-config');
-// Kindle+ (formerly Kindle Unlimited) through site-config kindlePlusFormerlyUntil; English only
-const formerlyKU = english && showFormerlyKU(siteConfig?.data.kindlePlusFormerlyUntil);
+// Kindle+ (formerly Kindle Unlimited) through site-config kindlePlusFormerlyUntil, in every language
+const formerlyKU = showFormerlyKU(siteConfig?.data.kindlePlusFormerlyUntil);
 
 const bookById = (id?: string) => allBooks.find((b) => b.id === id);
 const seriesOf = (b: Book) => allSeries.find((s) => s.data.readingOrder.includes(b.id));
@@ -246,7 +246,7 @@ const hasSeriesStart = doors.some((door) => door.target === 'series-start');
 const pageTitle = t.bookTitle(title, seriesName, book.data.seriesOrder);
 const description = english
   ? `${landing.hook} Read it free with ${kindlePlusName(formerlyKU)}${hasSeriesStart ? ', or start the series from book one' : ''}.`
-  : t.bookDescription(hook || title, thisDoor.showKU, hasSeriesStart);
+  : t.bookDescription(hook || title, thisDoor.showKU, hasSeriesStart, formerlyKU);
 const ogImage = `/images/landing/${book.id}${edition?.cover ? `-${lang}` : ''}-og.jpg`;
 
 // hreflang: this page in every language the book has (only once there is more than English).
@@ -340,7 +340,7 @@ const alternates = langs.length > 1
                     <a href={links[i].ku} data-landing-cta="ku" data-landing-target={door.target} class="btn btn-primary btn-lg w-full !text-base !px-4">
                       {t.readFree}
                     </a>
-                    <p class="text-xs text-fog-gray text-center mt-1 mb-3">{t.freeFor}{formerlyKU && <> · <span class="whitespace-nowrap" data-formerly-ku>{FORMERLY_KU}</span></>}</p>
+                    <p class="text-xs text-fog-gray text-center mt-1 mb-3">{t.freeFor}{formerlyKU && <> · <span class="whitespace-nowrap" data-formerly-ku>{t.formerlyKU}</span></>}</p>
                   </>
                 )}
                 <a href={links[i].buy} data-landing-cta="buy" data-landing-target={door.target} class="btn btn-secondary btn-lg w-full !text-base !px-4">

@@ -9,7 +9,7 @@ The box-set page and the book landing template also build at `/{de|fr}/…`, for
 1. A `/de/` page links only to `www.amazon.de` and a `/fr/` page only to `www.amazon.fr`. A button takes its product's tag from `attributionTags.DE` / `.FR`, and gets the plain link when there is none.
 2. The KU button is there only when the edition's `kuEnrolled` is true, door by door on a book page.
 3. On a book page, a door whose product has no edition in the language is left out.
-4. No string from the English table (`src/i18n/landing.en.ts`) appears on a German or French page, and no English reader quote either.
+4. No string from the English table (`src/i18n/landing.en.ts`) appears on a German or French page, and no English reader quote either. "Kindle+" is the one name all three tables share (`KINDLE_PLUS`, the rename reached amazon.de and amazon.fr on 2026-10-22), and the "formerly" line is in the page's language (ehemals / anciennement Kindle Unlimited) through `kindlePlusFormerlyUntil`.
 5. `hreflang` links the three versions of a page to each other (with `x-default` pointing at English), and the sitemap lists all three.
 6. Click events and the `press.landing.ctr` beacon carry `market`.
 7. The English pages build the same HTML as before, compared as `tests/lib/normalize-html.mjs` says.
@@ -21,7 +21,7 @@ The box-set page and the book landing template also build at `/{de|fr}/…`, for
 | Step | Does | Sees | Frame |
 | --- | --- | --- | --- |
 | de 0 | Opens `/de/series/sophie-feegle/box-set/?utm_campaign=sophie-feegle-set-de-landing&utm_source=meta` (Europe/Berlin) | The consent bar in German (Zulassen / Nein, danke), "Sophie Feegle Sammelband", the German hook and tagline, "Im Schnitt 4,7 Sterne", "Alle fünf Bände im Sammelband" | `assets/002/de-00-open.png` |
-| de 1 | Hovers "Gratis lesen mit Kindle Unlimited" | → `https://www.amazon.de/dp/B0FIXDE001?maas=maas_adg_FIXTURE_DE_KU&ref_=aa_maas&tag=maas` · LandingClickKU {market: DE} | `de-01-ku.png` |
+| de 1 | Hovers "Gratis lesen mit Kindle+" (under it: "Für Kindle+-Mitglieder kostenlos · ehemals Kindle Unlimited") | → `https://www.amazon.de/dp/B0FIXDE001?maas=maas_adg_FIXTURE_DE_KU&ref_=aa_maas&tag=maas` · LandingClickKU {market: DE} | `de-01-ku.png` |
 | de 2 | Hovers "Kindle-Sammelband kaufen – 9,99 €" | → `https://www.amazon.de/dp/B0FIXDE001?maas=maas_adg_FIXTURE_DE_KINDLE&ref_=aa_maas&tag=maas` · LandingClickBuy {market: DE} | `de-02-buy.png` |
 | de 3 | Hovers "Lieber auf Papier? Band 1 als Taschenbuch →" | → `https://www.amazon.de/dp/B0FIXDE0P1` (no DE Print tag: plain) · LandingClickPaperback {market: DE} | `de-03-paperback.png` |
 | fr 0 | Opens `/fr/series/sophie-feegle/box-set/?utm_campaign=sophie-feegle-set-fr-landing&utm_source=meta` (Europe/Paris) | The consent bar in French, "Sophie Feegle : l’intégrale", "11 720 évaluations". Only two buttons: the fixture's French edition is not in KU | `fr-00-open.png` |
