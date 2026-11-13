@@ -280,7 +280,9 @@ Both landing pages also exist in German and French for a product that has an edi
       asin: B0XXXXXXXX        # the Kindle edition on amazon.de (required)
       paperbackAsin: …        # optional; empty → a paperback search on amazon.de
       title: Sophie Feegle Sammelband   # as Amazon shows it (required)
-      blurb: …                # as Amazon shows it (required); the page shows 3 paragraphs
+      blurb: …                # as Amazon shows it; the page shows 3 paragraphs. Required on a
+                              # series; a book without one is on the box-set page and in doors,
+                              # but its own /de/ landing page is not built
       kuEnrolled: true        # required; false → no Kindle+ button
       cover: /images/…        # optional; empty → the English cover
       seriesName: …           # optional series name in German
@@ -293,7 +295,7 @@ Both landing pages also exist in German and French for a product that has an edi
     fr: { … }
   ```
 
-  No export from Press's Books fills these yet, so they are written by hand.
+  No export from Press's Books fills these yet, so they are written by hand from Books' catalogue (ASIN, title, KU, cover). The Sophie box set and its five books have German and French editions; the box set's hook, tagline and blurb are machine-drafted (marked in the frontmatter) until the blurbs Amazon shows are copied in, and the books have no blurbs yet.
 - **Storefront.** Every button goes to the market's storefront (`amazonDp(asin, market)` and `amazonSearch(…, market)` in `src/utils/landing.ts`; the market → host table is the inverse of `marketOf`). Tags come from `attributionTags.DE` / `.FR` as on the English pages. A button with no tag gets the plain `.de` / `.fr` link. On a book page, a door whose product has no edition in the language is left out.
 - **Words.** Title, series name, hook, tagline, blurb and price come from the edition. The fixed copy comes from `src/i18n/landing.de.ts` / `landing.fr.ts`. Both tables are machine-drafted and wait for a native check before the first ad. The English table is `landing.en.ts`. English reader quotes never appear on a German or French page; only the edition's own `reviews` do.
 - **hreflang.** Once a product has an edition, each language version links to the others with `<link rel="alternate" hreflang>` (and `x-default` → English). The sitemap lists all of them.

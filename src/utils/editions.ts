@@ -12,7 +12,8 @@ export interface Edition {
   asin: string;
   paperbackAsin?: string;
   title: string;
-  blurb: string;
+  /** Required on a series (box-set) edition; a book's own landing page needs it too. */
+  blurb?: string;
   kuEnrolled: boolean;
   cover?: string;
   seriesName?: string;
@@ -63,4 +64,13 @@ export const withFixtureTags = (tags?: AttributionTags): AttributionTags | undef
     merged[market] = { ...products, ...(merged[market] ?? {}) };
   }
   return merged;
+};
+
+/** A book's edition that its own /<lang>/ landing page can be built from: one with a blurb. */
+export const landingEditionOf = (
+  book: { id: string; data: { editions?: Editions } },
+  lang: LandingLang,
+): Edition | undefined => {
+  const e = editionOf('books', book, lang);
+  return e?.blurb?.trim() ? e : undefined;
 };

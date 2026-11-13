@@ -43,6 +43,19 @@ languages:
     url: https://www.amazon.es/dp/B0CNTP7PVL/
 hero_image: /images/sophie-brown-betty-on-her-right-hero-image.jpeg
 paperbackAsin: B08CWM839H
+# German and French editions from Books' catalogue (#6966): no blurb yet, so no /de/ or
+# /fr/ landing page of its own; the box-set page and doors show the title and cover.
+editions:
+  de:
+    asin: B0FF5Q8QJL
+    title: "Sophie und die Sonderlinge"
+    kuEnrolled: true
+    cover: /images/sophie-and-the-odd-ones-ebook-de.jpg
+  fr:
+    asin: B0G3Z8WT4Q
+    title: "Sophie et les Singuliers"
+    kuEnrolled: true
+    cover: /images/sophie-and-the-odd-ones-ebook-fr.jpg
 ---
 # Sophie and The Odd Ones
 

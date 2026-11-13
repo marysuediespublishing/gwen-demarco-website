@@ -45,6 +45,19 @@ languages:
     url: https://www.amazon.de/dp/B0FHT6YTRC
   - language: Spanish
     url: https://www.amazon.es/dp/B0DYPJCFZD
+# German and French editions from Books' catalogue (#6966): no blurb yet, so no /de/ or
+# /fr/ landing page of its own; the box-set page and doors show the title and cover.
+editions:
+  de:
+    asin: B0FHT6YTRC
+    title: "Sonderheiten und Schluss"
+    kuEnrolled: true
+    cover: /images/odds-and-ends-ebook-de.jpg
+  fr:
+    asin: B0G76HFCDX
+    title: "Singularités et Fin"
+    kuEnrolled: true
+    cover: /images/odds-and-ends-ebook-fr.jpg
 ---
 # Odds and Ends
 

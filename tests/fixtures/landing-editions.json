@@ -1,33 +1,6 @@
 {
-  "_note": "e2e build only (LANDING_EDITIONS_FIXTURE): made-up DE/FR editions and tags so the /de/ and /fr/ landing templates are tested before Books has the real ones. ASINs starting B0FIX are not real. The content's editions win over these.",
-  "series": {
-    "sophie-feegle": {
-      "de": {
-        "asin": "B0FIXDE001",
-        "title": "Sophie Feegle Sammelband",
-        "seriesName": "Sophie Feegle",
-        "hook": "Die Toten im Leichenschauhaus von San Francisco hüten ihre Geheimnisse. Bis Sophie sie berührt.",
-        "tagline": "Freche Heldinnen. Grummelige Helden. Wahlfamilie.",
-        "price": "9,99 €",
-        "kuEnrolled": true,
-        "blurb": "Sophie Feegle braucht dringend eine Pause. Die Miete ist fällig, und vom letzten Brot ist nur noch die Hälfte übrig.\n\nDann bekommt sie einen Job in der Rechtsmedizin – in der Nachtschicht, zwischen Leichen und Kollegen, die keine Menschen sind.\n\nUnd dann wird es seltsam. Na ja, noch seltsamer.\n\nDieser vierte Absatz steht nicht auf der Seite."
-      },
-      "fr": {
-        "asin": "B0FIXFR001",
-        "title": "Sophie Feegle : l’intégrale",
-        "seriesName": "Sophie Feegle",
-        "hook": "À la morgue de San Francisco, les morts gardent leurs secrets. Jusqu’à ce que Sophie les touche.",
-        "kuEnrolled": false,
-        "blurb": "Sophie Feegle a besoin d’une pause. Le loyer est en retard et il ne lui reste qu’un demi-pain.\n\nUne rencontre fortuite lui offre un poste à la morgue, dans l’équipe de nuit.",
-        "reviews": [{ "title": "Génial", "body": "Une série drôle et prenante, lue d’une traite.", "reviewer": "Camille" }]
-      }
-    }
-  },
+  "_note": "e2e build only (LANDING_EDITIONS_FIXTURE): made-up DE/FR editions of the books the content has none of (Ward Breaker, Gideon Bean), and made-up DE tags, so the book template, the KU-off rule, an edition's own reviews and the tags are tested. ASINs starting B0FIX are not real. The Sophie box set and its books are the content's real editions (src/content), which always win over these.",
   "books": {
-    "sophie-and-the-odd-ones": {
-      "de": { "asin": "B0FIXDE011", "paperbackAsin": "B0FIXDE0P1", "title": "Sophie und die Sonderlinge", "hook": "Ihre Berufung: die Nachtschicht im Leichenschauhaus.", "kuEnrolled": true, "blurb": "Band eins." },
-      "fr": { "asin": "B0FIXFR011", "title": "Sophie et les Bizarres", "kuEnrolled": false, "blurb": "Tome un." }
-    },
     "ward-breaker": {
       "de": {
         "asin": "B0FIXDE021",
@@ -36,25 +9,42 @@
         "hook": "In Savannah sind drei mythische Kinder verschwunden. Nur Gideon Bean kann sehen, wie es geschah.",
         "kuEnrolled": true,
         "blurb": "Gideon Bean sieht, was andere übersehen.\n\nDieses Mal geht es um drei Kinder.",
-        "doors": { "sameWorld": { "title": "Sophies Bücher, dieselbe Welt", "line": "Dieselbe Welt, dieselbe Zeit, ein Leichenschauhaus in San Francisco." } }
+        "doors": {
+          "sameWorld": {
+            "title": "Sophies Bücher, dieselbe Welt",
+            "line": "Dieselbe Welt, dieselbe Zeit, ein Leichenschauhaus in San Francisco."
+          }
+        }
       },
       "fr": {
         "asin": "B0FIXFR021",
         "title": "Le Briseur de sceaux",
         "hook": "Trois enfants mythiques ont disparu à Savannah. Seul Gideon Bean peut voir comment.",
-        "kuEnrolled": true,
-        "blurb": "Gideon Bean voit ce que les autres ne voient pas."
+        "kuEnrolled": false,
+        "blurb": "Gideon Bean voit ce que les autres ne voient pas.",
+        "reviews": [
+          {
+            "title": "Génial",
+            "body": "Une série drôle et prenante, lue d’une traite.",
+            "reviewer": "Camille"
+          }
+        ]
       }
     },
     "gideon-bean": {
-      "de": { "asin": "B0FIXDE031", "title": "Gideon Bean", "kuEnrolled": false, "blurb": "Band eins." }
+      "de": {
+        "asin": "B0FIXDE031",
+        "title": "Gideon Bean",
+        "kuEnrolled": false,
+        "blurb": "Band eins."
+      }
     }
   },
   "attributionTags": {
     "DE": {
       "sophie-boxset": {
-        "ku": "https://www.amazon.de/dp/B0FIXDE001?maas=maas_adg_FIXTURE_DE_KU&ref_=aa_maas&tag=maas",
-        "kindle": "https://www.amazon.de/dp/B0FIXDE001?maas=maas_adg_FIXTURE_DE_KINDLE&ref_=aa_maas&tag=maas"
+        "ku": "https://www.amazon.de/dp/B0GNPKZMXN?maas=maas_adg_FIXTURE_DE_KU&ref_=aa_maas&tag=maas",
+        "kindle": "https://www.amazon.de/dp/B0GNPKZMXN?maas=maas_adg_FIXTURE_DE_KINDLE&ref_=aa_maas&tag=maas"
       },
       "ward-breaker": {
         "ku": "https://www.amazon.de/dp/B0FIXDE021?maas=maas_adg_FIXTURE_DE_WB_KU&ref_=aa_maas&tag=maas"

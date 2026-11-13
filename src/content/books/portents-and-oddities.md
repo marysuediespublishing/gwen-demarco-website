@@ -38,6 +38,19 @@ languages:
     url: https://www.amazon.de/dp/B0FGVSJ98Z
   - language: Spanish
     url: https://www.amazon.es/dp/B0CW2HX9RL
+# German and French editions from Books' catalogue (#6966): no blurb yet, so no /de/ or
+# /fr/ landing page of its own; the box-set page and doors show the title and cover.
+editions:
+  de:
+    asin: B0FGVSJ98Z
+    title: "Vorzeichen und Sonderbarkeiten"
+    kuEnrolled: true
+    cover: /images/portents-and-oddities-ebook-de.jpg
+  fr:
+    asin: B0G4XP3VLT
+    title: "Présages et Singularités"
+    kuEnrolled: true
+    cover: /images/portents-and-oddities-ebook-fr.jpg
 ---
 # Portents and Oddities
 

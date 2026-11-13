@@ -13,13 +13,15 @@ const landingDoor = z.object({
 // A product's edition in another language (Press suite_006 §2): the market's ASINs and
 // the edition's own words, as Amazon shows them. A /<lang>/ landing page is built only for
 // a product with an edition in that language. `kuEnrolled` decides the KU button.
+// A book's edition can be just its title, ASIN and cover (what the box-set page and the
+// doors show); its own landing page is built only once it has a blurb too.
 const editionReview = z.object({ title: z.string().optional(), body: z.string(), reviewer: z.string() });
 const editionDoor = z.object({ title: z.string().optional(), line: z.string().optional() });
 const edition = z.object({
   asin: z.string(),
   paperbackAsin: z.string().optional(),
   title: z.string(),
-  blurb: z.string(),
+  blurb: z.string().optional(),
   kuEnrolled: z.boolean(),
   // The edition's own cover (/images/…), when it is not the English one
   cover: z.string().optional(),
@@ -41,6 +43,9 @@ const edition = z.object({
   }).optional(),
 });
 const editions = z.object({ de: edition.optional(), fr: edition.optional() }).optional();
+// A series' edition is its box set's: the box-set page always shows its blurb
+const seriesEdition = edition.extend({ blurb: z.string() });
+const seriesEditions = z.object({ de: seriesEdition.optional(), fr: seriesEdition.optional() }).optional();
 
 // Books collection - individual book entries
 const books = defineCollection({
@@ -122,7 +127,7 @@ const series = defineCollection({
     boxSetPrice: z.string().optional(),
     boxSetSeparatePrice: z.string().optional(),
     // The box set's editions in other languages (/<lang>/series/<slug>/box-set)
-    editions,
+    editions: seriesEditions,
   }),
 });
 

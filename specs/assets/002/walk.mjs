@@ -1,9 +1,8 @@
 // Walk for specs/landing_002.md: a German, then a French reader opens the Sophie Feegle
 // box-set page from an ad, sees the consent bar in their language, and hovers each
 // button; nothing is clicked. The caption shows the hovered link and the event (with its
-// market) a click would fire. Needs `astro preview` on BASE of a build made with
-// LANDING_EDITIONS_FIXTURE=tests/fixtures/landing-editions.json (the content has no
-// DE/FR editions yet).
+// market) a click would fire. Needs `astro preview` on BASE of a production build
+// (`npm run build`, no fixture): the content's real editions.
 // node specs/assets/002/walk.mjs [base] [outDir]
 import { chromium } from 'playwright';
 import { mkdirSync } from 'node:fs';

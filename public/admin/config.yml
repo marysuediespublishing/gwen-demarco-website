@@ -148,7 +148,7 @@ collections:
               - { label: "Kindle ASIN", name: "asin", widget: "string", required: false, hint: "The edition's Kindle ASIN in this storefront (required for the page)" }
               - { label: "Paperback ASIN", name: "paperbackAsin", widget: "string", required: false, hint: "Empty → a paperback search in this storefront" }
               - { label: "Title", name: "title", widget: "string", required: false, hint: "The edition's title as Amazon shows it (required)" }
-              - { label: "Blurb", name: "blurb", widget: "text", required: false, hint: "The edition's description as Amazon shows it (required); the page shows its first three paragraphs" }
+              - { label: "Blurb", name: "blurb", widget: "text", required: false, hint: "The edition's description as Amazon shows it; the page shows its first three paragraphs. Required on a box set; a book's own landing page is built only once it has one (without it the book still shows on the box-set page and as a door)" }
               - { label: "In Kindle Unlimited", name: "kuEnrolled", widget: "boolean", default: false, hint: "Off → the page has no Kindle Unlimited button" }
               - { label: "Cover", name: "cover", widget: "image", required: false, hint: "The edition's own cover; empty → the English one" }
               - { label: "Series Name", name: "seriesName", widget: "string", required: false, hint: "The series' name in this language; empty → the English one" }
@@ -254,7 +254,7 @@ collections:
               - { label: "Kindle ASIN", name: "asin", widget: "string", required: false, hint: "The edition's Kindle ASIN in this storefront (required for the page)" }
               - { label: "Paperback ASIN", name: "paperbackAsin", widget: "string", required: false, hint: "Empty → a paperback search in this storefront" }
               - { label: "Title", name: "title", widget: "string", required: false, hint: "The edition's title as Amazon shows it (required)" }
-              - { label: "Blurb", name: "blurb", widget: "text", required: false, hint: "The edition's description as Amazon shows it (required); the page shows its first three paragraphs" }
+              - { label: "Blurb", name: "blurb", widget: "text", required: false, hint: "The edition's description as Amazon shows it; the page shows its first three paragraphs. Required on a box set; a book's own landing page is built only once it has one (without it the book still shows on the box-set page and as a door)" }
               - { label: "In Kindle Unlimited", name: "kuEnrolled", widget: "boolean", default: false, hint: "Off → the page has no Kindle Unlimited button" }
               - { label: "Cover", name: "cover", widget: "image", required: false, hint: "The edition's own cover; empty → the English one" }
               - { label: "Series Name", name: "seriesName", widget: "string", required: false, hint: "The series' name in this language; empty → the English one" }

@@ -147,7 +147,7 @@ const buyLabel = t.buyBoxSet(price);
 const valueLine = price && separatePrice ? t.valueLine(books.length, price, separatePrice) : '';
 
 // The full blurb stays on Amazon; the page carries the first three paragraphs.
-const pitch = (english ? series.data.boxSetBlurb?.trim() || series.data.description : edition!.blurb)
+const pitch = (english ? series.data.boxSetBlurb?.trim() || series.data.description : edition!.blurb!)
   .split(/\n\s*\n/)
   .map((p) => p.trim())
   .filter(Boolean)

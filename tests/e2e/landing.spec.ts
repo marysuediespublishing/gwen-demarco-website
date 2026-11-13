@@ -425,16 +425,21 @@ test.describe('Kindle+ (formerly Kindle Unlimited)', () => {
 
 // ---------------------------------------------------------------------------------------
 // /de/ and /fr/ landing pages (Press suite_006 §2): the same templates, built for each
-// product with an edition in the language. The e2e build takes its editions and DE tags
-// from tests/fixtures/landing-editions.json (the content has none yet).
+// product with an edition in the language. The Sophie box set and its five books are the
+// content's real editions (src/content); the e2e build adds made-up ones for Ward Breaker and
+// Gideon Bean, and DE tags, from tests/fixtures/landing-editions.json.
 // ---------------------------------------------------------------------------------------
 
-type FixtureEdition = { asin: string; paperbackAsin?: string; title: string; kuEnrolled: boolean; reviews?: { body: string }[] };
+type EditionData = { asin: string; paperbackAsin?: string; title: string; kuEnrolled: boolean; hook?: string; blurb?: string; reviews?: { body: string }[] };
 const FIXTURE: {
-  series: Record<string, Record<'de' | 'fr', FixtureEdition>>;
-  books: Record<string, Partial<Record<'de' | 'fr', FixtureEdition>>>;
+  books: Record<string, Partial<Record<'de' | 'fr', EditionData>>>;
   attributionTags: AttributionTags;
 } = JSON.parse(readFileSync('tests/fixtures/landing-editions.json', 'utf8'));
+/** The content's editions of a book or series: what the pages are built from. */
+const contentEditions = (path: string): Record<'de' | 'fr', EditionData> =>
+  matter(readFileSync(`src/content/${path}.md`, 'utf8')).data.editions;
+const BOX = contentEditions('series/sophie-feegle');
+const BOOK_ONE = contentEditions('books/sophie-and-the-odd-ones');
 // The tags the DE/FR pages are built with: site-config's, with the fixture's where site-config has none.
 const I18N_TAGS: AttributionTags = Object.fromEntries(
   [...new Set([...Object.keys(TAGS ?? {}), ...Object.keys(FIXTURE.attributionTags)])].map((market) => [
@@ -501,38 +506,57 @@ test.describe('the English table and the others (pure)', () => {
 test.describe('/de/ and /fr/ landing pages', () => {
   test.use({ timezoneId: 'America/Chicago' });
 
-  test('DE box set: KU and Buy on amazon.de with the DE tags, book one\'s German paperback plain, every link on amazon.de', async ({ page }) => {
+  test('the Sophie box set\'s editions are Books\' (cw, #6966): ASINs, titles, in KU, own covers and words', () => {
+    expect([BOX.de.asin, BOX.de.title, BOX.de.kuEnrolled]).toEqual(['B0GNPKZMXN', 'Sophie Feegle: Sammelband', true]);
+    expect([BOX.fr.asin, BOX.fr.title, BOX.fr.kuEnrolled]).toEqual(['B0GNPL1PK7', "Sophie Feegle : L'Intégrale", true]);
+    expect([BOOK_ONE.de.title, BOOK_ONE.fr.title]).toEqual(['Sophie und die Sonderlinge', 'Sophie et les Singuliers']);
+  });
+
+  for (const [lang, market] of [['de', 'DE'], ['fr', 'FR']] as const) {
+    test(`${market} box set: the edition's title, hook and blurb; its books under their ${lang} titles and covers; every link on its storefront`, async ({ page }) => {
+      await stubOutside(page);
+      await page.goto(`/${lang}${BOX_SET}`);
+      await expect(page.locator('html')).toHaveAttribute('lang', lang);
+      await expect(page.locator('h1')).toHaveText(BOX[lang].title);
+      await expect(page.locator('main')).toContainText(BOX[lang].hook!);
+      await expect(page.locator('main')).toContainText(BOX[lang].blurb!.split(/\n\s*\n/)[0]);
+      await expect(page.locator('main img').first()).toHaveAttribute('src', new RegExp(`boxset-${lang}-640\\.webp$`));
+      await expect(page.locator('ol li').first()).toContainText(BOOK_ONE[lang].title);
+      await expect(page.locator('ol li img').first()).toHaveAttribute('src', new RegExp(`sophie-and-the-odd-ones-ebook-${lang}-400\\.jpg$`));
+      const hrefs = await page.locator('[data-landing-cta]').evaluateAll((els) => els.map((el) => el.getAttribute('href')!));
+      expect(hrefs.length).toBe(8);
+      for (const href of hrefs) expect(href.startsWith(STOREFRONT[lang]), href).toBe(true);
+      // The edition is in KU: three doors. No English reader quotes (the edition has none of its own).
+      await expect(page.locator('aside [data-landing-cta]')).toHaveCount(3);
+      await expect(page.locator('blockquote')).toHaveCount(0);
+    });
+  }
+
+  test('DE box set: KU and Buy on amazon.de with the DE tags; book one\'s German paperback is a search (no paperback ASIN)', async ({ page }) => {
     await stubOutside(page);
     await page.goto(`/de${BOX_SET}`);
-    const kindle = amazonDp(FIXTURE.series['sophie-feegle'].de.asin, 'DE');
+    const kindle = amazonDp(BOX.de.asin, 'DE');
+    expect(kindle).toBe('https://www.amazon.de/dp/B0GNPKZMXN');
     const ku = i18nLink('sophie-boxset', 'ku', kindle);
     expect(ku).toContain('FIXTURE_DE_KU');
     await expect(page.locator('aside [data-landing-cta="ku"]')).toHaveAttribute('href', ku);
     await expect(page.locator('aside [data-landing-cta="buy"]')).toHaveAttribute('href', i18nLink('sophie-boxset', 'buy', kindle));
-    // No DE Print tag for book one: the plain German paperback page.
-    await expect(page.locator('aside [data-landing-cta="paperback"]')).toHaveAttribute('href', 'https://www.amazon.de/dp/B0FIXDE0P1');
-    const hrefs = await page.locator('[data-landing-cta]').evaluateAll((els) => els.map((el) => el.getAttribute('href')!));
-    expect(hrefs.length).toBe(8);
-    for (const href of hrefs) expect(href.startsWith(STOREFRONT.de), href).toBe(true);
-    await expect(page.locator('h1')).toHaveText('Sophie Feegle Sammelband');
-    await expect(page.locator('html')).toHaveAttribute('lang', 'de');
-    // No English reader quotes (the edition has none of its own).
-    await expect(page.locator('blockquote')).toHaveCount(0);
-  });
-
-  test('FR box set: the edition is not in KU, so no KU button; plain amazon.fr links (no FR tags); the edition\'s own review', async ({ page }) => {
-    await stubOutside(page);
-    await page.goto(`/fr${BOX_SET}`);
-    await expect(page.locator('[data-landing-cta="ku"]')).toHaveCount(0);
-    await expect(page.locator('aside [data-landing-cta]')).toHaveCount(2);
-    await expect(page.locator('aside [data-landing-cta="buy"]')).toHaveAttribute('href', 'https://www.amazon.fr/dp/B0FIXFR001');
     await expect(page.locator('aside [data-landing-cta="paperback"]')).toHaveAttribute(
       'href',
-      amazonSearch('Sophie et les Bizarres Gwen DeMarco', true, 'FR'),
+      amazonSearch('Sophie und die Sonderlinge Gwen DeMarco', true, 'DE'),
     );
-    await expect(page.locator('blockquote')).toHaveCount(1);
-    await expect(page.locator('blockquote')).toContainText('Une série drôle et prenante');
-    await expect(page.locator('figcaption')).toHaveText('Camille, avis sur Amazon.fr');
+  });
+
+  test('FR box set: no FR tags, so plain amazon.fr links on all three doors', async ({ page }) => {
+    await stubOutside(page);
+    await page.goto(`/fr${BOX_SET}`);
+    const kindle = 'https://www.amazon.fr/dp/B0GNPL1PK7';
+    await expect(page.locator('aside [data-landing-cta="ku"]')).toHaveAttribute('href', kindle);
+    await expect(page.locator('aside [data-landing-cta="buy"]')).toHaveAttribute('href', kindle);
+    await expect(page.locator('aside [data-landing-cta="paperback"]')).toHaveAttribute(
+      'href',
+      amazonSearch('Sophie et les Singuliers Gwen DeMarco', true, 'FR'),
+    );
   });
 
   test('DE Ward Breaker: three doors in the editions\' words; the KU button on each door follows its edition', async ({ page }) => {
@@ -550,19 +574,27 @@ test.describe('/de/ and /fr/ landing pages', () => {
     await expect(page.locator('[data-door="series-start"] [data-landing-cta="buy"]')).toHaveAttribute('href', 'https://www.amazon.de/dp/B0FIXDE031');
     await expect(page.locator('[data-door="sophie"] [data-landing-cta="ku"]')).toHaveAttribute(
       'href',
-      i18nLink('sophie-boxset', 'ku', amazonDp('B0FIXDE001', 'DE')),
+      i18nLink('sophie-boxset', 'ku', amazonDp('B0GNPKZMXN', 'DE')),
     );
     await expect(page.locator('[data-door="sophie"] h3')).toHaveText('Sophies Bücher, dieselbe Welt');
     await expect(page.locator('#doors h2')).toHaveText('Drei Wege in die Geschichte');
     await expect(page.locator('h1')).toHaveText('Der Bannbrecher');
   });
 
-  test('FR Ward Breaker: a door with no French edition (Gideon Bean) is left out; two doors, all on amazon.fr', async ({ page }) => {
+  test('FR Ward Breaker: a door with no French edition (Gideon Bean) is left out; the edition not in KU has no KU button; all on amazon.fr', async ({ page }) => {
     await stubOutside(page);
     await page.goto(`/fr${WARD_BREAKER}`);
     expect(await page.locator('[data-door]').evaluateAll((els) => els.map((el) => (el as HTMLElement).dataset.door))).toEqual(['ward-breaker', 'sophie']);
-    await expect(page.locator('[data-door="sophie"] [data-landing-cta="ku"]')).toHaveCount(0);
-    await expect(page.locator('[data-door="ward-breaker"] [data-landing-cta="ku"]')).toHaveAttribute('href', 'https://www.amazon.fr/dp/B0FIXFR021');
+    // The (fixture) French Ward Breaker is not in KU: a two-button door. The box set is.
+    expect(FIXTURE.books['ward-breaker'].fr!.kuEnrolled).toBe(false);
+    await expect(page.locator('[data-door="ward-breaker"] [data-landing-cta="ku"]')).toHaveCount(0);
+    await expect(page.locator('[data-door="ward-breaker"] [data-landing-cta]')).toHaveCount(2);
+    await expect(page.locator('[data-door="ward-breaker"] [data-landing-cta="buy"]')).toHaveAttribute('href', 'https://www.amazon.fr/dp/B0FIXFR021');
+    await expect(page.locator('[data-door="sophie"] [data-landing-cta="ku"]')).toHaveAttribute('href', 'https://www.amazon.fr/dp/B0GNPL1PK7');
+    // The edition's own review, and no English one.
+    await expect(page.locator('blockquote')).toHaveCount(1);
+    await expect(page.locator('blockquote')).toContainText('Une série drôle et prenante');
+    await expect(page.locator('figcaption')).toHaveText('Camille, avis sur Amazon.fr');
     const hrefs = await page.locator('[data-landing-cta]').evaluateAll((els) => els.map((el) => el.getAttribute('href')!));
     for (const href of hrefs) expect(href.startsWith(STOREFRONT.fr), href).toBe(true);
     await expect(page.locator('#doors h2')).toHaveText('Deux portes d’entrée');
@@ -575,7 +607,9 @@ test.describe('/de/ and /fr/ landing pages', () => {
     de: { button: 'Gratis lesen mit Kindle+', line: 'Für Kindle+-Mitglieder kostenlos', formerly: 'ehemals Kindle Unlimited' },
     fr: { button: 'Lire gratuitement avec Kindle+', line: 'Gratuit pour les membres Kindle+', formerly: 'anciennement Kindle Unlimited' },
   } as const;
-  for (const [lang, path, buttons] of [['de', BOX_SET, 3], ['de', WARD_BREAKER, 2], ['fr', WARD_BREAKER, 1]] as const) {
+  // The description names Kindle+ when the page's own product is in KU (the French Ward
+  // Breaker is not: its one KU button is the box set's door).
+  for (const [lang, path, buttons, describesKU] of [['de', BOX_SET, 3, true], ['fr', BOX_SET, 3, true], ['de', WARD_BREAKER, 2, true], ['fr', WARD_BREAKER, 1, false]] as const) {
     test(`/${lang}${path}: every KU button reads "${KU_COPY[lang].button}" over "${KU_COPY[lang].line}"${formerlyWindow ? ` · ${KU_COPY[lang].formerly}` : ''}; the description too`, async ({ page }) => {
       await stubOutside(page);
       await page.goto(`/${lang}${path}`);
@@ -586,8 +620,8 @@ test.describe('/de/ and /fr/ landing pages', () => {
       expect(lines).toEqual(Array(buttons).fill(formerlyWindow ? `${KU_COPY[lang].line} · ${KU_COPY[lang].formerly}` : KU_COPY[lang].line));
       await expect(page.locator('[data-formerly-ku]')).toHaveCount(formerlyWindow ? buttons : 0);
       const description = (await page.locator('meta[name="description"]').getAttribute('content'))!;
-      expect(description).toContain('Kindle+');
-      expect(description.includes(KU_COPY[lang].formerly)).toBe(formerlyWindow);
+      expect(description.includes('Kindle+')).toBe(describesKU);
+      expect(description.includes(KU_COPY[lang].formerly)).toBe(describesKU && formerlyWindow);
     });
   }
 

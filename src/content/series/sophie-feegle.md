@@ -47,6 +47,55 @@ boxSetAsin: B0CK55M553
 boxSetSlug: sophie-boxset
 boxSetPrice: "9.99"
 boxSetSeparatePrice: ""
+# The box set in German and French (Press suite_006 §2). ASINs, titles, KU and covers from
+# Books' catalogue (cw, #6966 msg 61688). hook, tagline and blurb are machine-drafted from
+# the English series description, native check pending: replace the blurb with the one
+# Amazon shows when someone copies it in.
+editions:
+  de:
+    asin: B0GNPKZMXN
+    title: "Sophie Feegle: Sammelband"
+    seriesName: Sophie Feegle
+    kuEnrolled: true
+    cover: /images/boxset-de.png
+    hook: Im Leichenschauhaus von San Francisco hüten die Toten ihre Geheimnisse. Bis Sophie sie berührt.
+    tagline: Freche Heldin. Grummeliger Held. Wahlfamilie.
+    blurb: >-
+      Sophie Feegle braucht dringend eine Pause. Die Miete für ihre miese Wohnung ist fällig, und vom letzten Brot ist nur noch die Hälfte übrig.
+
+
+      Große Ambitionen hat Sophie nicht. Sie will nur einen Job, der ihr den Vermieter vom Hals hält, genug Geld für einen Whiskey in der Kneipe um die Ecke und ein bisschen Zeit mit der frechen alten Dame von nebenan.
+
+
+      Als eine zufällige Begegnung mit einem stillen Fremden ihr einen Job im Leichenschauhaus von San Francisco einbringt, greift Sophie zu. Dass sie ausgerechnet in der Nachtschicht ihre Berufung findet, zwischen Leichen und den seltsamen Gestalten, die dort arbeiten, hätte sie nie gedacht. Dass ihre Freunde und Kollegen Gestaltwandler, Oger und andere nichtmenschliche Wesen sind, ist ein Schock. Doch Sophie merkt schnell: Das sind ihre Leute, und sie hat endlich den perfekten Job gefunden.
+
+
+      Und dann wird es seltsam. Na ja … noch seltsamer.
+
+
+      Begleite Sophie und die Sonderlinge, wenn sie Morde aufklären und Geheimnisse lüften, die sie ans andere Ende der Welt führen … und noch weiter.
+  fr:
+    asin: B0GNPL1PK7
+    title: "Sophie Feegle : L'Intégrale"
+    seriesName: Sophie Feegle
+    kuEnrolled: true
+    cover: /images/boxset-fr.png
+    hook: À la morgue de San Francisco, les morts gardent leurs secrets. Jusqu’à ce que Sophie les touche.
+    tagline: Héroïne insolente. Héros bougon. Famille choisie.
+    blurb: >-
+      Sophie Feegle a bien besoin d’un coup de pouce. Le loyer de son appartement miteux est à payer, et il ne lui reste que la moitié de son dernier pain.
+
+
+      Sophie n’a pas de grandes ambitions. Elle veut juste un boulot qui tienne son propriétaire à distance, de quoi s’offrir un whisky au bar du quartier et un peu de temps libre avec la vieille dame espiègle d’à côté.
+
+
+      Quand une rencontre fortuite avec un inconnu discret lui vaut une offre d’emploi à la morgue de San Francisco, Sophie saute sur l’occasion. Jamais elle n’aurait cru trouver sa vocation dans l’équipe de nuit, entourée de cadavres et des drôles de personnages qui composent le personnel. Apprendre que ses amis et collègues sont des métamorphes, des ogres et d’autres créatures non humaines est un choc, mais Sophie comprend vite que ce sont les siens, et qu’elle a enfin trouvé le boulot idéal.
+
+
+      Et puis les choses deviennent bizarres. Enfin… encore plus bizarres.
+
+
+      Suivez Sophie et les Singuliers tandis qu’ils résolvent des meurtres et percent des secrets qui les mèneront à l’autre bout du monde… et au-delà.
 ---
 # Sophie Feegle Series
 

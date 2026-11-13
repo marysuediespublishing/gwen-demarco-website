@@ -41,6 +41,19 @@ languages:
     url: https://www.amazon.de/dp/B0FH7D7J98
   - language: Spanish
     url: https://www.amazon.es/dp/B0DB67Q3JH
+# German and French editions from Books' catalogue (#6966): no blurb yet, so no /de/ or
+# /fr/ landing page of its own; the box-set page and doors show the title and cover.
+editions:
+  de:
+    asin: B0FH7D7J98
+    title: "Sonderbare Zeiten für Sophie Feegle"
+    kuEnrolled: true
+    cover: /images/odd-times-for-sophie-feegle-ebook-de.jpg
+  fr:
+    asin: B0G5J1BG5M
+    title: "Temps Singuliers pour Sophie Feegle"
+    kuEnrolled: true
+    cover: /images/odd-times-for-sophie-feegle-ebook-fr.jpg
 ---
 # Odd Times for Sophie Feegle
 

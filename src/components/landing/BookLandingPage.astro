@@ -36,7 +36,7 @@ import {
   type DoorBase,
   type LandingLang,
 } from '../../utils/landing';
-import { editionOf, withFixtureTags, type Edition } from '../../utils/editions';
+import { editionOf, landingEditionOf, withFixtureTags, type Edition } from '../../utils/editions';
 import { kindlePlusName, showFormerlyKU } from '../../utils/kindle-plus';
 import { LANDING_STRINGS } from '../../i18n';
 import { formatCount, formatRating } from '../../i18n/landing';
@@ -55,8 +55,8 @@ const t = LANDING_STRINGS[lang];
 const english = lang === 'en';
 const market = LANG_MARKET[lang];
 const landing = book.data.landing!;
-const edition = editionOf('books', book, lang);
-if (!english && !edition) throw new Error(`No ${lang} edition of ${book.id}`);
+const edition = landingEditionOf(book, lang);
+if (!english && !edition) throw new Error(`No ${lang} edition with a blurb of ${book.id}`);
 const BLURB_PARAGRAPHS = 3;
 
 const allBooks = await getCollection('books');
@@ -233,7 +233,7 @@ const showRating = book.data.rating > 0 && book.data.ratingCount > 0;
 const amazonBadge = siteConfig?.data.amazonBadge?.trim();
 
 // The full blurb stays on Amazon; the page carries the first three paragraphs.
-const pitch = (english ? book.data.description : edition!.blurb)
+const pitch = (english ? book.data.description : edition!.blurb!)
   .split(/\n\s*\n/)
   .map((p) => p.trim())
   .filter(Boolean)
@@ -251,7 +251,7 @@ const ogImage = `/images/landing/${book.id}${edition?.cover ? `-${lang}` : ''}-o
 
 // hreflang: this page in every language the book has (only once there is more than English).
 const path = `/books/${book.id}/landing/`;
-const langs: LandingLang[] = ['en', ...LANDING_LANGS.filter((l) => editionOf('books', book, l))];
+const langs: LandingLang[] = ['en', ...LANDING_LANGS.filter((l) => landingEditionOf(book, l))];
 const alternates = langs.length > 1
   ? [...langs.map((l) => ({ hreflang: l, href: langPath(l, path) })), { hreflang: 'x-default', href: path }]
   : [];

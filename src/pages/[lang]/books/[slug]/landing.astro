@@ -1,9 +1,10 @@
 ---
 // A book's landing page in German and French: built for every book with a `landing:`
-// block and an edition in the language (editions.<lang>); the build says which it skipped.
+// block and an edition with a blurb in the language (editions.<lang>); the build says which
+// it skipped and why.
 import { type CollectionEntry, getCollection } from 'astro:content';
 import BookLandingPage from '../../../../components/landing/BookLandingPage.astro';
-import { editionOf } from '../../../../utils/editions';
+import { editionOf, landingEditionOf } from '../../../../utils/editions';
 import { LANDING_LANGS, type LandingLang } from '../../../../utils/landing';
 
 export async function getStaticPaths() {
@@ -11,8 +12,9 @@ export async function getStaticPaths() {
   return LANDING_LANGS.flatMap((lang) =>
     books
       .filter((book) => {
-        if (editionOf('books', book, lang)) return true;
-        console.warn(`[landing] not built: /${lang}/books/${book.id}/landing/ (${book.id} has no ${lang} edition)`);
+        if (landingEditionOf(book, lang)) return true;
+        const why = editionOf('books', book, lang) ? `its ${lang} edition has no blurb` : `${book.id} has no ${lang} edition`;
+        console.warn(`[landing] not built: /${lang}/books/${book.id}/landing/ (${why})`);
         return false;
       })
       .map((book) => ({ params: { lang, slug: book.id }, props: { book } })),
