@@ -74,6 +74,16 @@ editions:
 
 
       Begleite Sophie und die Sonderlinge, wenn sie Morde aufklären und Geheimnisse lüften, die sie ans andere Ende der Welt führen … und noch weiter.
+    # Lis's paste of amazon.de (#8700, cw #62089), verbatim; title is the headline after Amazon's star label
+    reviews:
+      - title: wundervolle Bücher
+        body: |-
+          Ich habe diese Reihe sehr genossen und liebe sie sehr. Ich habe soweit es möglich war ständig und überall gelesen.
+        reviewer: Gabriele Sandhop
+      - title: Einfach nur wow
+        body: |-
+          Was für eine Geschichte. Und ich bin ehrlich gesagt traurig, dass ich am Ende angelangt bin. Aber wie jede gute Geschichte, wird es Spass machen, die nochmals zu lesen. Ich liebe gute Stories und diese gehört definitiv zu meinen absoluten Lieblingsbüchern. Absolute Leseempfehlung von mir.
+        reviewer: Sabine Müller
   fr:
     asin: B0GNPL1PK7
     title: "Sophie Feegle : L'Intégrale"
@@ -96,6 +106,24 @@ editions:
 
 
       Suivez Sophie et les Singuliers tandis qu’ils résolvent des meurtres et percent des secrets qui les mèneront à l’autre bout du monde… et au-delà.
+    # Lis's paste of amazon.fr (#8700, cw #62089), verbatim, spelling and line breaks as the reviewers wrote them
+    reviews:
+      - title: Fascinant
+        body: |-
+          Ecriture fluide plein de rebondisdement.heroine badass et attachante par ses incertitudes et son attachemnt a ses amis.a lire sans moderation
+        reviewer: Client d'Amazon
+      - title: Génial
+        body: |-
+          J ai dévoré cette intégrale
+
+          J ai souri,pleuré, tremblé avec Sophie et Mac
+
+          J ai adoré les intrigues,les péripéties ,les personnages attachants....
+
+          Je suis triste de les quitter
+
+          Merci à l auteure pour tout ça
+        reviewer: Merritt
 ---
 # Sophie Feegle Series
 

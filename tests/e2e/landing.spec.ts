@@ -430,7 +430,7 @@ test.describe('Kindle+ (formerly Kindle Unlimited)', () => {
 // Gideon Bean, and DE tags, from tests/fixtures/landing-editions.json.
 // ---------------------------------------------------------------------------------------
 
-type EditionData = { asin: string; paperbackAsin?: string; title: string; kuEnrolled: boolean; hook?: string; blurb?: string; reviews?: { body: string }[] };
+type EditionData = { asin: string; paperbackAsin?: string; title: string; kuEnrolled: boolean; hook?: string; blurb?: string; reviews?: { title?: string; body: string; reviewer: string }[] };
 const FIXTURE: {
   books: Record<string, Partial<Record<'de' | 'fr', EditionData>>>;
   attributionTags: AttributionTags;
@@ -526,9 +526,25 @@ test.describe('/de/ and /fr/ landing pages', () => {
       const hrefs = await page.locator('[data-landing-cta]').evaluateAll((els) => els.map((el) => el.getAttribute('href')!));
       expect(hrefs.length).toBe(8);
       for (const href of hrefs) expect(href.startsWith(STOREFRONT[lang]), href).toBe(true);
-      // The edition is in KU: three doors. No English reader quotes (the edition has none of its own).
+      // The edition is in KU: three doors.
       await expect(page.locator('aside [data-landing-cta]')).toHaveCount(3);
-      await expect(page.locator('blockquote')).toHaveCount(0);
+    });
+
+    test(`${market} box set: the edition's own reader reviews, as Lis pasted them (#8702), each with its reviewer's name`, async ({ page }) => {
+      await stubOutside(page);
+      await page.goto(`/${lang}${BOX_SET}`);
+      const reviews = BOX[lang].reviews!;
+      expect(reviews.map((r) => r.reviewer)).toEqual(lang === 'de' ? ['Gabriele Sandhop', 'Sabine Müller'] : ["Client d'Amazon", 'Merritt']);
+      await expect(page.locator('blockquote')).toHaveCount(reviews.length);
+      const cite = lang === 'de' ? (r: string) => `${r}, Rezension auf Amazon.de` : (r: string) => `${r}, avis sur Amazon.fr`;
+      await expect(page.locator('figure figcaption')).toHaveText(reviews.map((r) => cite(r.reviewer)));
+      for (const [i, review] of reviews.entries()) {
+        const quote = page.locator('blockquote').nth(i);
+        await expect(quote.locator('p').first()).toHaveText(`“${review.title}”`);
+        // The body character for character, its line breaks kept on screen.
+        expect(await quote.locator('p').last().textContent()).toBe(review.body);
+        await expect(quote.locator('p').last()).toHaveCSS('white-space', 'pre-line');
+      }
     });
   }
 

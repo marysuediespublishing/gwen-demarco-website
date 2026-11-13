@@ -97,6 +97,9 @@ const pullQuote = english ? toReview(PULL_QUOTE_ID) : undefined;
 const reviews = english
   ? REVIEWS.map((r) => toReview(r.id, r.excerpt)).filter((r): r is NonNullable<typeof r> => Boolean(r))
   : edition!.reviews.map((r) => ({ title: r.title ?? '', body: r.body, cite: t.reviewCite(r.reviewer) }));
+// An edition's review keeps its reviewer's line breaks (white-space: pre-line); the English
+// excerpts are single lines. A style attribute, not a utility class, so the shared stylesheet
+// and the English page stay as they were.
 
 // Series-wide numbers, labelled as such: the box set has its own (smaller) Amazon rating.
 const rating = series.data.overallRating;
@@ -268,7 +271,7 @@ const alternates = langs.length > 1
                 <figure class="rounded-lg border border-mystic-violet/20 bg-dark-surface/60 p-6 flex flex-col">
                   <blockquote class="flex-1">
                     {review.title && <p class="font-primary text-lg text-bone-white mb-2">“{review.title}”</p>}
-                    <p class="text-moon-silver">{review.body}</p>
+                    <p class="text-moon-silver" style={english ? undefined : 'white-space: pre-line'}>{review.body}</p>
                   </blockquote>
                   <figcaption class="mt-4 text-sm text-fog-gray">{review.cite}</figcaption>
                 </figure>
