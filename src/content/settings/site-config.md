@@ -137,6 +137,54 @@ attributionTags:
       ku: "https://www.amazon.de/dp/B0G62LLZQ2?maas=maas_adg_2086C7DB8E710A696C8425EE31E47A08_afap_abs&ref_=aa_maas&tag=maas"
       kindle: "https://www.amazon.de/dp/B0G62LLZQ2?maas=maas_adg_DFF4901AF3C930FA6543C7DBF8A23344_afap_abs&ref_=aa_maas&tag=maas"
       print: "https://www.amazon.de/dp/1963906411?maas=maas_adg_DB98B8161CF3B2ECA9967A24C8155789_afap_abs&ref_=aa_maas&tag=maas"
+  FR:
+    gideon-bean:
+      ku: "https://www.amazon.fr/dp/B0GTRS88KV?maas=maas_adg_A533C6907BCE2487CBBA6F099DCE54D1_afap_abs&ref_=aa_maas&tag=maas"
+      kindle: "https://www.amazon.fr/dp/B0GTRS88KV?maas=maas_adg_4A83A5F5F3F0246910A6D95C334B9181_afap_abs&ref_=aa_maas&tag=maas"
+      print: "https://www.amazon.fr/dp/1963906454?maas=maas_adg_B17BB3FB8DA8D383143563925EEC6C36_afap_abs&ref_=aa_maas&tag=maas"
+    spirit-marked:
+      ku: "https://www.amazon.fr/dp/B0H4ZJLDSS?maas=maas_adg_47FDA3DB14E240F7C2F56C8D54EB8514_afap_abs&ref_=aa_maas&tag=maas"
+      kindle: "https://www.amazon.fr/dp/B0H4ZJLDSS?maas=maas_adg_EEB3A309E27ADD82B89EB9DBAE978A2B_afap_abs&ref_=aa_maas&tag=maas"
+      print: "https://www.amazon.fr/dp/1963906527?maas=maas_adg_95B7AB6F763FCCE82D9FC657008CF262_afap_abs&ref_=aa_maas&tag=maas"
+    ward-breaker:
+      ku: "https://www.amazon.fr/dp/B0HK1ZP9JG?maas=maas_adg_A891C29322A3AFA97E90A347D98553CE_afap_abs&ref_=aa_maas&tag=maas"
+      kindle: "https://www.amazon.fr/dp/B0HK1ZP9JG?maas=maas_adg_1364176F86C1F8CB87090AD697B454E7_afap_abs&ref_=aa_maas&tag=maas"
+      print: "https://www.amazon.fr/dp/1963906594?maas=maas_adg_EFAB17856AE0EDD38B204F8D7C85D8A2_afap_abs&ref_=aa_maas&tag=maas"
+    the-mudlark:
+      ku: "https://www.amazon.fr/dp/B0GYFWN6ZQ?maas=maas_adg_2786C0FB5E425CAA68377952B302BF61_afap_abs&ref_=aa_maas&tag=maas"
+      kindle: "https://www.amazon.fr/dp/B0GYFWN6ZQ?maas=maas_adg_624E664CDFF70E5598E02D947408CC0D_afap_abs&ref_=aa_maas&tag=maas"
+      print: "https://www.amazon.fr/dp/1963906500?maas=maas_adg_55AD7BE8867DCC91E89DC944D997F1CA_afap_abs&ref_=aa_maas&tag=maas"
+    the-gutter-shrike:
+      ku: "https://www.amazon.fr/dp/B0HC8K95B2?maas=maas_adg_077AEB289DB26558B38E243073FCA446_afap_abs&ref_=aa_maas&tag=maas"
+      kindle: "https://www.amazon.fr/dp/B0HC8K95B2?maas=maas_adg_33C896017041E640D20FF5B2AAE1C473_afap_abs&ref_=aa_maas&tag=maas"
+      print: "https://www.amazon.fr/dp/1963906551?maas=maas_adg_564B5FBC2C8671F78F38BFBEBD02F1BF_afap_abs&ref_=aa_maas&tag=maas"
+    sophie-and-the-odd-ones:
+      ku: "https://www.amazon.fr/dp/B0G3Z8WT4Q?maas=maas_adg_04400BDC4449A50976F7B36DF24A17EB_afap_abs&ref_=aa_maas&tag=maas"
+      kindle: "https://www.amazon.fr/dp/B0G3Z8WT4Q?maas=maas_adg_7BF7FC6A1802420AC7FA91A1CE7B9EE5_afap_abs&ref_=aa_maas&tag=maas"
+      print: "https://www.amazon.fr/dp/1963906365?maas=maas_adg_4143A59FD625BEB8E2DDAC28EBD0327A_afap_abs&ref_=aa_maas&tag=maas"
+    portents-and-oddities:
+      ku: "https://www.amazon.fr/dp/B0G4XP3VLT?maas=maas_adg_C94E9D0734B463E35035F408693677B9_afap_abs&ref_=aa_maas&tag=maas"
+      kindle: "https://www.amazon.fr/dp/B0G4XP3VLT?maas=maas_adg_64094DAF194624A86E05E0606ACB7256_afap_abs&ref_=aa_maas&tag=maas"
+      print: "https://www.amazon.fr/dp/196390639X?maas=maas_adg_AE45B17649340F0019985433758FEC30_afap_abs&ref_=aa_maas&tag=maas"
+    odd-times-for-sophie-feegle:
+      ku: "https://www.amazon.fr/dp/B0G5J1BG5M?maas=maas_adg_1FA2FAB03FE81091E4B130BFF875C815_afap_abs&ref_=aa_maas&tag=maas"
+      kindle: "https://www.amazon.fr/dp/B0G5J1BG5M?maas=maas_adg_4612EBD04CDE73913242859216384613_afap_abs&ref_=aa_maas&tag=maas"
+      print: "https://www.amazon.fr/dp/1963906403?maas=maas_adg_14781CCBFAB9A2CE22D1BA762B824089_afap_abs&ref_=aa_maas&tag=maas"
+    against-all-odds:
+      ku: "https://www.amazon.fr/dp/B0G6M64X4L?maas=maas_adg_A3B1AD2645AB3FDDFDD9218B842A7CD0_afap_abs&ref_=aa_maas&tag=maas"
+      kindle: "https://www.amazon.fr/dp/B0G6M64X4L?maas=maas_adg_B6A6EFADD036E413771A47B8397CBEA9_afap_abs&ref_=aa_maas&tag=maas"
+      print: "https://www.amazon.fr/dp/196390642X?maas=maas_adg_08B3D312B829EB11442ADAAF82DF6B83_afap_abs&ref_=aa_maas&tag=maas"
+    odds-and-ends:
+      ku: "https://www.amazon.fr/dp/B0G76HFCDX?maas=maas_adg_6702A7E3914B4C5CB89DD3AED22A6F05_afap_abs&ref_=aa_maas&tag=maas"
+      kindle: "https://www.amazon.fr/dp/B0G76HFCDX?maas=maas_adg_9DC9B5BE03A79DB3FDEEB7B726EC0C7B_afap_abs&ref_=aa_maas&tag=maas"
+      print: "https://www.amazon.fr/dp/1963906438?maas=maas_adg_C9D680E1025F88C52C43495A729A185C_afap_abs&ref_=aa_maas&tag=maas"
+    sophie-boxset:
+      ku: "https://www.amazon.fr/dp/B0GNPL1PK7?maas=maas_adg_9DF4BF3F5C11E0285EC65B819A99E7F3_afap_abs&ref_=aa_maas&tag=maas"
+      kindle: "https://www.amazon.fr/dp/B0GNPL1PK7?maas=maas_adg_E6B03CDA8F88D5D438AE4FAB937FDD06_afap_abs&ref_=aa_maas&tag=maas"
+    asphalt-coven:
+      ku: "https://www.amazon.fr/dp/B0GFFRV9YY?maas=maas_adg_3BA1C75AEC9484A7F7FC59074E10C765_afap_abs&ref_=aa_maas&tag=maas"
+      kindle: "https://www.amazon.fr/dp/B0GFFRV9YY?maas=maas_adg_14F480C7835BA3683B73E60F83911E9D_afap_abs&ref_=aa_maas&tag=maas"
+      print: "https://www.amazon.fr/dp/1963906446?maas=maas_adg_C6B19C4CAD7DD6F633EF0F7D274F7DD0_afap_abs&ref_=aa_maas&tag=maas"
 pressCtrEndpoint: ""
 amazonBadge: ""
 kindlePlusFormerlyUntil: "2027-01-20"
