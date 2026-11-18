@@ -48,6 +48,7 @@ paperbackAsin: B08CWM839H
 editions:
   de:
     asin: B0FF5Q8QJL
+    paperbackAsin: "1963906209"
     title: "Sophie und die Sonderlinge"
     kuEnrolled: true
     cover: /images/sophie-and-the-odd-ones-ebook-de.jpg

@@ -548,19 +548,25 @@ test.describe('/de/ and /fr/ landing pages', () => {
     });
   }
 
-  test('DE box set: KU and Buy on amazon.de with the DE tags; book one\'s German paperback is a search (no paperback ASIN)', async ({ page }) => {
+  test('DE box set: every Amazon link carries its DE tag; KU is the Sophie DE ad\'s (#9369), the paperback book one\'s German print tag', async ({ page }) => {
     await stubOutside(page);
     await page.goto(`/de${BOX_SET}`);
     const kindle = amazonDp(BOX.de.asin, 'DE');
     expect(kindle).toBe('https://www.amazon.de/dp/B0GNPKZMXN');
+    // The Attribution tag of the Sophie box-set DE ad (campaign sophie-feegle-set-de-landing), by the letter.
     const ku = i18nLink('sophie-boxset', 'ku', kindle);
-    expect(ku).toContain('FIXTURE_DE_KU');
-    await expect(page.locator('aside [data-landing-cta="ku"]')).toHaveAttribute('href', ku);
+    expect(ku).toBe('https://www.amazon.de/dp/B0GNPKZMXN?maas=maas_adg_BF3F558B6A88E034D809516FD5F131DA_afap_abs&ref_=aa_maas&tag=maas');
+    await expect(page.locator('[data-landing-cta="ku"]')).toHaveCount(3);
+    for (const el of await page.locator('[data-landing-cta="ku"]').all()) await expect(el).toHaveAttribute('href', ku);
     await expect(page.locator('aside [data-landing-cta="buy"]')).toHaveAttribute('href', i18nLink('sophie-boxset', 'buy', kindle));
-    await expect(page.locator('aside [data-landing-cta="paperback"]')).toHaveAttribute(
-      'href',
-      amazonSearch('Sophie und die Sonderlinge Gwen DeMarco', true, 'DE'),
-    );
+    // Book one's German paperback (1963906209 on amazon.de) with its DE print tag.
+    const paperback = amazonDp('1963906209', 'DE');
+    expect(i18nLink('sophie-and-the-odd-ones', 'paperback', paperback)).toContain('maas_adg_E0A64C3BB6B9D5DC9A7B46A2B8C19429');
+    await expect(page.locator('aside [data-landing-cta="paperback"]')).toHaveAttribute('href', i18nLink('sophie-and-the-odd-ones', 'paperback', paperback));
+    // No untagged Amazon link anywhere on the page.
+    const hrefs = await page.locator('a[href*="amazon."]').evaluateAll((els) => els.map((el) => el.getAttribute('href')!));
+    expect(hrefs.length).toBeGreaterThan(0);
+    for (const href of hrefs) expect(href, href).toContain('maas=maas_adg_');
   });
 
   test('FR box set: no FR tags, so plain amazon.fr links on all three doors', async ({ page }) => {
